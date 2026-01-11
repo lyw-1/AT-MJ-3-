@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.ProcessStatusHistoryMapper">
+
+    <!-- 鏍规嵁娴佺▼ID鏌ヨ鐘舵€佸巻鍙茶褰?-->
+    <select id="selectByProcessId" resultType="com.mold.digitalization.entity.ProcessStatusHistory">
+        SELECT * FROM process_status_history 
+        WHERE process_id = #{processId}
+        ORDER BY transition_time DESC
+    </select>
+
+    <!-- 鏍规嵁娴佺▼ID鍜岀姸鎬佹煡璇㈢姸鎬佸巻鍙茶褰?-->
+    <!-- 根据状态查询状态历史列表（接口方法：selectByStatus） -->
+    <select id="selectByStatus" resultType="com.mold.digitalization.entity.ProcessStatusHistory">
+        SELECT * FROM process_status_history 
+        WHERE status = #{status}
+        ORDER BY transition_time DESC
+    </select>
+
+    <!-- 鏍规嵁浜嬩欢绫诲瀷鏌ヨ鐘舵€佸巻鍙茶褰?-->
+    <!-- 根据操作人ID查询状态历史列表（接口方法：selectByOperatorId） -->
+    <select id="selectByOperatorId" resultType="com.mold.digitalization.entity.ProcessStatusHistory">
+        SELECT * FROM process_status_history 
+        WHERE operator_id = #{operatorId}
+        ORDER BY transition_time DESC
+    </select>
+
+    <!-- 移除无效方法：selectByOperator（列 operator/change_time 不存在，且接口未声明） -->
+
+    <!-- 鏍规嵁鏃堕棿鑼冨洿鏌ヨ鐘舵€佸巻鍙茶褰?-->
+    <select id="selectByTimeRange" resultType="com.mold.digitalization.entity.ProcessStatusHistory">
+        SELECT * FROM process_status_history 
+        WHERE transition_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY transition_time DESC
+    </select>
+
+    <!-- 缁熻娴佺▼鐘舵€佸彉鏇存鏁?-->
+    <!-- 统计流程状态变更次数（接口方法：countStatusChangesByProcessId） -->
+    <select id="countStatusChangesByProcessId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM process_status_history 
+        WHERE process_id = #{processId}
+    </select>
+
+    <!-- 移除无效方法：countByEventType（列 event_type 不存在，且接口未声明） -->
+
+    <!-- 鑾峰彇娴佺▼鐨勬渶鏂扮姸鎬佽褰?-->
+    <select id="selectLatestByProcessId" resultType="com.mold.digitalization.entity.ProcessStatusHistory">
+        SELECT * FROM process_status_history 
+        WHERE process_id = #{processId}
+        ORDER BY transition_time DESC 
+        LIMIT 1
+    </select>
+
+    <!-- 鍒犻櫎鎸囧畾娴佺▼鐨勭姸鎬佸巻鍙茶褰?-->
+    <delete id="deleteByProcessId">
+        DELETE FROM process_status_history WHERE process_id = #{processId}
+    </delete>
+
+    <!-- 移除无效方法：deleteBeforeTime（接口未声明） -->
+
+</mapper>

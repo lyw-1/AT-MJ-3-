@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.MoldInitialParameterMapper">
+
+  <select id="selectByMoldCode" parameterType="string" resultType="com.mold.digitalization.entity.MoldInitialParameter">
+    SELECT *
+    FROM mold_initial_parameter
+    WHERE mold_code = #{moldCode}
+    ORDER BY create_time DESC, update_time DESC, id DESC
+  </select>
+
+  <select id="selectLatestByMoldCode" parameterType="string" resultType="com.mold.digitalization.entity.MoldInitialParameter">
+    SELECT *
+    FROM mold_initial_parameter
+    WHERE mold_code = #{moldCode}
+    ORDER BY update_time DESC, create_time DESC, id DESC
+    LIMIT 1
+  </select>
+
+  <select id="selectByApplicationNo" parameterType="string" resultType="com.mold.digitalization.entity.MoldInitialParameter">
+    SELECT *
+    FROM mold_initial_parameter
+    WHERE application_no = #{applicationNo}
+    ORDER BY id DESC
+    LIMIT 1
+  </select>
+
+</mapper>

@@ -1,0 +1,114 @@
+/* 输入框组件样式 */
+.input-wrapper {
+  margin-bottom: var(--spacing-3);
+}
+
+.input-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-1);
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  border: 2rpx solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: 0 var(--spacing-3);
+  transition: all 0.3s ease;
+}
+
+.input-container:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4rpx var(--primary-light);
+}
+
+.input {
+  flex: 1;
+  height: 88rpx;
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  padding: 0 var(--spacing-2);
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--gray-400);
+}
+
+.input-icon {
+  font-size: var(--font-size-lg);
+  color: var(--gray-500);
+}
+
+.input-icon.prefix {
+  margin-right: var(--spacing-2);
+}
+
+.input-icon.suffix {
+  margin-left: var(--spacing-2);
+}
+
+.input-clear {
+  position: absolute;
+  right: var(--spacing-3);
+  font-size: var(--font-size-lg);
+  color: var(--gray-500);
+  background-color: var(--gray-100);
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* 输入框尺寸 */
+.input-wrapper.large .input {
+  height: 104rpx;
+  font-size: var(--font-size-lg);
+}
+
+.input-wrapper.small .input {
+  height: 72rpx;
+  font-size: var(--font-size-sm);
+}
+
+/* 输入框类型 */
+.input-wrapper.password {
+  /* 密码类型特殊样式 */
+}
+
+/* 禁用状态 */
+.input-wrapper.disabled .input-container {
+  background-color: var(--gray-100);
+  border-color: var(--gray-300);
+}
+
+.input-wrapper.disabled .input {
+  color: var(--gray-500);
+  cursor: not-allowed;
+}
+
+/* 错误状态 */
+.input-wrapper.error .input-container {
+  border-color: var(--error-color);
+}
+
+.input-wrapper.error .input-container:focus-within {
+  box-shadow: 0 0 0 4rpx #FEE2E2;
+}
+
+.error-message {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--error-color);
+  margin-top: var(--spacing-1);
+}

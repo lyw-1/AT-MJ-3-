@@ -1,0 +1,136 @@
+<view class="container">
+  <view class="card">
+    <view class="card-header">
+      <h3>添加模具</h3>
+    </view>
+    <form class="mold-form">
+      <!-- 基本信息 -->
+      <view class="form-section">
+        <h4>基本信息</h4>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="模具编号" 
+            placeholder="请输入模具编号" 
+            value="{{formData.code}}" 
+            bind:input="onInput" 
+            data-field="code"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="模具名称" 
+            placeholder="请输入模具名称" 
+            value="{{formData.name}}" 
+            bind:input="onInput" 
+            data-field="name"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="模具类型" 
+            placeholder="请输入模具类型" 
+            value="{{formData.type}}" 
+            bind:input="onInput" 
+            data-field="type"
+          />
+        </view>
+        <view class="form-item">
+          <textarea 
+            class="textarea" 
+            placeholder="请输入模具描述" 
+            value="{{formData.description}}" 
+            bindinput="onTextareaInput" 
+            data-field="description"
+            maxlength="200"
+            placeholder-class="textarea-placeholder"
+          ></textarea>
+        </view>
+        <view class="form-item">
+          <view class="radio-group">
+            <text class="radio-label">模具状态:</text>
+            <radio-group class="radio-options" bindchange="onRadioChange" data-field="status">
+              <label wx:for="{{statusOptions}}" wx:key="value" class="radio-option">
+                <radio value="{{item.value}}" checked="{{formData.status === item.value}}" />
+                <text>{{item.label}}</text>
+              </label>
+            </radio-group>
+          </view>
+        </view>
+      </view>
+
+      <!-- 技术参数 -->
+      <view class="form-section">
+        <h4>技术参数</h4>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="长度" 
+            placeholder="请输入长度" 
+            value="{{formData.length}}" 
+            bind:input="onInput" 
+            data-field="length"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="宽度" 
+            placeholder="请输入宽度" 
+            value="{{formData.width}}" 
+            bind:input="onInput" 
+            data-field="width"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="高度" 
+            placeholder="请输入高度" 
+            value="{{formData.height}}" 
+            bind:input="onInput" 
+            data-field="height"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="重量" 
+            placeholder="请输入重量" 
+            value="{{formData.weight}}" 
+            bind:input="onInput" 
+            data-field="weight"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="材质" 
+            placeholder="请输入材质" 
+            value="{{formData.material}}" 
+            bind:input="onInput" 
+            data-field="material"
+          />
+        </view>
+        <view class="form-item">
+          <input-component 
+            type="text" 
+            label="精度" 
+            placeholder="请输入精度" 
+            value="{{formData.precision}}" 
+            bind:input="onInput" 
+            data-field="precision"
+          />
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="form-actions">
+        <button-component type="default" size="large" text="取消" bind:click="onCancel"></button-component>
+        <button-component type="primary" size="large" text="保存" bind:click="onSave"></button-component>
+      </view>
+    </form>
+  </view>
+</view>

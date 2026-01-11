@@ -1,0 +1,22 @@
+# 使用本地已有的Java环境构建后端
+FROM openjdk:17-jdk-slim
+LABEL maintainer="mold-digitalization-team"
+LABEL version="1.0.0"
+LABEL description="Mold Digitalization System"
+WORKDIR /app
+
+# 复制后端JAR文件
+COPY backend/target/*.jar app.jar
+
+# 创建日志目录
+RUN mkdir -p /app/logs
+
+# 暴露端口
+EXPOSE 8082
+
+# 环境变量配置
+ENV SPRING_PROFILES_ACTIVE=prod
+ENV JAVA_OPTS="-Xms512m -Xmx1024m"
+
+# 启动应用
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

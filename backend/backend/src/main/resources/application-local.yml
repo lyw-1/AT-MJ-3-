@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    # 使用MySQL数据库进行本地开发测试
+    url: jdbc:mysql://localhost:3306/mold_digitalization?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Root@2023
+  redis:
+    # 临时禁用Redis，使用内存缓存
+    enabled: false
+  rabbitmq:
+    # 临时禁用RabbitMQ
+    enabled: false
+
+logging:
+  level:
+    com.mold.digitalization: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data: DEBUG
+
+# JWT配置
+jwt:
+  secret: 9VfaLz1CunRStZOARq1UrEXnwgbz3gJeO4Sqmoy5Iw0=
+  expiration: 604800000  # 7 days
+
+# 邮件配置
+mail:
+  enabled: false

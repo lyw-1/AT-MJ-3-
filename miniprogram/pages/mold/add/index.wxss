@@ -1,0 +1,111 @@
+/* 模库添加页样式 */
+
+/* 卡片头部 */
+.card-header {
+  margin-bottom: var(--spacing-4);
+}
+
+/* 表单样式 */
+.mold-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.form-section {
+  margin-bottom: var(--spacing-4);
+}
+
+.form-section h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-3);
+}
+
+.form-item {
+  margin-bottom: var(--spacing-3);
+}
+
+/* 文本域样式 */
+.textarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: var(--spacing-3);
+  border: 2rpx solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  background-color: var(--white);
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4rpx var(--primary-light);
+}
+
+.textarea-placeholder {
+  color: var(--gray-400);
+}
+
+/* 单选框样式 */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.radio-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-1);
+  display: block;
+}
+
+.radio-options {
+  display: flex;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  cursor: pointer;
+}
+
+.radio-option radio {
+  transform: scale(1.2);
+}
+
+/* 表单操作按钮 */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-5);
+}
+
+.form-actions .btn {
+  flex: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768rpx) {
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .radio-options {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+}

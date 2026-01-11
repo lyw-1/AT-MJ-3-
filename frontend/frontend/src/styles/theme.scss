@@ -1,0 +1,776 @@
+@use "sass:color";
+@use './variables' as *;
+@use './common' as *;
+
+// Circle Soft设计风格 - 完整主题配置
+:root {
+  // 主色调 - 紫色系，与Circle Soft设计完全一致
+  --el-color-primary: #{$primary-color};
+  --el-color-primary-light-3: #{color.adjust($primary-color, $lightness: 15%)};
+  --el-color-primary-light-5: #{color.adjust($primary-color, $lightness: 25%)};
+  --el-color-primary-light-7: #{color.adjust($primary-color, $lightness: 35%)};
+  --el-color-primary-light-8: #{color.adjust($primary-color, $lightness: 40%)};
+  --el-color-primary-light-9: #{color.adjust($primary-color, $lightness: 45%)};
+  --el-color-primary-dark-2: #{color.adjust($primary-color, $lightness: -15%)};
+  
+  // 成功色
+  --el-color-success: #{$success-color};
+  --el-color-success-light-3: #{color.adjust($success-color, $lightness: 15%)};
+  --el-color-success-light-5: #{color.adjust($success-color, $lightness: 25%)};
+  --el-color-success-light-7: #{color.adjust($success-color, $lightness: 35%)};
+  --el-color-success-light-8: #{color.adjust($success-color, $lightness: 40%)};
+  --el-color-success-light-9: #{color.adjust($success-color, $lightness: 45%)};
+  --el-color-success-dark-2: #{color.adjust($success-color, $lightness: -15%)};
+  
+  // 警告色
+  --el-color-warning: #{$warning-color};
+  --el-color-warning-light-3: #{color.adjust($warning-color, $lightness: 15%)};
+  --el-color-warning-light-5: #{color.adjust($warning-color, $lightness: 25%)};
+  --el-color-warning-light-7: #{color.adjust($warning-color, $lightness: 35%)};
+  --el-color-warning-light-8: #{color.adjust($warning-color, $lightness: 40%)};
+  --el-color-warning-light-9: #{color.adjust($warning-color, $lightness: 45%)};
+  --el-color-warning-dark-2: #{color.adjust($warning-color, $lightness: -15%)};
+  
+  // 错误色
+  --el-color-danger: #{$error-color};
+  --el-color-danger-light-3: #{color.adjust($error-color, $lightness: 15%)};
+  --el-color-danger-light-5: #{color.adjust($error-color, $lightness: 25%)};
+  --el-color-danger-light-7: #{color.adjust($error-color, $lightness: 35%)};
+  --el-color-danger-light-8: #{color.adjust($error-color, $lightness: 40%)};
+  --el-color-danger-light-9: #{color.adjust($error-color, $lightness: 45%)};
+  --el-color-danger-dark-2: #{color.adjust($error-color, $lightness: -15%)};
+  
+  // 信息色
+  --el-color-info: #{$info-color};
+  --el-color-info-light-3: #{color.adjust($info-color, $lightness: 15%)};
+  --el-color-info-light-5: #{color.adjust($info-color, $lightness: 25%)};
+  --el-color-info-light-7: #{color.adjust($info-color, $lightness: 35%)};
+  --el-color-info-light-8: #{color.adjust($info-color, $lightness: 40%)};
+  --el-color-info-light-9: #{color.adjust($info-color, $lightness: 45%)};
+  --el-color-info-dark-2: #{color.adjust($info-color, $lightness: -15%)};
+  
+  // 边框颜色 - 采用更浅的边框色，增强扁平感
+  --el-border-color: #{$gray-200};
+  --el-border-color-light: #{$gray-100};
+  --el-border-color-lighter: #{$gray-50};
+  --el-border-color-extra-light: transparent;
+  
+  // 文字颜色 - 优化对比度，增强可读性
+  --el-text-color-primary: #{$gray-900};
+  --el-text-color-regular: #{$gray-700};
+  --el-text-color-secondary: #{$gray-600};
+  --el-text-color-placeholder: #{$gray-400};
+  
+  // 背景颜色 - 采用更柔和的背景色
+  --el-bg-color: #{$white};
+  --el-bg-color-page: #{$gray-50};
+  --el-bg-color-overlay: #{$white};
+  --el-bg-color-hover: #{$primary-light};
+  
+  // 边框圆角 - 全新扁平圆角风格，增大所有圆角值
+  --el-border-radius-base: #{$border-radius-xl};
+  --el-border-radius-small: #{$border-radius-lg};
+  --el-border-radius-round: #{$border-radius-2xl};
+  --el-border-radius-circle: 50%;
+  
+  // 字体大小
+  --el-font-size-extra-large: #{$font-size-2xl};
+  --el-font-size-large: #{$font-size-xl};
+  --el-font-size-medium: #{$font-size-lg};
+  --el-font-size-base: #{$font-size-base};
+  --el-font-size-small: #{$font-size-sm};
+  --el-font-size-extra-small: #{$font-size-xs};
+  
+  // 间距
+  --el-spacing-xs: #{$spacing-1};
+  --el-spacing-sm: #{$spacing-2};
+  --el-spacing-md: #{$spacing-3};
+  --el-spacing-lg: #{$spacing-4};
+  --el-spacing-xl: #{$spacing-5};
+  
+  // 阴影效果 - 采用柔和的阴影，增强层次感但不突兀
+  --el-box-shadow-light: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --el-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --el-box-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+// Element Plus组件样式覆盖
+.el-button {
+  // 参考Circle Soft设计风格按钮 - 简洁设计，清晰状态，流畅交互
+  border-radius: $button-radius;
+  font-weight: $font-weight-semibold;
+  box-shadow: none;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  
+  // 主按钮样式 - 参考Circle Soft设计，紫色背景
+  &.el-button--primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $white;
+    
+    &:hover {
+      background-color: $primary-dark;
+      border-color: $primary-dark;
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+    }
+  }
+  
+  // 次要按钮样式 - 简洁白色背景，灰色边框
+  &.el-button--default {
+    background-color: $white;
+    border-color: $gray-200;
+    color: $gray-700;
+    
+    &:hover {
+      background-color: $gray-50;
+      border-color: $gray-300;
+      color: $gray-800;
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+  
+  // 成功按钮样式
+  &.el-button--success {
+    background-color: $success-color;
+    border-color: $success-color;
+    color: $white;
+    
+    &:hover {
+      background-color: #{color.adjust($success-color, $lightness: -10%)};
+    }
+  }
+  
+  // 警告按钮样式
+  &.el-button--warning {
+    background-color: $warning-color;
+    border-color: $warning-color;
+    color: $white;
+    
+    &:hover {
+      background-color: #{color.adjust($warning-color, $lightness: -10%)};
+    }
+  }
+  
+  // 尺寸优化 - 合适的按钮尺寸，提升点击区域
+  &.el-button--large {
+    height: 48px;
+    padding: 0 28px;
+    font-size: $font-size-lg;
+  }
+  
+  &.el-button--medium {
+    height: 40px;
+    padding: 0 20px;
+    font-size: $font-size-base;
+  }
+  
+  &.el-button--small {
+    height: 32px;
+    padding: 0 16px;
+    font-size: $font-size-sm;
+  }
+  
+  // 图标按钮样式优化
+  &.el-button--icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.el-input {
+  // 参考Circle Soft设计风格输入框 - 简洁设计，清晰边框，流畅交互
+  .el-input__wrapper {
+    border-radius: $border-radius-md;
+    height: 48px;
+    box-shadow: none;
+    background-color: $white;
+    border: 2px solid $gray-200;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: $gray-300;
+    }
+    
+    &.is-focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+    }
+    
+    &.is-disabled {
+      border-color: $gray-100;
+      background-color: $gray-50;
+    }
+  }
+  
+  .el-input__inner {
+    height: 44px;
+    line-height: 44px;
+    font-size: $font-size-base;
+    color: $gray-800;
+    font-weight: $font-weight-medium;
+  }
+  
+  // 输入框前缀样式优化
+  .el-input__prefix {
+    left: 12px;
+    color: $gray-400;
+  }
+  
+  // 输入框后缀样式优化
+  .el-input__suffix {
+    right: 12px;
+    color: $gray-400;
+    
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+.el-card {
+  // 参考Circle Soft设计风格卡片 - 简洁阴影，清晰边框，柔和圆角
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $gray-200;
+  background-color: $white;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  
+  // 卡片悬停效果 - 轻微上浮，增强阴影
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  // 卡片头部样式优化 - 简洁设计
+  .el-card__header {
+    padding: $spacing-3 $spacing-4;
+    border-bottom: 1px solid $gray-200;
+    background-color: $white;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-lg;
+    color: $gray-800;
+  }
+  
+  // 卡片主体样式优化 - 适当内边距
+  .el-card__body {
+    padding: $spacing-4;
+    background-color: $white;
+  }
+  
+  // 数据统计卡片变体 - 参考Circle Soft设计
+  &.stat-card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    
+    .el-card__body {
+      padding: $spacing-4;
+    }
+    
+    // 统计数值样式
+    .stat-value {
+      font-size: $font-size-2xl;
+      font-weight: $font-weight-semibold;
+      color: $gray-900;
+      margin-bottom: $spacing-1;
+    }
+    
+    // 统计标签样式
+    .stat-label {
+      font-size: $font-size-sm;
+      color: $gray-500;
+      margin-bottom: $spacing-2;
+    }
+    
+    // 统计变化样式
+    .stat-change {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      
+      &.positive {
+        color: $success-color;
+      }
+      
+      &.negative {
+        color: $error-color;
+      }
+    }
+  }
+}
+
+.el-table {
+  // 参考Circle Soft设计风格表格 - 简洁设计，清晰层次
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  border: 1px solid $gray-200;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background-color: $white;
+  
+  // 表格头部样式优化 - 简洁白色背景
+  &__header-wrapper {
+    .el-table__header {
+      th {
+          background-color: $white;
+          color: $gray-700;
+          font-weight: $font-weight-semibold;
+          height: 52px;
+          border-bottom: 2px solid $gray-200;
+          font-size: $font-size-sm;
+          text-align: left;
+          vertical-align: middle;
+          
+          // 表头内边距
+          &:first-child {
+            padding-left: $spacing-4;
+          }
+          
+          &:last-child {
+            padding-right: $spacing-4;
+          }
+        }
+    }
+  }
+  
+  // 表格主体样式优化
+  &__body-wrapper {
+    .el-table__body {
+      td {
+          height: 48px;
+          border-bottom: 1px solid $gray-100;
+          color: $gray-700;
+          font-weight: $font-weight-medium;
+          font-size: $font-size-sm;
+          text-align: left;
+          vertical-align: middle;
+          
+          // 单元格内边距优化
+          &:first-child {
+            padding-left: $spacing-4;
+          }
+          
+          &:last-child {
+            padding-right: $spacing-4;
+          }
+        }
+      
+      // 行样式优化
+      tr {
+        transition: background-color 0.2s ease;
+        
+        // 行悬停效果 - 简洁背景色变化
+        &:hover {
+          background-color: $gray-50;
+        }
+        
+        // 移除隔行变色，保持简洁设计
+      }
+    }
+  }
+  
+  // 表格空状态样式优化
+  &--empty {
+    .el-table__empty-block {
+      padding: $spacing-6;
+      color: $gray-400;
+    }
+  }
+}
+
+.el-menu {
+  // 参考Circle Soft设计风格菜单 - 简洁白色背景，左侧紫色指示器
+  border-right: 1px solid $gray-200;
+  background-color: $white;
+  box-shadow: none;
+  width: 240px;
+  
+  // 菜单项样式优化
+  .el-menu-item {
+    height: 52px;
+    line-height: 52px;
+    padding: 0 $spacing-4 0 $spacing-5;
+    margin: 0;
+    border-right: none;
+    transition: all 0.2s ease;
+    color: $gray-700;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-base;
+    text-align: left;
+    
+    // 菜单项悬停效果
+    &:hover {
+      background-color: $primary-light;
+      color: $primary-color;
+    }
+    
+    // 菜单项激活状态 - 参考Circle Soft设计，左侧紫色指示器
+    &.is-active {
+      background-color: $primary-light;
+      color: $primary-color;
+      border-left: 4px solid $primary-color;
+      font-weight: $font-weight-semibold;
+      padding-left: $spacing-4;
+    }
+  }
+  
+  // 子菜单样式优化
+  .el-submenu {
+    // 子菜单标题样式
+    .el-submenu__title {
+      height: 52px;
+      line-height: 52px;
+      padding: 0 $spacing-4 0 $spacing-5;
+      margin: 0;
+      color: $gray-700;
+      font-weight: $font-weight-medium;
+      transition: all 0.2s ease;
+      
+      // 子菜单标题悬停效果
+      &:hover {
+        background-color: $primary-light;
+        color: $primary-color;
+      }
+      
+      // 子菜单激活状态
+      &.is-active {
+        background-color: $primary-light;
+        color: $primary-color;
+        border-left: 4px solid $primary-color;
+        padding-left: $spacing-4;
+      }
+    }
+    
+    // 子菜单项样式
+    .el-menu-item {
+      padding: 0 $spacing-4 0 $spacing-6;
+      margin-left: 0;
+      
+      &:hover {
+        background-color: $primary-light;
+      }
+      
+      &.is-active {
+        border-left: 4px solid $primary-color;
+        padding: 0 $spacing-4 0 $spacing-5;
+      }
+    }
+  }
+  
+  // 水平菜单样式（如果使用）
+  &.el-menu--horizontal {
+    border-bottom: 1px solid $gray-200;
+    background-color: $white;
+    
+    .el-menu-item {
+      margin: 0;
+      padding: 0 $spacing-4;
+      border-radius: 0;
+      border-left: none;
+      
+      &:hover {
+        background-color: $primary-light;
+      }
+      
+      &.is-active {
+        background-color: $primary-light;
+        color: $primary-color;
+        border-left: none;
+        border-bottom: 3px solid $primary-color;
+      }
+    }
+    
+    .el-submenu {
+      .el-submenu__title {
+        margin: 0;
+        padding: 0 $spacing-4;
+        border-radius: 0;
+        
+        &:hover {
+          background-color: $primary-light;
+        }
+      }
+    }
+  }
+}
+
+// 自定义Element Plus主题类
+.el-custom-primary {
+  --el-button-bg-color: #{$primary-color};
+  --el-button-border-color: #{$primary-color};
+  --el-button-hover-bg-color: #{$primary-dark};
+  --el-button-hover-border-color: #{$primary-dark};
+}
+
+// 对话框样式优化 - 移至下方统一定义
+
+// 表单样式优化
+.el-form {
+  // 表单项样式
+  .el-form-item {
+    margin-bottom: $spacing-4;
+    
+    // 表单标签样式
+    .el-form-item__label {
+      color: $gray-700;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-base;
+    }
+    
+    // 表单错误提示样式
+    .el-form-item__error {
+      color: $error-color;
+      font-size: $font-size-xs;
+      margin-top: $spacing-1;
+    }
+  }
+}
+
+// 标签样式优化
+.el-tag {
+  // 全新扁平圆角风格标签 - 增大圆角，优化配色
+  border-radius: $border-radius-lg;
+  padding: 4px 12px;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  border: none;
+  
+  // 主标签样式
+  &.el-tag--primary {
+    background-color: $primary-light;
+    color: $primary-color;
+  }
+  
+  // 成功标签样式
+  &.el-tag--success {
+    background-color: #{color.adjust($success-color, $lightness: 40%)};
+    color: $success-color;
+  }
+  
+  // 警告标签样式
+  &.el-tag--warning {
+    background-color: #{color.adjust($warning-color, $lightness: 40%)};
+    color: $warning-color;
+  }
+  
+  // 错误标签样式
+  &.el-tag--danger {
+    background-color: #{color.adjust($error-color, $lightness: 40%)};
+    color: $error-color;
+  }
+}
+
+// 分页样式优化
+.el-pagination {
+  // 分页容器样式
+  margin-top: $spacing-5;
+  
+  // 分页按钮样式
+  .el-pager {
+    .number {
+      border-radius: $border-radius-lg;
+      margin: 0 $spacing-1;
+      padding: 0 $spacing-2;
+      height: 36px;
+      line-height: 36px;
+      font-weight: $font-weight-medium;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: $primary-light;
+        color: $primary-color;
+      }
+      
+      &.active {
+        background-color: $primary-color;
+        color: $white;
+        border-radius: $border-radius-lg;
+      }
+    }
+  }
+  
+  // 分页控件样式
+  .el-pagination__prev,
+  .el-pagination__next {
+    border-radius: $border-radius-lg;
+    padding: 0 $spacing-2;
+    height: 36px;
+    line-height: 36px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: $primary-light;
+      color: $primary-color;
+    }
+  }
+}
+
+// 开关样式优化
+.el-switch {
+  // 全新扁平圆角风格开关 - 增大圆角，优化配色
+  border-radius: $border-radius-xl;
+  
+  &.el-switch--active {
+    background-color: $primary-color;
+  }
+}
+
+// 复选框样式优化
+.el-checkbox {
+  // 复选框样式
+  .el-checkbox__inner {
+    border-radius: $border-radius-sm;
+    width: 20px;
+    height: 20px;
+    border: 2px solid $gray-300;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: $primary-color;
+    }
+    
+    &:checked {
+      background-color: $primary-color;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// 单选框样式优化
+.el-radio {
+  // 单选框样式
+  .el-radio__inner {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid $gray-300;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: $primary-color;
+    }
+    
+    &:checked {
+      background-color: $primary-color;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// 响应式工具类
+@media (max-width: 768px) {
+  .el-dialog {
+    width: 95% !important;
+    margin: 0 auto;
+    border-radius: $border-radius-2xl;
+  }
+  
+  .el-menu {
+    width: 200px !important;
+  }
+  
+  .el-table {
+    font-size: $font-size-sm;
+    
+    &__header {
+      th {
+        padding-left: $spacing-2;
+        padding-right: $spacing-2;
+      }
+    }
+    
+    &__body {
+      td {
+        padding-left: $spacing-2;
+        padding-right: $spacing-2;
+      }
+    }
+  }
+}
+
+// 已移除自定义遮罩层，统一使用Element Plus对话框自带遮罩
+// .custom-overlay {
+//   background-color: $mask-color !important;
+//   z-index: $mask-z-index !important;
+//   transition: $mask-transition !important;
+//   position: fixed !important;
+//   top: 0 !important;
+//   left: 0 !important;
+//   right: 0 !important;
+//   bottom: 0 !important;
+//   opacity: 1 !important;
+//   pointer-events: none !important;
+// }
+
+// 统一对话框样式定义
+.el-dialog {
+  // 确保对话框高于导航栏和侧边栏
+  z-index: 3000 !important;
+  // 对话框背景为白色，不透明
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+  // 保留适当的阴影和圆角
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.16) !important;
+  border-radius: $modal-radius !important;
+  border: 2px solid $gray-100 !important;
+}
+
+// 对话框容器样式
+.el-dialog__wrapper {
+  // 容器背景透明，让遮罩层显示
+  background-color: transparent !important;
+  opacity: 1 !important;
+  // 确保对话框容器层级正确，高于遮罩层
+  z-index: 3000 !important;
+}
+
+// 统一遮罩层样式 - 标准半透明黑色背景（覆盖整个页面）
+.el-overlay {
+  // 半透明黑色背景，平衡视觉效果和可读性
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  // 适当的透明度，确保背景内容可区分但不干扰对话框
+  opacity: 1 !important;
+  // 确保遮罩可见
+  visibility: visible !important;
+  // 遮罩层级高于导航栏和侧边栏，确保覆盖整个页面
+  z-index: 2002 !important;
+  // 全屏覆盖，固定定位
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  // 添加平滑过渡动画，提升用户体验
+  transition: opacity 0.3s ease !important;
+}
+
+// 确保下拉选项显示在遮罩层之上
+.user-select-popper,
+.el-select-dropdown,
+.el-popper,
+.el-dropdown-menu,
+.el-menu--popup,
+.el-popover__content,
+.el-popper__content {
+  z-index: 3001 !important;
+}
+
+// 确保MessageBox组件样式一致
+.el-message-box {
+  z-index: 3000 !important;
+}

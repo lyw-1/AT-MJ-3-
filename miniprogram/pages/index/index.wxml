@@ -1,0 +1,75 @@
+<view class="container">
+  <!-- 欢迎区域 -->
+  <view class="welcome-section">
+    <view class="welcome-text">
+      <text class="hello">你好，</text>
+      <text class="username">{{userInfo?.name || '用户'}}</text>
+    </view>
+    <text class="subtitle">欢迎使用蜂窝陶瓷模具管理系统</text>
+  </view>
+
+  <!-- 快捷入口 -->
+  <view class="quick-actions">
+    <view class="action-card" bindtap="navigateToTasks">
+      <view class="action-icon task-icon"></view>
+      <text class="action-text">任务管理</text>
+    </view>
+    <view class="action-card" bindtap="navigateToMold">
+      <view class="action-icon mold-icon"></view>
+      <text class="action-text">模具管理</text>
+    </view>
+    <view class="action-card" bindtap="navigateToProcess">
+      <view class="action-icon process-icon"></view>
+      <text class="action-text">加工管理</text>
+    </view>
+    <view class="action-card" bindtap="navigateToStatistics">
+      <view class="action-icon stats-icon"></view>
+      <text class="action-text">数据统计</text>
+    </view>
+  </view>
+
+  <!-- 待办事项 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>待办事项</h3>
+      <text class="more" bindtap="navigateToTasks">查看全部</text>
+    </view>
+    <view class="todo-list">
+      <view wx:for="{{todos}}" wx:key="id" class="todo-item" bindtap="navigateToTaskDetail" data-id="{{item.id}}">
+        <view class="todo-content">
+          <text class="todo-title">{{item.title}}</text>
+          <text class="todo-desc">{{item.description}}</text>
+        </view>
+        <tag class="tag tag-{{item.status}}">{{item.statusText}}</tag>
+      </view>
+      <view wx:if="{{todos.length === 0}}" class="empty-state">
+        <text>暂无待办事项</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>统计数据</h3>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{stats.totalTasks}}</text>
+        <text class="stat-label">总任务数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.pendingTasks}}</text>
+        <text class="stat-label">待处理</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.processingTasks}}</text>
+        <text class="stat-label">处理中</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.completedTasks}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+    </view>
+  </view>
+</view>

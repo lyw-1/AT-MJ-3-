@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.MoldStatusMapper">
+    <!-- 鏍规嵁鐘舵€佷唬鐮佹煡璇㈡ā鍏风姸鎬?-->
+    <select id="selectByStatusCode" resultType="com.mold.digitalization.entity.MoldStatus">
+        SELECT * FROM mold_status WHERE status_code = #{statusCode}
+    </select>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mold.digitalization.mapper.UserRoleMapper">
+
+    <!-- 鏍规嵁鐢ㄦ埛ID鏌ヨ瑙掕壊鍒楄〃 -->
+    <select id="selectRolesByUserId" resultType="com.mold.digitalization.entity.Role">
+        SELECT r.id, r.role_name, r.role_code, r.description
+        FROM role r
+        INNER JOIN user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <!-- 根据用户ID查询用户角色关联（返回 UserRole 列表） -->
+    <select id="selectByUserId" resultType="com.mold.digitalization.entity.UserRole">
+        SELECT ur.user_id, ur.role_id
+        FROM user_role ur
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <!-- 根据角色ID查询用户角色关联（返回 UserRole 列表） -->
+    <select id="selectByRoleId" resultType="com.mold.digitalization.entity.UserRole">
+        SELECT ur.user_id, ur.role_id
+        FROM user_role ur
+        WHERE ur.role_id = #{roleId}
+    </select>
+
+    <!-- 鎵归噺鎻掑叆鐢ㄦ埛瑙掕壊鍏宠仈 -->
+    <insert id="batchInsert">
+        INSERT INTO user_role (user_id, role_id)
+        VALUES
+        <foreach collection="userRoles" item="userRole" separator=",">
+            (#{userRole.userId}, #{userRole.roleId})
+        </foreach>
+    </insert>
+
+    <!-- 鏍规嵁鐢ㄦ埛ID鍒犻櫎鐢ㄦ埛瑙掕壊鍏宠仈 -->
+    <delete id="deleteByUserId">
+        DELETE FROM user_role WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 根据用户ID并排除指定角色ID列表删除用户角色关联 -->
+    <delete id="deleteByUserId">
+        DELETE FROM user_role WHERE user_id = #{userId}
+        <if test="excludeRoleIds != null and !excludeRoleIds.isEmpty()">
+            AND role_id NOT IN
+            <foreach collection="excludeRoleIds" item="roleId" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="existsByUserIdAndRoleId" resultType="int">
+        SELECT COUNT(*) FROM user_role WHERE user_id = #{userId} AND role_id = #{roleId}
+    </select>
+
+    <delete id="deleteByUserIdAndRoleId">
+        DELETE FROM user_role WHERE user_id = #{userId} AND role_id = #{roleId}
+    </delete>
+
+    <insert id="insertBatch">
+        INSERT INTO user_role (user_id, role_id)
+        VALUES
+        <foreach collection="userRoles" item="userRole" separator=",">
+            (#{userRole.userId}, #{userRole.roleId})
+        </foreach>
+    </insert>
+
+</mapper>

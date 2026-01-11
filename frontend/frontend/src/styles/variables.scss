@@ -1,0 +1,72 @@
+// Circle Soft设计风格 - 紫色主色调
+$primary-color: #6150BF;
+$primary-light: #EEF2FF;
+$primary-dark: #4F46E5;
+
+// 数据可视化颜色 - 与Circle Soft保持一致
+$primary-chart: #6150BF;
+$secondary-chart: #E0E7FF;
+$success-chart: #10B981;
+$warning-chart: #F59E0B;
+$error-chart: #EF4444;
+
+// 状态颜色 - 与Circle Soft设计匹配
+$success-color: #10B981;
+$warning-color: #F59E0B;
+$error-color: #EF4444;
+$info-color: #6B7280;
+
+$white: #FFFFFF;
+$gray-50: #F9FAFB;
+$gray-100: #F3F4F6;
+$gray-200: #E5E7EB;
+$gray-300: #D1D5DB;
+$gray-400: #9CA3AF;
+$gray-500: #6B7280;
+$gray-600: #4B5563;
+$gray-700: #374151;
+$gray-800: #1F2937;
+$gray-900: #111827;
+
+$bg-color: #F9F9FA;
+$card-bg: #FFFFFF;
+
+$spacing-1: 8px;
+$spacing-2: 16px;
+$spacing-3: 24px;
+$spacing-4: 32px;
+$spacing-5: 40px;
+$spacing-6: 48px;
+
+// 全新扁平圆角风格设计
+// 核心设计理念：大圆角、低饱和度、柔和阴影、简洁扁平
+
+// 圆角系统 - 采用更大的圆角值，营造柔和圆润的视觉效果
+$border-radius-sm: 12px;
+$border-radius-md: 16px;
+$border-radius-lg: 20px;
+$border-radius-xl: 24px;
+$border-radius-2xl: 28px;
+$border-radius-3xl: 32px;
+
+// 组件圆角配置 - 为不同组件分配合适的圆角大小
+$button-radius: $border-radius-xl;
+$input-radius: $border-radius-lg;
+$card-radius: $border-radius-2xl;
+$modal-radius: $border-radius-3xl;
+
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-2xl: 20px;
+
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+
+// 遮罩层样式变量
+$mask-color: rgba(0, 0, 0, 0.5); // 遮罩层背景色和透明度
+$mask-z-index: 2000; // 遮罩层z-index
+$mask-transition: opacity 0.3s ease; // 遮罩层过渡效果
+$mask-position: fixed; // 遮罩层定位方式

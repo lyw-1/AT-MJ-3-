@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.DepartmentMapper">
+
+  <resultMap id="DepartmentMap" type="com.mold.digitalization.entity.Department">
+    <id column="id" property="id"/>
+    <result column="name" property="name"/>
+    <result column="parent_id" property="parentId"/>
+    <result column="sort_order" property="sortOrder"/>
+    <result column="status" property="status"/>
+    <result column="create_time" property="createTime"/>
+    <result column="update_time" property="updateTime"/>
+  </resultMap>
+
+  <select id="selectAll" resultMap="DepartmentMap">
+    SELECT id, name, parent_id, sort_order, status, create_time, update_time FROM department 
+    WHERE status IS NULL OR status = 1 
+    ORDER BY parent_id ASC, sort_order ASC, name ASC
+  </select>
+
+  <select id="selectByKeyword" resultMap="DepartmentMap">
+    SELECT id, name, parent_id, sort_order, status, create_time, update_time FROM department 
+    WHERE (status IS NULL OR status = 1) AND name LIKE CONCAT('%', #{keyword}, '%')
+    ORDER BY parent_id ASC, sort_order ASC, name ASC
+  </select>
+
+  <select id="selectIdByName" resultType="long">
+    SELECT id FROM department WHERE name = #{name} LIMIT 1
+  </select>
+
+  <update id="insertIgnoreByName">
+    INSERT INTO department(name, status)
+    SELECT #{name}, 1 WHERE NOT EXISTS(SELECT 1 FROM department WHERE name = #{name})
+  </update>
+
+</mapper>

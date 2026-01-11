@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- 示例：排除 Lombok 生成的代码中的空指针警告 -->
+    <Match>
+        <Or>
+            <Class name="~.*\$\$.*" />
+            <Class name="~lombok\..*" />
+        </Or>
+    </Match>
+</FindBugsFilter>

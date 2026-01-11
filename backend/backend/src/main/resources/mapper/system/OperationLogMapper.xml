@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.OperationLogMapper">
+
+    <!-- 澶氭潯浠跺垎椤垫煡璇㈡搷浣滄棩蹇?-->
+    <select id="queryPage" resultType="com.mold.digitalization.entity.system.OperationLog">
+        SELECT * FROM operation_log 
+        <where>
+            <if test="query.username != null and query.username != ''">
+                AND username LIKE CONCAT('%', #{query.username}, '%')
+            </if>
+            <if test="query.operationType != null and query.operationType != ''">
+                AND operation_type = #{query.operationType}
+            </if>
+            <if test="query.startTime != null">
+                AND create_time >= #{query.startTime}
+            </if>
+            <if test="query.endTime != null">
+                AND create_time <= #{query.endTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鎸夋椂闂磋寖鍥存煡璇㈡搷浣滄棩蹇?-->
+    <select id="queryByTimeRange" resultType="com.mold.digitalization.entity.system.OperationLog">
+        SELECT * FROM operation_log 
+        WHERE create_time >= #{startTime} AND create_time <= #{endTime}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鎸夋搷浣滅被鍨嬬粺璁?-->
+    <select id="statisticByOperationType" resultType="com.mold.digitalization.entity.dto.OperationLogStatisticDTO">
+        SELECT 
+            operation_type as name,
+            COUNT(*) as count
+        FROM operation_log 
+        WHERE create_time >= #{startTime} AND create_time <= #{endTime}
+        GROUP BY operation_type
+        ORDER BY count DESC
+    </select>
+
+    <!-- 鎸夌敤鎴风粺璁?-->
+    <select id="statisticByUser" resultType="com.mold.digitalization.entity.dto.OperationLogStatisticDTO">
+        SELECT 
+            username as name,
+            COUNT(*) as count
+        FROM operation_log 
+        WHERE create_time >= #{startTime} AND create_time <= #{endTime}
+        GROUP BY username
+        ORDER BY count DESC
+    </select>
+
+    <!-- 鎸夋ā鍧楃粺璁?-->
+    <!-- 移除对不存在列 module 的引用：如需按模块统计，请后续补充列与映射 -->
+    <select id="statisticByModule" resultType="com.mold.digitalization.entity.dto.OperationLogStatisticDTO">
+        SELECT 
+            operation_type as name,
+            COUNT(*) as count
+        FROM operation_log 
+        WHERE create_time >= #{startTime} AND create_time <= #{endTime}
+        GROUP BY operation_type
+        ORDER BY count DESC
+    </select>
+
+    <!-- 鏌ヨ鏁忔劅鎿嶄綔 -->
+    <select id="querySensitiveOperations" resultType="com.mold.digitalization.entity.system.OperationLog">
+        SELECT * FROM operation_log 
+        WHERE 1 = 1
+        <if test="query.username != null and query.username != ''">
+            AND username LIKE CONCAT('%', #{query.username}, '%')
+        </if>
+        <if test="query.startTime != null">
+            AND create_time >= #{query.startTime}
+        </if>
+        <if test="query.endTime != null">
+            AND create_time <= #{query.endTime}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 娓呯悊鎸囧畾鏃堕棿涔嬪墠鐨勬搷浣滄棩蹇?-->
+    <delete id="cleanOldLogs">
+        DELETE FROM operation_log 
+        WHERE create_time < #{beforeTime}
+    </delete>
+
+</mapper>

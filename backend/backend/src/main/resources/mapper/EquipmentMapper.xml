@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.EquipmentMapper">
+
+    <resultMap id="EquipmentResultMap" type="com.mold.digitalization.entity.Equipment">
+        <id column="id" property="id" />
+        <result column="equipment_code" property="equipmentCode" />
+        <result column="equipment_name" property="equipmentName" />
+        <result column="equipment_type_id" property="equipmentTypeId" />
+        <result column="status" property="status" />
+        <result column="location" property="location" />
+        <result column="responsible_user_id" property="responsibleUserId" />
+        <result column="purchase_time" property="purchaseTime" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="selectByEquipmentCode" resultMap="EquipmentResultMap">
+        SELECT
+            id,
+            equipment_code,
+            equipment_name,
+            equipment_type_id,
+            status,
+            location,
+            responsible_user_id,
+            purchase_time,
+            remark,
+            create_time,
+            update_time
+        FROM equipment
+        WHERE equipment_code = #{equipmentCode}
+        LIMIT 1
+    </select>
+
+    <select id="selectByTypeId" resultMap="EquipmentResultMap">
+        SELECT
+            id,
+            equipment_code,
+            equipment_name,
+            equipment_type_id,
+            status,
+            location,
+            responsible_user_id,
+            purchase_time,
+            remark,
+            create_time,
+            update_time
+        FROM equipment
+        WHERE equipment_type_id = #{typeId}
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

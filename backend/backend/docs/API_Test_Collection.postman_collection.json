@@ -1,0 +1,1385 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "模具加工流程引擎 API测试集合",
+		"description": "模具加工流程引擎API的测试用例集合，包含流程管理、状态机、进度跟踪、异常处理和统计分析等模块的API测试",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "// 集合级预请求脚本：自动获取并注入 token 与 userToken（如果为空且提供了凭据）",
+                    "function getVar(k){ return pm.collectionVariables.get(k) || pm.variables.get(k) || pm.environment.get(k) || ''; }",
+                    "function setVar(k,v){ pm.collectionVariables.set(k,v); try{ pm.environment.set(k,v); }catch(e){} }",
+                    "const baseUrl = getVar('baseUrl');",
+                    "function ensureAdminToken(){",
+                    "  if(getVar('token')){ return; }",
+                    "  const username = getVar('adminUsername');",
+                    "  const password = getVar('adminPassword');",
+                    "  if(!username || !password || !baseUrl){ return; }",
+                    "  const paths = ['/api/auth/login','/v1/api/auth/login','/auth/login'];",
+                    "  function tryLogin(i){",
+                    "    if(i >= paths.length){ console.warn('管理员登录全部路径尝试失败'); return; }",
+                    "    const url = baseUrl.replace(/\\/$/, '') + paths[i];",
+                    "    pm.sendRequest({",
+                    "      url: url,",
+                    "      method: 'POST',",
+                    "      header: [{ key: 'Content-Type', value: 'application/json' }],",
+                    "      body: { mode: 'raw', raw: JSON.stringify({ username: username, password: password }) }",
+                    "    }, function(err, res){",
+                    "      if(err){ console.warn('管理员登录失败', err, 'path:', paths[i]); return tryLogin(i+1); }",
+                    "      if(res && res.code === 200){",
+                    "        try{",
+                    "          var json = {}; try{ json = res.json(); }catch(e){}",
+                    "          var access = (json && json.data && json.data.accessToken) ? json.data.accessToken : (json && json.accessToken ? json.accessToken : '');",
+                    "          if(access){ setVar('token', access); } else { console.warn('管理员登录未获取到 accessToken，切换下一路径'); tryLogin(i+1); }",
+                    "        }catch(e){ console.warn('解析管理员登录响应失败', e); tryLogin(i+1); }",
+                    "      } else { console.warn('管理员登录返回非200状态', res && res.code, 'path:', paths[i]); tryLogin(i+1); }",
+                    "    });",
+                    "  }",
+                    "  tryLogin(0);",
+                    "}",
+                    "function ensureUserToken(){",
+                    "  if(getVar('userToken')){ return; }",
+                    "  const username = getVar('userUsername');",
+                    "  const password = getVar('userPassword');",
+                    "  if(!username || !password || !baseUrl){ return; }",
+                    "  const paths = ['/api/auth/login','/v1/api/auth/login','/auth/login'];",
+                    "  function tryLogin(i){",
+                    "    if(i >= paths.length){ console.warn('普通用户登录全部路径尝试失败'); return; }",
+                    "    const url = baseUrl.replace(/\\/$/, '') + paths[i];",
+                    "    pm.sendRequest({",
+                    "      url: url,",
+                    "      method: 'POST',",
+                    "      header: [{ key: 'Content-Type', value: 'application/json' }],",
+                    "      body: { mode: 'raw', raw: JSON.stringify({ username: username, password: password }) }",
+                    "    }, function(err, res){",
+                    "      if(err){ console.warn('普通用户登录失败', err, 'path:', paths[i]); return tryLogin(i+1); }",
+                    "      if(res && res.code === 200){",
+                    "        try{",
+                    "          var json = {}; try{ json = res.json(); }catch(e){}",
+                    "          var access = (json && json.data && json.data.accessToken) ? json.data.accessToken : (json && json.accessToken ? json.accessToken : '');",
+                    "          if(access){ setVar('userToken', access); } else { console.warn('普通用户登录未获取到 accessToken，切换下一路径'); tryLogin(i+1); }",
+                    "        }catch(e){ console.warn('解析普通用户登录响应失败', e); tryLogin(i+1); }",
+                    "      } else { console.warn('普通用户登录返回非200状态', res && res.code, 'path:', paths[i]); tryLogin(i+1); }",
+                    "    });",
+                    "  }",
+                    "  tryLogin(0);",
+                    "}",
+                    "try { ensureAdminToken(); ensureUserToken(); } catch(e){ console.warn('集合级预请求脚本异常', e); }",
+                    "try {",
+                    "  var devToken = getVar('devToken') || getVar('app.security.dev.token.value') || 'dev-123';",
+                    "  var reqName = (pm.info && pm.info.requestName) ? pm.info.requestName : '';",
+                    "  var hasAuthToken = !!getVar('token');",
+                    "  var isForbiddenCase = /未携带令牌|普通用户令牌/.test(reqName);",
+                    "  if(devToken && !hasAuthToken && !isForbiddenCase){",
+                    "    setVar('devToken', devToken);",
+                    "    try { pm.request.headers.add({ key: 'X-Dev-Token', value: devToken }); } catch(ex) {}",
+                    "  }",
+                    "} catch(e) { console.warn('注入DevToken失败', e); }"
+                ]
+            }
+        }
+    ],
+    "item": [
+        {
+            "name": "流程管理",
+            "item": [
+                {
+                    "name": "创建流程",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"moldName\": \"流程\",\n  \"moldNumber\": \"M001\",\n  \"moldCategory\": \"CNC\",\n  \"material\": \"钢\",\n  \"cavityCount\": 2,\n  \"remark\": \"高精度模具加工\",\n  \"operatorId\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/mold-process",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","mold-process"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取流程详情",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/mold-process/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","mold-process","1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "更新流程",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"processName\": \"流程-更新\",\n  \"description\": \"更新描述\",\n  \"remark\": \"备注信息\",\n  \"currentStatus\": 1,\n  \"currentProgress\": 10\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/mold-process/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","mold-process","1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "删除流程",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/mold-process/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","mold-process","1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "查询全部流程",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/mold-process",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","mold-process"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "开始流程(状态机)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=START&operator=tester",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"START"},
+                                {"key":"operator","value":"tester"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "暂停流程(状态机)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=PAUSE&operator=tester",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"PAUSE"},
+                                {"key":"operator","value":"tester"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "恢复流程(状态机)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=RESUME&operator=tester",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"RESUME"},
+                                {"key":"operator","value":"tester"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "完成流程(状态机)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=COMPLETE&operator=tester",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"COMPLETE"},
+                                {"key":"operator","value":"tester"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "取消流程(状态机)",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=CANCEL&operator=tester&remark=设备故障",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"CANCEL"},
+                                {"key":"operator","value":"tester"},
+                                {"key":"remark","value":"设备故障"}
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "description": "流程管理相关的API测试"
+        },
+        {
+            "name": "状态机",
+            "item": [
+                {
+                    "name": "获取当前状态",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/current",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","current"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取可用事件列表",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/available-events",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","available-events"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "检查状态转换是否允许",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/can-transition?event=START",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","can-transition"],
+                            "query": [
+                                {"key":"event","value":"START"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "执行状态转换",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=START&operator=tester",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","transition"],
+                            "query": [
+                                {"key":"event","value":"START"},
+                                {"key":"operator","value":"tester"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取状态历史",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/1/history",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","1","history"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取全部状态定义",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/states",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","states"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取全部事件定义",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/events",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","events"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取状态描述",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/status-description?statusCode=0",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","status-description"],
+                            "query": [
+                                {"key":"statusCode","value":"0"}
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取事件描述",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/process-state-machine/event-description?eventName=START",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","process-state-machine","event-description"],
+                            "query": [
+                                {"key":"eventName","value":"START"}
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "description": "状态机相关的API测试"
+        },
+        {
+            "name": "进度跟踪",
+            "item": [
+                {
+                    "name": "获取进度记录详情",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/progress/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","progress","1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "更新进度记录",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"progress\": 20,\n  \"operatorId\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/progress/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","progress","1"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "获取进度历史数据",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/progress/1/history",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api","progress","1","history"]
+                        }
+                    },
+                    "response": []
+                }
+            ],
+            "description": "进度跟踪相关的API测试"
+        },
+		{
+			"name": "异常处理",
+			"item": [
+				{
+					"name": "创建异常记录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"processId\": 1,\n  \"exceptionType\": \"EQUIPMENT_FAILURE\",\n  \"exceptionLevel\": \"HIGH\",\n  \"title\": \"设备故障\",\n  \"description\": \"主轴异常震动\",\n  \"reportedBy\": \"OP001\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取异常记录详情",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新异常记录",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"processId\": 1,\n  \"exceptionType\": \"EQUIPMENT_FAILURE\",\n  \"exceptionLevel\": \"HIGH\",\n  \"title\": \"设备故障\",\n  \"description\": \"主轴异常震动，需要更换轴承\",\n  \"exceptionStatus\": \"IN_PROGRESS\",\n  \"reportedBy\": \"OP001\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除异常记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按流程ID获取异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/process/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"process",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按异常类型获取异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/type/EQUIPMENT_FAILURE",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"type",
+								"EQUIPMENT_FAILURE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按异常状态获取异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/status/OPEN",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"status",
+								"OPEN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按异常级别获取异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/level/HIGH",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"level",
+								"HIGH"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "按时间范围获取异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/time-range?startTime=2023-12-01T00:00:00&endTime=2023-12-01T23:59:59",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"time-range"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "2023-12-01T00:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "2023-12-01T23:59:59"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取所有异常记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新异常状态",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/1/status?status=IN_PROGRESS&updatedBy=TECH001",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "IN_PROGRESS"
+								},
+								{
+									"key": "updatedBy",
+									"value": "TECH001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "处理异常",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/1/handle?resolution=更换主轴轴承&resolvedBy=TECH001",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"1",
+								"handle"
+							],
+							"query": [
+								{
+									"key": "resolution",
+									"value": "更换主轴轴承"
+								},
+								{
+									"key": "resolvedBy",
+									"value": "TECH001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取异常统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/exceptions/statistics",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"exceptions",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "异常处理相关的API测试"
+		},
+		{
+			"name": "统计分析",
+			"item": [
+				{
+					"name": "获取流程统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/process",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取状态统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/state",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"state"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取进度统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/progress",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"progress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取异常统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/exception",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"exception"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取综合统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/comprehensive",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"comprehensive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取时间范围统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/time-range?startTime=2023-12-01T00:00:00&endTime=2023-12-01T23:59:59",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"time-range"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "2023-12-01T00:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "2023-12-01T23:59:59"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取图表数据",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/statistics/chart-data?chartType=process&timeRange=daily",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"statistics",
+								"chart-data"
+							],
+							"query": [
+								{
+									"key": "chartType",
+									"value": "process"
+								},
+								{
+									"key": "timeRange",
+									"value": "daily"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "统计分析相关的API测试"
+		}
+		,
+		{
+			"name": "管理员接口",
+			"description": "管理员认证与用户管理接口，需要 ADMIN 或 SUPER_ADMIN 角色；用于用户不存在的404、无令牌401、非管理员403的规范验证。",
+			"item": [
+				{
+					"name": "管理员登录获取token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin12345\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"try {",
+									"  const json = pm.response.json();",
+									"  const token = json && json.data && json.data.accessToken ? json.data.accessToken : '';",
+									"  pm.test('管理员登录成功并设置 token', function () {",
+									"    pm.expect(json.code).to.eql(200);",
+									"    pm.expect(token).to.not.be.empty;",
+									"  });",
+									"  pm.collectionVariables.set('token', token);",
+									"  pm.environment.set('token', token);",
+									"} catch (e) {",
+									"  console.log('解析失败', e);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "普通用户登录获取userToken",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"user12345\"\n}"
+						},
+						"url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"try {",
+									"  const json = pm.response.json();",
+									"  const token = json && json.data && json.data.accessToken ? json.data.accessToken : '';",
+									"  pm.test('普通用户登录成功并设置 userToken', function () {",
+									"    pm.expect(json.code).to.eql(200);",
+									"    pm.expect(token).to.not.be.empty;",
+									"  });",
+									"  pm.collectionVariables.set('userToken', token);",
+									"  pm.environment.set('userToken', token);",
+									"} catch (e) {",
+									"  console.log('解析失败', e);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+                {
+                    "name": "重置密码（用户不存在 -> 404 / 10001）",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" },
+                            { "key": "Content-Type", "value": "application/json" }
+                        ],
+                        "body": { "mode": "raw", "raw": "{\n  \"userId\": 999\n}" },
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","reset-password"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+                                    "let isJson = false; let json = {}; try { json = pm.response.json(); isJson = true; } catch(e){}",
+                                    "if (isJson) {",
+                                    "  pm.test('业务码10001或消息包含用户不存在', function(){",
+                                    "    pm.expect([json.code, json.message]).to.include(10001) || pm.expect((json.message||'')).to.match(/用户不存在|User not found/i);",
+                                    "  });",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "锁定用户（用户不存在 -> 404 / 10001）",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" },
+                            { "key": "Content-Type", "value": "application/json" }
+                        ],
+                        "body": { "mode": "raw", "raw": "{\n  \"userId\": 999,\n  \"operationType\": \"lock\"\n}" },
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/lock-user", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","lock-user"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+                                    "let isJson = false; let json = {}; try { json = pm.response.json(); isJson = true; } catch(e){}",
+                                    "if (isJson) {",
+                                    "  pm.test('业务码10001或消息包含用户不存在', function(){",
+                                    "    pm.expect([json.code, json.message]).to.include(10001) || pm.expect((json.message||'')).to.match(/用户不存在|User not found/i);",
+                                    "  });",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "解锁用户（路径 unlock-user/{userId}，用户不存在 -> 404 / 10001）",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" }
+                        ],
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/unlock-user/999", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","unlock-user","999"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+                                    "let isJson = false; let json = {}; try { json = pm.response.json(); isJson = true; } catch(e){}",
+                                    "if (isJson) {",
+                                    "  pm.test('业务码10001或消息包含用户不存在', function(){",
+                                    "    pm.expect([json.code, json.message]).to.include(10001) || pm.expect((json.message||'')).to.match(/用户不存在|User not found/i);",
+                                    "  });",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "解锁用户（JSON统一返回）/users/{userId}/unlock（用户不存在 -> 404 / 10001）",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" }
+                        ],
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/users/999/unlock", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","users","999","unlock"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+                                    "const json = pm.response.json();",
+                                    "pm.test('统一JSON结构code=10001', function(){ pm.expect(json.code).to.eql(10001); });"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "未携带令牌访问管理员接口（预期 401）",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/unlock-user/999", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","unlock-user","999"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为401', function () { pm.response.to.have.status(401); });",
+                                    "let json={}; try{ json = pm.response.json(); }catch(e){}",
+                                    "if(json && json.code){ pm.test('错误码为401', function(){ pm.expect(json.code).to.eql(401); }); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "使用普通用户令牌访问管理员接口（预期 403）",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{userToken}}" }
+                        ],
+                        "url": { "raw": "{{baseUrl}}/api/v1/admin/auth/unlock-user/999", "host": ["{{baseUrl}}"], "path": ["api","v1","admin","auth","unlock-user","999"] }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为403', function () { pm.response.to.have.status(403); });",
+                                    "let json={}; try{ json = pm.response.json(); }catch(e){}",
+                                    "if(json && json.code){ pm.test('错误码为403', function(){ pm.expect(json.code).to.eql(403); }); }"
+                                ]
+                            }
+                        }
+                    ]
+                }
+				,
+				{
+					"name": "异常统一验证：ProcessException 不存在 -> 404 / 1001",
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+						"url": { "raw": "{{baseUrl}}/api/process-exceptions/99999", "host": ["{{baseUrl}}"], "path": ["api","process-exceptions","99999"] }
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+									"let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+                                    "if(isJson){ pm.test('业务码为1001或消息包含not found/不存在', function(){ pm.expect([json.code, (json.message||'')]).to.include(1001) || pm.expect((json.message||'')).to.match(/not\\s*found|不存在/i); }); }"
+								]
+							}
+						}
+					]
+				}
+				,
+				{
+					"name": "异常统一验证：ProcessException 处理参数缺失 -> 400 / 400",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+						"url": { "raw": "{{baseUrl}}/api/process-exceptions/1/handle", "host": ["{{baseUrl}}"], "path": ["api","process-exceptions","1","handle"] }
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('状态码为400', function () { pm.response.to.have.status(400); });",
+									"let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+									"if(isJson){ pm.test('错误码400或消息包含参数错误', function(){ pm.expect(json.code).to.eql(400); }); }"
+								]
+							}
+						}
+					]
+				}
+				,
+				{
+					"name": "异常统一验证：OperationLog 不存在 -> 404 / 1001",
+					"request": {
+						"method": "GET",
+						"header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+						"url": { "raw": "{{baseUrl}}/v1/api/log/operation/99999", "host": ["{{baseUrl}}"], "path": ["v1","api","log","operation","99999"] }
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('状态码为404', function () { pm.response.to.have.status(404); });",
+									"let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+                                    "if(isJson){ pm.test('业务码为1001或消息包含not found/不存在', function(){ pm.expect([json.code, (json.message||'')]).to.include(1001) || pm.expect((json.message||'')).to.match(/not\\s*found|不存在/i); }); }"
+								]
+							}
+						}
+					]
+				}
+			,
+			{
+				"name": "登录失败（用户名或密码错误）-> 401",
+				"request": {
+					"method": "POST",
+					"header": [ { "key": "Content-Type", "value": "application/json" } ],
+					"url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] },
+					"body": { "mode": "raw", "raw": "{\n  \"username\": \"wrong_user\",\n  \"password\": \"wrong_pass\"\n}" }
+				},
+				"event": [
+					{
+						"listen": "test",
+						"script": {
+							"type": "text/javascript",
+							"exec": [
+								"pm.test('状态码为401', function () { pm.response.to.have.status(401); });",
+								"let json={}; try{ json = pm.response.json(); }catch(e){}",
+								"if(json && json.code){ pm.test('错误码为401', function(){ pm.expect(json.code).to.eql(401); }); }"
+							]
+						}
+					}
+				]
+			}
+			,
+			{
+				"name": "非法操作（状态不允许）-> 422 / 1007",
+				"request": {
+					"method": "POST",
+					"header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+					"url": { "raw": "{{baseUrl}}/api/process-state-machine/1/transition?event=START&operator=tester", "host": ["{{baseUrl}}"], "path": ["api","process-state-machine","1","transition"], "query": [ {"key":"event","value":"START"}, {"key":"operator","value":"tester"} ] }
+				},
+				"event": [
+					{
+						"listen": "test",
+						"script": {
+							"type": "text/javascript",
+							"exec": [
+								"pm.test('状态码为422或400', function () { pm.expect([422,400]).to.include(pm.response.code); });",
+								"let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+								"if(isJson){ pm.test('错误码包含1007(非法操作)或400(参数错误)', function(){ pm.expect([1007,400]).to.include(json.code); }); }"
+							]
+						}
+					}
+				]
+			}
+			,
+                {
+                    "name": "数据库错误模拟 -> 500 / 3000",
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" }, {"key":"Content-Type","value":"application/json"} ],
+                        "url": { "raw": "{{baseUrl}}/api/process-exceptions", "host": ["{{baseUrl}}"], "path": ["api","process-exceptions"] },
+                        "body": { "mode": "raw", "raw": "{\n  \"id\": 1,\n  \"exceptionType\": 9999,\n  \"description\": \"force db error\"\n}" }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('状态码为500', function () { pm.response.to.have.status(500); });",
+                                    "let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+                                    "if(isJson){ pm.test('错误码为3000或消息包含数据库错误', function(){ pm.expect([3000,500]).to.include(json.code) || pm.expect((json.message||'')).to.match(/数据库错误|sql异常/i); }); }"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ,
+            {
+                "name": "未携带令牌登出（预期 401）",
+                "request": {
+                    "method": "POST",
+                    "header": [],
+                    "url": { "raw": "{{baseUrl}}/api/auth/logout", "host": ["{{baseUrl}}"], "path": ["api","auth","logout"] }
+                },
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                                "pm.test('状态码为401', function () { pm.response.to.have.status(401); });",
+                                "let json={}; try{ json = pm.response.json(); }catch(e){}",
+                                "if(json && json.code){ pm.test('错误码为401', function(){ pm.expect(json.code).to.eql(401); }); }"
+                            ]
+                        }
+                    }
+                ]
+            }
+            ,
+            {
+                "name": "刷新令牌为空（预期 400 / 参数错误）",
+                "request": {
+                    "method": "POST",
+                    "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                    "url": { "raw": "{{baseUrl}}/api/auth/refresh-token", "host": ["{{baseUrl}}"], "path": ["api","auth","refresh-token"] },
+                    "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"\"\n}" }
+                },
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                                "pm.test('状态码为400', function () { pm.response.to.have.status(400); });",
+                                "let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+                                "if(isJson){ pm.test('错误码为400或消息包含刷新令牌', function(){ pm.expect([400]).to.include(json.code) || pm.expect((json.message||'')).to.match(/刷新令牌|refresh token/i); }); }"
+                            ]
+                        }
+                    }
+                ]
+            }
+            ,
+            {
+                "name": "刷新令牌无效（预期 400 / 4012）",
+                "request": {
+                    "method": "POST",
+                    "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                    "url": { "raw": "{{baseUrl}}/api/auth/refresh-token", "host": ["{{baseUrl}}"], "path": ["api","auth","refresh-token"] },
+                    "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"invalid-refresh-token-123\"\n}" }
+                },
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "type": "text/javascript",
+                            "exec": [
+                                "pm.test('状态码为400', function () { pm.response.to.have.status(400); });",
+                                "let json={}; let isJson=false; try{ json = pm.response.json(); isJson=true; }catch(e){}",
+                                "if(isJson){ pm.test('错误码为4012(令牌无效)或400', function(){ pm.expect([4012,400]).to.include(json.code); }); }"
+                            ]
+                        }
+                    }
+                ]
+            }
+            ]
+        }
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"description": "管理员令牌（不含 Bearer 前缀）"
+		},
+		{
+			"key": "userToken",
+			"value": "",
+			"type": "string",
+			"description": "普通用户令牌（不含 Bearer 前缀），用于验证 403 拒绝访问"
+		},
+		{
+			"key": "adminUsername",
+			"value": "",
+			"type": "string",
+			"description": "管理员用户名（用于集合级自动登录）；留空则不自动登录"
+		},
+		{
+			"key": "adminPassword",
+			"value": "",
+			"type": "string",
+			"description": "管理员密码（用于集合级自动登录）；留空则不自动登录"
+		},
+		{
+			"key": "userUsername",
+			"value": "",
+			"type": "string",
+			"description": "普通用户用户名（用于集合级自动登录）；留空则不自动登录"
+		},
+		{
+			"key": "userPassword",
+			"value": "",
+			"type": "string",
+			"description": "普通用户密码（用于集合级自动登录）；留空则不自动登录"
+		}
+	]
+}

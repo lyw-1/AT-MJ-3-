@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.AccessoryMapper">
+  <select id="selectByAccessoryCode" resultType="com.mold.digitalization.entity.Accessory">
+    select * from accessory where accessory_code = #{accessoryCode}
+  </select>
+  <select id="selectByTypeId" resultType="com.mold.digitalization.entity.Accessory">
+    select * from accessory where accessory_type_id = #{accessoryTypeId}
+  </select>
+  <select id="selectByStatus" resultType="com.mold.digitalization.entity.Accessory">
+    select * from accessory where status = #{status}
+  </select>
+  <select id="selectLowStock" resultType="com.mold.digitalization.entity.Accessory">
+    select * from accessory where stock_quantity &lt; #{threshold}
+  </select>
+  <select id="selectByMaterial" resultType="com.mold.digitalization.entity.Accessory">
+    select * from accessory where material = #{material}
+  </select>
+  <update id="updateStockQuantity">
+    update accessory set stock_quantity = stock_quantity + #{quantity} where id = #{id}
+  </update>
+  <resultMap id="AccessoryMap" type="com.mold.digitalization.entity.Accessory"/>
+</mapper>

@@ -1,0 +1,75 @@
+<view class="container">
+  <!-- 任务头部 -->
+  <view class="card">
+    <view class="task-header">
+      <view class="task-title-section">
+        <text class="task-title">{{task.title}}</text>
+        <tag class="tag tag-{{task.status}}">{{task.statusText}}</tag>
+      </view>
+      <view class="task-actions">
+        <button-component type="primary" size="small" text="编辑" bind:click="onEdit"></button-component>
+        <button-component type="success" size="small" text="完成" bind:click="onComplete"></button-component>
+      </view>
+    </view>
+    <view class="task-info">
+      <text class="task-desc">{{task.description}}</text>
+    </view>
+    <view class="task-meta">
+      <view class="meta-item">
+        <text class="meta-label">负责人:</text>
+        <text class="meta-value">{{task.assignee}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">创建时间:</text>
+        <text class="meta-value">{{task.createTime}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">更新时间:</text>
+        <text class="meta-value">{{task.updateTime}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">优先级:</text>
+        <text class="meta-value">{{task.priority}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 任务进度 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>任务进度</h3>
+    </view>
+    <view class="progress-section">
+      <view class="progress-bar">
+        <view class="progress" style="width: {{task.progress}}%"></view>
+      </view>
+      <text class="progress-text">{{task.progress}}%</text>
+    </view>
+    <view class="progress-steps">
+      <view wx:for="{{task.steps}}" wx:key="id" class="progress-step {{step.completed ? 'completed' : ''}}">
+        <view class="step-icon">{{step.completed ? '✓' : step.id}}</view>
+        <view class="step-content">
+          <text class="step-title">{{step.title}}</text>
+          <text class="step-desc">{{step.description}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 任务日志 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>任务日志</h3>
+    </view>
+    <view class="log-list">
+      <view wx:for="{{task.logs}}" wx:key="id" class="log-item">
+        <view class="log-time">{{log.createTime}}</view>
+        <view class="log-content">{{log.content}}</view>
+        <view class="log-user">{{log.user}}</view>
+      </view>
+      <view wx:if="{{task.logs.length === 0}}" class="empty-state">
+        <text>暂无日志</text>
+      </view>
+    </view>
+  </view>
+</view>

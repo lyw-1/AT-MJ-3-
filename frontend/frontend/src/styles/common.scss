@@ -1,0 +1,191 @@
+// SCSS规则：@use必须在所有其他规则之前
+@use 'sass:color';
+@use './variables' as *;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+// Circle Soft设计风格 - 全局样式
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial;
+  background-color: $gray-50;
+  color: $gray-900;
+  font-size: $font-size-base;
+  line-height: 1.6;
+}
+
+// 主容器样式
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+// 内容区域样式
+.main-content {
+  flex: 1;
+  padding: $spacing-4;
+  background-color: $gray-50;
+  overflow-x: auto;
+}
+
+// Circle Soft风格卡片样式
+.stats-card {
+  background-color: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $gray-200;
+  padding: $spacing-4;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  // 统计数值样式
+  .stats-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    color: $gray-900;
+    margin-bottom: $spacing-1;
+  }
+  
+  // 统计标签样式
+  .stats-label {
+    font-size: $font-size-sm;
+    color: $gray-500;
+    margin-bottom: $spacing-2;
+  }
+  
+  // 统计变化样式
+  .stats-change {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    
+    &.positive {
+      color: $success-color;
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: '↑';
+        margin-right: 4px;
+      }
+    }
+    
+    &.negative {
+      color: $error-color;
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: '↓';
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// 图表容器样式
+.chart-container {
+  background-color: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $gray-200;
+  padding: $spacing-4;
+  margin-bottom: $spacing-4;
+}
+
+// 表格容器样式
+.table-container {
+  background-color: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $gray-200;
+  overflow: hidden;
+}
+
+// 状态标签样式
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: $border-radius-lg;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  
+  &.status-permanent {
+    background-color: #{color.adjust($success-color, $lightness: 40%)};
+    color: $success-color;
+  }
+  
+  &.status-contract {
+    background-color: #{color.adjust($warning-color, $lightness: 40%)};
+    color: $warning-color;
+  }
+}
+
+// 主布局样式 - 参考Circle Soft设计
+.app-layout {
+  display: flex;
+  height: 100%;
+  
+  // 侧边栏样式
+  .sidebar {
+    width: 240px;
+    background-color: $white;
+    border-right: 1px solid $gray-200;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+  }
+  
+  // 主内容区域
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    
+    // 顶部栏样式
+    .top-bar {
+      height: 72px;
+      background-color: $white;
+      border-bottom: 1px solid $gray-200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 $spacing-4;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      z-index: 50;
+    }
+    
+    // 内容区域
+    .content {
+      flex: 1;
+      padding: $spacing-4;
+      overflow-y: auto;
+      background-color: $gray-50;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+    
+    .sidebar {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

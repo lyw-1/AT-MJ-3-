@@ -1,0 +1,68 @@
+<view class="container">
+  <!-- 模具基本信息 -->
+  <view class="card">
+    <view class="mold-header">
+      <view class="mold-title-section">
+        <text class="mold-code">{{mold.code}}</text>
+        <tag class="tag tag-{{mold.status}}">{{mold.statusText}}</tag>
+      </view>
+      <view class="mold-actions">
+        <button-component type="primary" size="small" text="编辑" bind:click="onEdit"></button-component>
+        <button-component type="error" size="small" text="删除" bind:click="onDelete"></button-component>
+      </view>
+    </view>
+    <view class="mold-info">
+      <text class="mold-name">{{mold.name}}</text>
+      <text class="mold-desc">{{mold.description}}</text>
+    </view>
+    <view class="mold-meta">
+      <view class="meta-item">
+        <text class="meta-label">模具类型:</text>
+        <text class="meta-value">{{mold.type}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">创建时间:</text>
+        <text class="meta-value">{{mold.createTime}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">更新时间:</text>
+        <text class="meta-value">{{mold.updateTime}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">使用寿命:</text>
+        <text class="meta-value">{{mold.life}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 技术参数 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>技术参数</h3>
+    </view>
+    <view class="params-grid">
+      <view wx:for="{{mold.params}}" wx:key="id" class="param-item">
+        <text class="param-label">{{item.label}}:</text>
+        <text class="param-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用记录 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>使用记录</h3>
+      <text class="more" bindtap="navigateToUsageRecords">查看全部</text>
+    </view>
+    <view class="usage-list">
+      <view wx:for="{{mold.usageRecords}}" wx:key="id" class="usage-item">
+        <view class="usage-time">{{item.time}}</view>
+        <view class="usage-content">{{item.content}}</view>
+        <view class="usage-user">{{item.user}}</view>
+      </view>
+      <view wx:if="{{mold.usageRecords.length === 0}}" class="empty-state">
+        <text>暂无使用记录</text>
+      </view>
+    </view>
+  </view>
+</view>

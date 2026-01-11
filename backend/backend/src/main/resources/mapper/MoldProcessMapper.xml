@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.MoldProcessMapper">
+
+    <!-- 根据流程编码查询流程 -->
+    <select id="selectByProcessCode" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process WHERE process_code = #{processCode}
+    </select>
+
+    <!-- 根据模具ID查询流程列表 -->
+    <select id="selectByMoldId" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process WHERE mold_id = #{moldId}
+    </select>
+
+    <!-- 根据状态查询流程列表（current_status） -->
+    <select id="selectByStatus" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process WHERE current_status = #{status}
+    </select>
+
+    <!-- 根据优先级查询流程列表 -->
+    <select id="selectByPriority" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process WHERE priority = #{priority}
+    </select>
+
+    <!-- 根据设备ID查询流程列表 -->
+    <select id="selectByEquipmentId" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process WHERE equipment_id = #{equipmentId}
+    </select>
+
+    <!-- 根据时间范围查询流程列表（create_time BETWEEN） -->
+    <select id="selectByTimeRange" resultType="com.mold.digitalization.entity.MoldProcess">
+        SELECT * FROM mold_process 
+        WHERE create_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 统计流程数量 -->
+    <select id="countProcesses" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM mold_process
+    </select>
+
+    <!-- 统计各状态流程数量（current_status） -->
+    <select id="countByStatus" resultType="java.util.Map">
+        SELECT current_status AS status, COUNT(*) as count 
+        FROM mold_process 
+        GROUP BY current_status
+    </select>
+
+    <!-- 开发环境插入：补充 equipment_id/operator_id，避免 NOT NULL 约束报错 -->
+    <insert id="insertDev" parameterType="com.mold.digitalization.entity.MoldProcess">
+        INSERT INTO mold_process (
+            process_code, process_name, mold_id,
+            equipment_id,
+            operator_id,
+            current_status, current_progress,
+            create_time, update_time
+        ) VALUES (
+            #{processCode}, #{processName}, #{moldId},
+            COALESCE(#{equipmentId}, 0),
+            #{operatorId},
+            #{currentStatus}, #{currentProgress},
+            #{createTime}, #{updateTime}
+        )
+    </insert>
+
+    <!-- 更新流程状态（与 updateProcessStatus 对齐） -->
+    <update id="updateProcessStatus">
+        UPDATE mold_process 
+        SET current_status = #{status}, update_time = NOW()
+        WHERE id = #{processId}
+    </update>
+
+    <!-- 更新流程进度（与 updateProcessProgress 对齐） -->
+    <update id="updateProcessProgress">
+        UPDATE mold_process 
+        SET current_progress = #{progress}, update_time = NOW()
+        WHERE id = #{processId}
+    </update>
+
+    <!-- 按ID删除流程 -->
+    <delete id="deleteById">
+        DELETE FROM mold_process WHERE id = #{id}
+    </delete>
+
+</mapper>

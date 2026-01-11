@@ -1,0 +1,76 @@
+/* 全局表格样式 */
+:root {
+  /* 表格默认样式 */
+  --table-cell-text-align: left;
+  --table-cell-vertical-align: middle;
+}
+
+/* Element Plus 表格默认样式 */
+.el-table {
+  --el-table-header-bg-color: var(--el-bg-color-page);
+  --el-table-row-hover-bg-color: var(--el-bg-color-hover);
+}
+
+/* 表格单元格样式 */
+.el-table__cell,
+.el-table__header-wrapper .el-table__header {
+  text-align: var(--table-cell-text-align);
+  vertical-align: var(--table-cell-vertical-align);
+}
+
+/* 表格表头样式 */
+.el-table__header-wrapper th {
+  text-align: var(--table-cell-text-align);
+  vertical-align: var(--table-cell-vertical-align);
+}
+
+/* 表格内容区域样式 */
+.el-table__body-wrapper td {
+  text-align: var(--table-cell-text-align);
+  vertical-align: var(--table-cell-vertical-align);
+}
+
+/* 表单元素在表格中左对齐 */
+.el-table :deep(.el-input__inner),
+.el-table :deep(.el-select__input) {
+  text-align: var(--table-cell-text-align);
+}
+
+/* 表格选择列居中 */
+.el-table-column--selection .el-table__cell,
+.el-table-column--selection .el-table__header-cell {
+  text-align: center;
+}
+
+/* 操作列居中 */
+.el-table-column--operation .el-table__cell,
+.el-table-column--operation .el-table__header-cell {
+  text-align: center;
+}
+
+/* 已选工序列表样式 */
+.selected-item {
+  display: flex;
+  align-items: var(--table-cell-vertical-align);
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.selected-item > * {
+  text-align: var(--table-cell-text-align);
+}
+
+.selected-name {
+  flex: 0 0 auto;
+  min-width: 120px;
+}
+
+.selected-item :deep(.el-select),
+.selected-item :deep(.el-input) {
+  text-align: var(--table-cell-text-align);
+}
+
+.selected-item :deep(.el-button) {
+  text-align: center;
+}

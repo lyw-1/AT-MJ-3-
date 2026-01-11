@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.UserMapper">
+
+    <!-- 根据用户名查询用户信息 -->
+    <select id="selectByUsername" resultType="com.mold.digitalization.entity.User">
+        SELECT id, username, password, status 
+        FROM `USER` WHERE username = #{username}
+    </select>
+    
+    <!-- email字段已移除，不再需要
+    <select id="selectByEmail" resultType="com.mold.digitalization.entity.User">
+        SELECT id, username, password, real_name, department, role, phone, status, create_time, update_time 
+        FROM user WHERE phone = #{email}
+    </select>
+    -->
+    
+    <!-- 根据手机号查询用户信息 -->
+    <select id="selectByPhone" resultType="com.mold.digitalization.entity.User">
+        SELECT id, username, password, status 
+        FROM `USER` WHERE phone = #{phone}
+    </select>
+
+    <!-- 按ID查询基础列，避免选择不存在的列导致错误 -->
+    <select id="selectBasicById" resultType="com.mold.digitalization.entity.User">
+        SELECT id, username, password, status
+        FROM `USER` WHERE id = #{id}
+    </select>
+    
+    <!-- 分页查询用户列表 -->
+  <select id="selectPage" resultType="com.mold.digitalization.entity.User">
+    SELECT id, username, password, status 
+    FROM `USER`
+    <where>
+      <if test="params.username != null and params.username != ''">
+        AND username LIKE CONCAT('%', #{params.username}, '%')
+      </if>
+      <if test="params.status != null">
+        AND status = #{params.status}
+      </if>
+    </where>
+    ORDER BY id DESC
+  </select>
+
+  <!-- 查询所有用户（基础列） -->
+  <select id="selectAllBasic" resultType="com.mold.digitalization.entity.User">
+    SELECT id, username, password, status FROM `USER` ORDER BY id DESC
+  </select>
+
+  <!-- 扩展列版本（在存在扩展列时使用） -->
+  <select id="selectAllExtended" resultType="com.mold.digitalization.entity.User">
+    SELECT id, username, password, real_name, department, phone, email, status FROM `USER` ORDER BY id DESC
+  </select>
+    
+    <!-- 查询用户拥有的角色列表 -->
+    <select id="selectUserRoles" resultType="com.mold.digitalization.entity.Role">
+        SELECT 
+            r.id,
+            r.name AS role_name,
+            r.code AS role_code,
+            r.description
+        FROM role r
+        INNER JOIN user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+    </select>
+
+    <!-- 重置登录失败次数 -->
+    <update id="resetLoginFailedCount">
+        UPDATE `USER` SET status = 1 WHERE id = #{userId}
+    </update>
+
+    <!-- 锁定用户 -->
+    <update id="lockUser">
+        UPDATE `USER` SET status = 0 
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 解锁用户 -->
+    <update id="unlockUser">
+        UPDATE `USER` SET status = 1 
+        WHERE id = #{userId}
+    </update>
+    
+    <!-- 批量解锁过期用户 -->
+    <update id="unlockExpiredUsers">
+        UPDATE `USER` SET status = 1 
+        WHERE status = 0
+    </update>
+    
+    <!-- 查询所有已过期但仍处于锁定状态的用户 -->
+    <select id="selectExpiredLockedUsers" resultType="com.mold.digitalization.entity.User">
+        SELECT id, username, password, status
+        FROM `USER` 
+        WHERE status = 0
+    </select>
+
+    <!-- 更新用户最后登录信息 -->
+  <update id="updateLastLoginInfo">
+    UPDATE `USER` SET status = status 
+    WHERE id = #{userId}
+  </update>
+
+  <select id="existsUserColumn" resultType="int">
+    SELECT COUNT(*) FROM information_schema.columns 
+    WHERE table_schema = (SELECT DATABASE()) AND table_name = 'USER' AND column_name = #{column}
+  </select>
+
+  <update id="updateExtraFields">
+    UPDATE `USER`
+    <set>
+      <if test="realName != null">real_name = #{realName},</if>
+      <if test="department != null">department = #{department},</if>
+      <if test="phone != null">phone = #{phone},</if>
+      <if test="email != null">email = #{email},</if>
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <update id="updateBasic">
+    UPDATE `USER`
+    <set>
+      <if test="password != null">password = #{password},</if>
+      <if test="status != null">status = #{status},</if>
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <update id="updateUsername">
+    UPDATE `USER` SET username = #{username} WHERE id = #{id}
+  </update>
+</mapper>

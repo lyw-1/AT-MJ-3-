@@ -1,0 +1,49 @@
+# 项目备份计划
+
+## 目标
+将模具数字化项目的前后端代码、数据库和配置文件备份到指定目录，以便重装系统后恢复。
+
+## 备份内容
+1. **前端代码**：完整备份 frontend 目录
+2. **后端代码**：完整备份 backend 目录  
+3. **数据库**：备份 mold_digitalization 数据库
+4. **配置文件**：备份 nginx.conf 等配置文件
+
+## 备份步骤
+
+### 1. 确保备份目录存在
+- 检查 D:\Trae\AT-MJ-3\backup 目录是否存在
+- 如果不存在，创建该目录
+
+### 2. 备份前端代码
+- 使用压缩工具将 frontend 目录压缩为 frontend_backup.zip
+- 保存到 D:\Trae\AT-MJ-3\backup 目录
+
+### 3. 备份后端代码
+- 使用压缩工具将 backend 目录压缩为 backend_backup.zip
+- 保存到 D:\Trae\AT-MJ-3\backup 目录
+
+### 4. 备份数据库
+- 使用 mysqldump 命令备份 mold_digitalization 数据库
+- 保存为 D:\Trae\AT-MJ-3\backup\mold_digitalization_backup.sql
+
+### 5. 备份配置文件
+- 复制 nginx.conf 到 D:\Trae\AT-MJ-3\backup\nginx.conf
+- 复制 Dockerfile.backend 到 D:\Trae\AT-MJ-3\backup\Dockerfile.backend
+
+## 备份验证
+- 检查备份目录下是否存在所有备份文件
+- 验证压缩文件的完整性
+- 验证数据库备份文件的大小和内容
+
+## 恢复步骤（重装系统后）
+1. 安装必要的开发环境（JDK、Maven、Node.js、MySQL、Git）
+2. 解压前后端代码到原目录
+3. 恢复数据库
+4. 恢复配置文件
+5. 安装依赖并启动项目
+
+## 注意事项
+- 备份过程中确保项目处于停止状态，避免数据不一致
+- 备份文件应妥善保存，避免丢失
+- 重装系统前再次确认所有重要数据已备份

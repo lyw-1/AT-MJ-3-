@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 定义日志文件的存储地址 -->
+    <property name="LOG_HOME" value="./logs" />
+    
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度，%logger{50}：logger名字最长50个字符，%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 确保控制台输出使用UTF-8编码 -->
+        <target>System.out</target>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名 -->
+            <FileNamePattern>${LOG_HOME}/mold-process.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度，%logger{50}：logger名字最长50个字符，%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志文件最大的大小 -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- 错误日志单独记录 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/mold-process-error.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 业务日志单独记录 -->
+    <appender name="BUSINESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/mold-process-business.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 操作日志单独记录 -->
+    <appender name="OPERATION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/mold-process-operation.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- API访问日志单独记录 -->
+    <appender name="API_ACCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/mold-process-api.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 根日志配置 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+
+    <!-- 业务日志配置 -->
+    <logger name="com.mold.digitalization.service" level="INFO" additivity="false">
+        <appender-ref ref="BUSINESS_FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <!-- 操作日志配置 -->
+    <logger name="com.mold.digitalization.aspect.OperationLogAspect" level="INFO" additivity="false">
+        <appender-ref ref="OPERATION_FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <!-- API访问日志配置 -->
+    <logger name="com.mold.digitalization.aspect.ApiAccessLogAspect" level="INFO" additivity="false">
+        <appender-ref ref="API_ACCESS_FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <!-- MyBatis日志配置 -->
+    <logger name="com.baomidou.mybatisplus" level="WARN" />
+
+    <!-- Spring相关日志配置 -->
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.springframework.security" level="INFO" />
+
+    <!-- 数据库相关日志配置 -->
+    <logger name="java.sql" level="WARN" />
+    
+    <!-- Redis相关日志配置 -->
+    <logger name="org.springframework.data.redis" level="INFO" />
+
+    <!-- 配置文件读取 -->
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" defaultValue="INFO" />
+</configuration>

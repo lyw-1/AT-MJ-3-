@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/mold/list/index",
+    "pages/mold/detail/index",
+    "pages/mold/add/index",
+    "pages/tasks/index",
+    "pages/task-detail/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#6150BF",
+    "navigationBarTitleText": "蜂窝陶瓷模具管理",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#6B7280",
+    "selectedColor": "#6150BF",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/mold/list/index",
+        "text": "模库",
+        "iconPath": "assets/icons/mold.png",
+        "selectedIconPath": "assets/icons/mold-active.png"
+      },
+      {
+        "pagePath": "pages/tasks/index",
+        "text": "任务",
+        "iconPath": "assets/icons/tasks.png",
+        "selectedIconPath": "assets/icons/tasks-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

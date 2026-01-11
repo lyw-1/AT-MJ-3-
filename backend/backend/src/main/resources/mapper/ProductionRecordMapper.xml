@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.dao.ProductionRecordMapper">
+
+    <!-- 鏍规嵁浠诲姟ID鏌ヨ鐢熶骇璁板綍鍒楄〃 -->
+    <select id="selectByTaskId" resultType="com.mold.digitalization.entity.ProductionRecord">
+        SELECT * FROM production_record WHERE task_id = #{taskId}
+    </select>
+
+    <!-- 鏍规嵁妯″叿ID鏌ヨ鐢熶骇璁板綍鍒楄〃 -->
+    <select id="selectByMoldId" resultType="com.mold.digitalization.entity.ProductionRecord">
+        SELECT * FROM production_record WHERE mold_id = #{moldId}
+    </select>
+
+    <!-- 鏍规嵁璁惧ID鏌ヨ鐢熶骇璁板綍鍒楄〃 -->
+    <select id="selectByEquipmentId" resultType="com.mold.digitalization.entity.ProductionRecord">
+        SELECT * FROM production_record WHERE equipment_id = #{equipmentId}
+    </select>
+
+</mapper>

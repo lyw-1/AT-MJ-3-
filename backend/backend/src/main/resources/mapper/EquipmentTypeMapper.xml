@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.EquipmentTypeMapper">
+
+    <resultMap id="EquipmentTypeResultMap" type="com.mold.digitalization.entity.EquipmentType">
+        <id column="id" property="id" />
+        <result column="type_name" property="typeName" />
+        <result column="type_code" property="typeCode" />
+        <result column="description" property="description" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="selectByTypeCode" resultMap="EquipmentTypeResultMap">
+        SELECT
+            id,
+            type_name,
+            type_code,
+            description,
+            sort_order,
+            create_time,
+            update_time
+        FROM equipment_type
+        WHERE type_code = #{typeCode}
+        LIMIT 1
+    </select>
+
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.dao.ProcessExceptionMapper">
+
+    <!-- 鏍规嵁娴佺▼ID鏌ヨ寮傚父璁板綍 -->
+    <select id="selectByProcessId" resultType="com.mold.digitalization.entity.ProcessException">
+        SELECT * FROM process_exception 
+        WHERE process_id = #{processId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鏍规嵁寮傚父绫诲瀷鏌ヨ寮傚父璁板綍 -->
+    <select id="selectByExceptionType" resultType="com.mold.digitalization.entity.ProcessException">
+        SELECT * FROM process_exception 
+        WHERE exception_type = #{exceptionType}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鏍规嵁涓ラ噸绋嬪害鏌ヨ寮傚父璁板綍 -->
+    <select id="selectBySeverity" resultType="com.mold.digitalization.entity.ProcessException">
+        SELECT * FROM process_exception 
+        WHERE severity = #{severity}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鏍规嵁澶勭悊鐘舵€佹煡璇㈠紓甯歌褰?-->
+    <select id="selectByHandleStatus" resultType="com.mold.digitalization.entity.ProcessException">
+        SELECT * FROM process_exception 
+        WHERE handle_status = #{handleStatus}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 鏍规嵁鏃堕棿鑼冨洿鏌ヨ寮傚父璁板綍 -->
+    <select id="selectByTimeRange" resultType="com.mold.digitalization.entity.ProcessException">
+        SELECT * FROM process_exception 
+        WHERE create_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 缁熻寮傚父鏁伴噺 -->
+    <select id="countExceptions" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM process_exception
+    </select>
+
+    <!-- 缁熻鍚勭被鍨嬪紓甯告暟閲?-->
+    <select id="countByExceptionType" resultType="java.util.Map">
+        SELECT exception_type, COUNT(*) as count 
+        FROM process_exception 
+        GROUP BY exception_type
+    </select>
+
+    <!-- 缁熻鍚勪弗閲嶇▼搴﹀紓甯告暟閲?-->
+    <select id="countBySeverity" resultType="java.util.Map">
+        SELECT severity, COUNT(*) as count 
+        FROM process_exception 
+        GROUP BY severity
+    </select>
+
+    <!-- 缁熻鍚勫鐞嗙姸鎬佸紓甯告暟閲?-->
+    <select id="countByHandleStatus" resultType="java.util.Map">
+        SELECT handle_status, COUNT(*) as count 
+        FROM process_exception 
+        GROUP BY handle_status
+    </select>
+
+    <!-- 鏇存柊寮傚父澶勭悊鐘舵€?-->
+    <update id="updateHandleStatus">
+        UPDATE process_exception 
+        SET handle_status = #{handleStatus}, 
+            handle_time = NOW(), 
+            handler = #{handler}, 
+            handle_info = #{handleInfo},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 鏇存柊寮傚父澶勭悊淇℃伅 -->
+    <update id="updateHandleInfo">
+        UPDATE process_exception 
+        SET handle_info = #{handleInfo}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 鍒犻櫎鎸囧畾娴佺▼鐨勫紓甯歌褰?-->
+    <delete id="deleteByProcessId">
+        DELETE FROM process_exception WHERE process_id = #{processId}
+    </delete>
+
+    <!-- 鍒犻櫎鎸囧畾鏃堕棿涔嬪墠鐨勫紓甯歌褰?-->
+    <delete id="deleteBeforeTime">
+        DELETE FROM process_exception WHERE create_time &lt; #{time}
+    </delete>
+
+</mapper>

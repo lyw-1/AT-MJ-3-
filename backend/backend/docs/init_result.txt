@@ -1,0 +1,8 @@
+ADMIN_TOKEN_PREFIX:eyJhbGciOiJIUzUxMiJ9
+TESTUSER_ID:3
+ADMIN_RESET_PASSWORD_RESP:{
+    "code":  200,
+    "message":  "?бе????иж???????????",
+    "data":  null
+}
+USER_LOGIN_TOKEN_PREFIX:eyJhbGciOiJIUzUxMiJ9

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.MoldMapper">
+
+  <select id="selectByMoldCode" parameterType="string" resultType="com.mold.digitalization.entity.Mold">
+    SELECT *
+    FROM mold
+    WHERE mold_code = #{moldCode}
+    ORDER BY update_time DESC, create_time DESC, id DESC
+    LIMIT 1
+  </select>
+
+  <select id="selectByTypeId" parameterType="long" resultType="com.mold.digitalization.entity.Mold">
+    SELECT *
+    FROM mold
+    WHERE mold_type_id = #{typeId}
+    ORDER BY id DESC
+  </select>
+
+  <select id="selectByStatusId" parameterType="long" resultType="com.mold.digitalization.entity.Mold">
+    SELECT *
+    FROM mold
+    WHERE mold_status_id = #{statusId}
+    ORDER BY id DESC
+  </select>
+
+</mapper>

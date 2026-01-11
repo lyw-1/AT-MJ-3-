@@ -1,0 +1,175 @@
+/* 模库详情页样式 */
+
+/* 模具头部 */
+.mold-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-3);
+}
+
+.mold-title-section {
+  flex: 1;
+  margin-right: var(--spacing-3);
+}
+
+.mold-code {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-2);
+  display: block;
+}
+
+.mold-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.mold-info {
+  margin-bottom: var(--spacing-3);
+}
+
+.mold-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-1);
+  display: block;
+}
+
+.mold-desc {
+  font-size: var(--font-size-base);
+  color: var(--gray-600);
+  line-height: 1.5;
+  display: block;
+}
+
+/* 模具元数据 */
+.mold-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+}
+
+.meta-label {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+  margin-right: var(--spacing-1);
+}
+
+.meta-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-800);
+}
+
+/* 卡片头部 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+}
+
+.more {
+  font-size: var(--font-size-sm);
+  color: var(--primary-color);
+}
+
+/* 技术参数 */
+.params-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+.param-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2);
+  background-color: var(--gray-50);
+  border-radius: var(--border-radius-lg);
+}
+
+.param-label {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+}
+
+.param-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-800);
+}
+
+/* 使用记录 */
+.usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.usage-item {
+  padding: var(--spacing-3);
+  background-color: var(--gray-50);
+  border-radius: var(--border-radius-lg);
+}
+
+.usage-time {
+  font-size: var(--font-size-xs);
+  color: var(--gray-500);
+  margin-bottom: var(--spacing-1);
+  display: block;
+}
+
+.usage-content {
+  font-size: var(--font-size-base);
+  color: var(--gray-800);
+  margin-bottom: var(--spacing-1);
+  display: block;
+  line-height: 1.5;
+}
+
+.usage-user {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-color);
+  display: block;
+  text-align: right;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-6) 0;
+  color: var(--gray-500);
+  font-size: var(--font-size-sm);
+}
+
+/* 响应式设计 */
+@media (max-width: 768rpx) {
+  .params-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mold-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .mold-actions {
+    margin-top: var(--spacing-2);
+  }
+  
+  .mold-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

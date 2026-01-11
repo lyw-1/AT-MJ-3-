@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.ProductionTaskMapper">
+
+    <!-- 鏍规嵁浠诲姟浠ｇ爜鏌ヨ鐢熶骇浠诲姟 -->
+    <select id="selectByTaskCode" resultType="com.mold.digitalization.entity.ProductionTask">
+        SELECT * FROM production_task WHERE task_code = #{taskCode}
+    </select>
+
+    <!-- 鏍规嵁璁惧ID鏌ヨ鐢熶骇浠诲姟鍒楄〃 -->
+    <select id="selectByEquipmentId" resultType="com.mold.digitalization.entity.ProductionTask">
+        SELECT * FROM production_task WHERE equipment_id = #{equipmentId}
+    </select>
+
+    <!-- 鏍规嵁浠诲姟鐘舵€佹煡璇㈢敓浜т换鍔″垪琛?-->
+    <select id="selectByStatus" resultType="com.mold.digitalization.entity.ProductionTask">
+        SELECT * FROM production_task WHERE status = #{status}
+    </select>
+
+</mapper>

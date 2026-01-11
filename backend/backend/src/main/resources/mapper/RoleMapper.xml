@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.RoleMapper">
+
+    <!-- 閫氱敤鏌ヨ鏄犲皠缁撴灉 -->
+    <resultMap id="BaseResultMap" type="com.mold.digitalization.entity.Role">
+        <id column="id" property="id" />
+        <result column="role_code" property="roleCode" />
+        <result column="role_name" property="roleName" />
+        <result column="description" property="description" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 閫氱敤鏌ヨ缁撴灉鍒?-->
+    <sql id="Base_Column_List">
+        id,
+        role_name,
+        role_code,
+        description,
+        status,
+        create_time,
+        update_time
+    </sql>
+
+    <!-- 鏍规嵁瑙掕壊浠ｇ爜鏌ヨ瑙掕壊淇℃伅 -->
+    <select id="selectByRoleCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM role
+        WHERE role_code = #{roleCode}
+    </select>
+
+    <!-- 鍒嗛〉鏌ヨ瑙掕壊鍒楄〃 -->
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM role
+        ORDER BY id DESC
+    </select>
+
+  <insert id="insertRole" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO role (
+      role_name,
+      role_code,
+      description,
+      status,
+      create_time,
+      update_time
+    ) VALUES (
+      #{roleName},
+      #{roleCode},
+      #{description},
+      #{status},
+      NOW(),
+      NOW()
+    )
+  </insert>
+
+  <update id="updateRoleBasic">
+    UPDATE role
+    <set>
+      <if test="roleName != null">role_name = #{roleName},</if>
+      <if test="roleCode != null">role_code = #{roleCode},</if>
+      <if test="description != null">description = #{description},</if>
+      update_time = NOW()
+    </set>
+    WHERE id = #{id}
+  </update>
+
+</mapper>

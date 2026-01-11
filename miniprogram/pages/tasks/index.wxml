@@ -1,0 +1,53 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <input-component 
+      type="text" 
+      placeholder="搜索任务..." 
+      clearable="true" 
+      bind:input="onSearch"
+      prefixIcon="🔍"
+    />
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-section">
+    <view class="filter-tags">
+      <tag 
+        wx:for="{{filterTags}}" 
+        wx:key="id" 
+        class="tag tag-{{item.type}} {{item.active ? 'active' : ''}}" 
+        bindtap="onFilter" 
+        data-type="{{item.type}}"
+      >
+        {{item.name}}
+      </tag>
+    </view>
+  </view>
+
+  <!-- 任务列表 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>任务列表</h3>
+      <text class="total">{{tasks.length}} 个任务</text>
+    </view>
+    <view class="tasks-list">
+      <view wx:for="{{tasks}}" wx:key="id" class="task-item" bindtap="navigateToTaskDetail" data-id="{{item.id}}">
+        <view class="task-header">
+          <text class="task-title">{{item.title}}</text>
+          <tag class="tag tag-{{item.status}}">{{item.statusText}}</tag>
+        </view>
+        <view class="task-info">
+          <text class="task-desc">{{item.description}}</text>
+        </view>
+        <view class="task-meta">
+          <text class="task-time">{{item.createTime}}</text>
+          <text class="task-assignee">负责人: {{item.assignee}}</text>
+        </view>
+      </view>
+      <view wx:if="{{tasks.length === 0}}" class="empty-state">
+        <text>暂无任务</text>
+      </view>
+    </view>
+  </view>
+</view>

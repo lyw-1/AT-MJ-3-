@@ -1,0 +1,23 @@
+<view class="input-wrapper {{type}} {{size}} {{disabled ? 'disabled' : ''}} {{error ? 'error' : ''}}">
+  <text wx:if="{{label}}" class="input-label">{{label}}</text>
+  <view class="input-container">
+    <text wx:if="{{prefixIcon}}" class="input-icon prefix">{{prefixIcon}}</text>
+    <input
+      class="input"
+      type="{{inputType}}"
+      value="{{value}}"
+      placeholder="{{placeholder}}"
+      placeholder-class="placeholder"
+      disabled="{{disabled}}"
+      maxlength="{{maxlength}}"
+      focus="{{focus}}"
+      bindinput="handleInput"
+      bindfocus="handleFocus"
+      bindblur="handleBlur"
+      bindconfirm="handleConfirm"
+    />
+    <text wx:if="{{suffixIcon}}" class="input-icon suffix">{{suffixIcon}}</text>
+    <text wx:if="{{showClear}}" class="input-clear" bindtap="handleClear">×</text>
+  </view>
+  <text wx:if="{{errorMessage}}" class="error-message">{{errorMessage}}</text>
+</view>

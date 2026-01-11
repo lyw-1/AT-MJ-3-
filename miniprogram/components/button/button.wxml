@@ -1,0 +1,4 @@
+<view class="btn btn-{{type}} {{size}} {{plain ? 'plain' : ''}} {{round ? 'round' : ''}} {{circle ? 'circle' : ''}} {{loading ? 'loading' : ''}} {{disabled ? 'disabled' : ''}}" bindtap="handleClick">
+  <view wx:if="{{loading}}" class="loading-icon"></view>
+  <text class="btn-text">{{text}}</text>
+</view>

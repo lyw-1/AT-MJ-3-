@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <input-component 
+      type="text" 
+      placeholder="搜索模具..." 
+      clearable="true" 
+      bind:input="onSearch"
+      prefixIcon="🔍"
+    />
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-section">
+    <view class="filter-tags">
+      <tag 
+        wx:for="{{filterTags}}" 
+        wx:key="id" 
+        class="tag tag-{{item.type}} {{item.active ? 'active' : ''}}" 
+        bindtap="onFilter" 
+        data-type="{{item.type}}"
+      >
+        {{item.name}}
+      </tag>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-button-container">
+    <button-component type="primary" round="true" text="+ 添加模具" bind:click="navigateToAddMold"></button-component>
+  </view>
+
+  <!-- 模库列表 -->
+  <view class="card">
+    <view class="card-header">
+      <h3>模库列表</h3>
+      <text class="total">{{molds.length}} 个模具</text>
+    </view>
+    <view class="molds-list">
+      <view wx:for="{{molds}}" wx:key="id" class="mold-item" bindtap="navigateToMoldDetail" data-id="{{item.id}}">
+        <view class="mold-header">
+          <text class="mold-code">{{item.code}}</text>
+          <tag class="tag tag-{{item.status}}">{{item.statusText}}</tag>
+        </view>
+        <view class="mold-info">
+          <text class="mold-name">{{item.name}}</text>
+          <text class="mold-desc">{{item.description}}</text>
+        </view>
+        <view class="mold-meta">
+          <text class="mold-type">{{item.type}}</text>
+          <text class="mold-date">{{item.createTime}}</text>
+        </view>
+      </view>
+      <view wx:if="{{molds.length === 0}}" class="empty-state">
+        <text>暂无模具</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mold.digitalization.mapper.MoldStorageRecordMapper">
+  <select id="selectByMoldId" resultType="com.mold.digitalization.entity.MoldStorageRecord">
+    select * from mold_storage_record where mold_id = #{moldId}
+  </select>
+  <select id="selectByBatchNumber" resultType="com.mold.digitalization.entity.MoldStorageRecord">
+    select * from mold_storage_record where batch_number = #{batchNumber} limit 1
+  </select>
+  <select id="selectByDateRange" resultType="com.mold.digitalization.entity.MoldStorageRecord">
+    select * from mold_storage_record where storage_date between #{startDate} and #{endDate}
+  </select>
+  <select id="selectByInspectionResult" resultType="com.mold.digitalization.entity.MoldStorageRecord">
+    select * from mold_storage_record where inspection_result = #{inspectionResult}
+  </select>
+  <update id="updateInspectionResult">
+    update mold_storage_record set inspection_result = #{inspectionResult} where id = #{id}
+  </update>
+  <select id="selectByOperatorId" resultType="com.mold.digitalization.entity.MoldStorageRecord">
+    select * from mold_storage_record where operator_id = #{operatorId}
+  </select>
+</mapper>
