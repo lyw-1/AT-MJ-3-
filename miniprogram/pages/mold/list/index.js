@@ -91,7 +91,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    // 检查登录状态
+    const app = getApp()
+    if (!app.globalData.isLoggedIn) {
+      wx.redirectTo({
+        url: '/pages/login/index'
+      })
+      return
+    }
+    
+    // 更新tabBar选中状态
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 1
+      })
+    }
   },
 
   /**

@@ -3,7 +3,6 @@ package com.mold.digitalization;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationListener;
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 /**
  * Spring Boot 主应用程序类
  * 模具数字化管理系统的入口 */
-@SpringBootApplication(exclude = FlywayAutoConfiguration.class)
+@SpringBootApplication
 // 扩大包扫描范围，包含com.atmj.mold.digitization包
 @ComponentScan(basePackages = {
         "com.mold.digitalization",

@@ -1,0 +1,52 @@
+<!-- 隐私政策页面 -->
+<view class="privacy-container">
+  <view class="privacy-content">
+    <view class="privacy-header">
+      <text class="privacy-title">隐私政策</text>
+    </view>
+    <view class="privacy-body">
+      <text class="privacy-text">
+        欢迎使用蜂窝陶瓷模具管理小程序。我们非常重视您的隐私保护和个人信息安全。为了更好地向您提供服务，我们特此制定本隐私政策，向您说明我们如何收集、使用、存储和保护您的个人信息。
+      </text>
+      
+      <view class="privacy-section">
+        <text class="section-title">一、我们收集的信息</text>
+        <text class="privacy-text">
+          1. 您在使用我们的服务时，我们可能会收集您的账号、密码等信息。
+          2. 当您使用微信授权登录时，我们会获取您的微信头像、昵称等信息。
+          3. 我们可能会收集您使用我们服务的相关日志信息，如登录时间、操作记录等。
+        </text>
+      </view>
+      
+      <view class="privacy-section">
+        <text class="section-title">二、我们如何使用信息</text>
+        <text class="privacy-text">
+          1. 用于验证您的身份，确保您的账号安全。
+          2. 用于为您提供个性化的服务体验。
+          3. 用于改进我们的服务质量，优化用户体验。
+        </text>
+      </view>
+      
+      <view class="privacy-section">
+        <text class="section-title">三、信息安全</text>
+        <text class="privacy-text">
+          我们采取严格的安全措施保护您的个人信息，防止信息泄露、滥用或篡改。我们仅在必要的情况下保留您的个人信息，并在法律规定的期限内删除或匿名化处理。
+        </text>
+      </view>
+      
+      <view class="privacy-section">
+        <text class="section-title">四、本政策的更新</text>
+        <text class="privacy-text">
+          我们可能会根据服务的更新情况或法律法规的变化，不时更新本隐私政策。更新后的政策将在小程序内发布，您继续使用我们的服务即表示您同意更新后的政策。
+        </text>
+      </view>
+      
+      <view class="privacy-section">
+        <text class="section-title">五、联系方式</text>
+        <text class="privacy-text">
+          如果您对本隐私政策有任何疑问或建议，请通过小程序内的联系方式与我们联系。
+        </text>
+      </view>
+    </view>
+  </view>
+</view>

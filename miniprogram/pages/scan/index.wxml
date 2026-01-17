@@ -1,0 +1,28 @@
+<view class="scan-container">
+  <view class="scan-header">
+    <text class="scan-title">扫描功能</text>
+  </view>
+  <view class="scan-content">
+    <view class="scan-area">
+      <image class="scan-icon" src="/assets/icons/scan-large.png"></image>
+      <text class="scan-text">点击开始扫描</text>
+      <button class="scan-button" type="primary" bindtap="startScan">开始扫描</button>
+    </view>
+    <view class="scan-history">
+      <view class="section-header">
+        <text class="section-title">扫描历史</text>
+      </view>
+      <view class="history-list">
+        <view class="history-item" wx:for="{{scanHistory}}" wx:key="id">
+          <view class="history-content">
+            <text class="history-title">{{item.title}}</text>
+            <text class="history-time">{{item.time}}</text>
+          </view>
+          <view class="history-arrow">
+            <image class="arrow-icon" src="/assets/icons/arrow-right.png"></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

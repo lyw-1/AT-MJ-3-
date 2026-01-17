@@ -1,0 +1,6 @@
+<svg width="81" height="81" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 简单的微信图标 -->
+  <path d="M40.5 10C24 10 10 24 10 40.5C10 57 24 71 40.5 71C57 71 71 57 71 40.5C71 24 57 10 40.5 10ZM40.5 66C27 66 16 55 16 40.5C16 26 27 15 40.5 15C54 15 65 26 65 40.5C65 55 54 66 40.5 66Z" fill="#07C160"/>
+  <path d="M25 35C25 35 30 30 40.5 30C51 30 56 35 56 35" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M25 45C25 45 30 50 40.5 50C51 50 56 45 56 45" stroke="white" stroke-width="3" stroke-linecap="round"/>
+</svg>

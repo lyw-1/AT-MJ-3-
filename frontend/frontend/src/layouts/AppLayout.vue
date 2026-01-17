@@ -125,7 +125,15 @@
               :index="route.children ? route.children[0].path : route.path"
               @click="handleMenuClick(route)"
             >
-              <el-icon v-if="route.meta?.icon && iconMap[route.meta.icon]">
+              <!-- 自定义图片图标 -->
+              <img 
+                v-if="route.meta?.icon && route.meta.icon.includes('/')"
+                :src="route.meta.icon"
+                class="custom-menu-icon"
+                :alt="route.meta.title"
+              >
+              <!-- Element Plus 图标组件 -->
+              <el-icon v-else-if="route.meta?.icon && iconMap[route.meta.icon]">
                 <component :is="iconMap[route.meta.icon]" />
               </el-icon>
               <template #title>
@@ -139,7 +147,15 @@
               :index="route.path"
             >
               <template #title>
-                <el-icon v-if="route.meta?.icon && iconMap[route.meta.icon]">
+                <!-- 自定义图片图标 -->
+                <img 
+                  v-if="route.meta?.icon && route.meta.icon.includes('/')"
+                  :src="route.meta.icon"
+                  class="custom-menu-icon"
+                  :alt="route.meta.title"
+                >
+                <!-- Element Plus 图标组件 -->
+                <el-icon v-else-if="route.meta?.icon && iconMap[route.meta.icon]">
                   <component :is="iconMap[route.meta.icon]" />
                 </el-icon>
                 <span>{{ route.meta?.title }}</span>
@@ -151,7 +167,15 @@
                 :index="`${route.path}/${child.path}`"
                 @click="handleMenuClick(child)"
               >
-                <el-icon v-if="child.meta?.icon && iconMap[child.meta.icon]">
+                <!-- 自定义图片图标 -->
+                <img 
+                  v-if="child.meta?.icon && child.meta.icon.includes('/')"
+                  :src="child.meta.icon"
+                  class="custom-menu-icon"
+                  :alt="child.meta.title"
+                >
+                <!-- Element Plus 图标组件 -->
+                <el-icon v-else-if="child.meta?.icon && iconMap[child.meta.icon]">
                   <component :is="iconMap[child.meta.icon]" />
                 </el-icon>
                 <span>{{ child.meta?.title }}</span>
@@ -325,7 +349,7 @@ watch(() => route.path, () => {
 // Circle Soft设计风格 - 主容器样式
 .app-container {
   height: 100vh;
-  background-color: $gray-50;
+  background-color: $white;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -716,12 +740,22 @@ watch(() => route.path, () => {
       position: relative;
       z-index: 10;
       will-change: transform, background-color, box-shadow;
+      display: flex;
+      align-items: center;
       
       // 图标样式
       :deep(.el-icon) {
         font-size: $font-size-xl;
         color: $gray-600;
         margin-right: $spacing-3;
+      }
+      
+      // 自定义图片图标样式
+      .custom-menu-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: $spacing-3;
+        object-fit: contain;
       }
       
       &:hover {
@@ -733,6 +767,11 @@ watch(() => route.path, () => {
         // 悬停时图标颜色变化
         :deep(.el-icon) {
           color: $primary-color;
+        }
+        
+        // 悬停时自定义图标保持不变
+        .custom-menu-icon {
+          filter: brightness(0.8);
         }
       }
     
@@ -747,6 +786,11 @@ watch(() => route.path, () => {
       // 激活时图标颜色变化
       :deep(.el-icon) {
         color: $primary-color;
+      }
+      
+      // 激活时自定义图标保持不变
+      .custom-menu-icon {
+        filter: brightness(0.8);
       }
     }
   }
@@ -778,6 +822,11 @@ watch(() => route.path, () => {
       :deep(.el-icon) {
         margin-right: 0;
         display: inline-block;
+      }
+      
+      // 折叠状态下自定义图标样式
+      .custom-menu-icon {
+        margin-right: 0;
       }
       
       // 确保所有内容都居中

@@ -44,6 +44,13 @@ request.interceptors.request.use(
       console.log(`[DEV-REQUEST] X-Dev-Token: ${devToken}`)
     }
     
+    // 确保所有请求都添加X-Dev-Token，特别是/api/process-preset请求
+    if (config.url && config.url.includes('/api/process-preset')) {
+      const devToken = import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+      config.headers['X-Dev-Token'] = devToken
+      console.log(`[DEV-REQUEST] Forced X-Dev-Token for process-preset: ${devToken}`)
+    }
+    
     return config
   },
   (error) => {

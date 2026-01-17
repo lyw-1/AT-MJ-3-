@@ -957,7 +957,7 @@ const router = useRouter()
 const handleRowClick = (row: any, column: any, _event: any) => {
   // 如果点击的是操作列，不执行跳转
   if (column && column.label !== '操作') {
-    router.push(`/mold/initial-params/${row.id}`)
+    router.push(`/mold/initial-params-detail/${row.id}`)
   }
 }
 

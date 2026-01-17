@@ -1,0 +1,12 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="15" y="15" width="30" height="30" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- 扫描线效果 -->
+<line x1="20" y1="25" x2="40" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<line x1="20" y1="30" x2="40" y2="30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+<line x1="20" y1="35" x2="40" y2="35" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<!-- 四个角的标记 -->
+<line x1="15" y1="15" x2="10" y2="10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="45" y1="15" x2="50" y2="10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="15" y1="45" x2="10" y2="50" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="45" y1="45" x2="50" y2="50" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

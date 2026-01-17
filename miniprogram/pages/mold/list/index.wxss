@@ -2,78 +2,87 @@
 
 /* 搜索栏 */
 .search-section {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
 }
 
 /* 筛选标签 */
 .filter-section {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
 }
 
 .filter-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: var(--space-2);
 }
 
 .tag {
   display: inline-block;
   padding: 8rpx 16rpx;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   cursor: pointer;
+  border: 1rpx solid transparent;
 }
 
 .tag.active {
-  transform: translateY(-2rpx);
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+  transform: translateY(-1rpx);
+  box-shadow: var(--shadow-md);
 }
 
 .tag-all {
-  background-color: var(--gray-100);
-  color: var(--gray-700);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-200);
 }
 
 .tag-all.active {
-  background-color: var(--primary-color);
+  background-color: var(--color-primary);
   color: white;
+  border-color: var(--color-primary);
 }
 
 .tag-active {
-  background-color: #D1FAE5;
-  color: var(--success-color);
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
 }
 
 .tag-active.active {
-  background-color: var(--success-color);
+  background-color: var(--color-success);
   color: white;
+  border-color: var(--color-success);
 }
 
 .tag-maintenance {
-  background-color: #FEF3C7;
-  color: var(--warning-color);
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+  border-color: rgba(245, 158, 11, 0.2);
 }
 
 .tag-maintenance.active {
-  background-color: var(--warning-color);
+  background-color: var(--color-warning);
   color: white;
+  border-color: var(--color-warning);
 }
 
 .tag-inactive {
-  background-color: #FEE2E2;
-  color: var(--error-color);
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .tag-inactive.active {
-  background-color: var(--error-color);
+  background-color: var(--color-error);
   color: white;
+  border-color: var(--color-error);
 }
 
 /* 添加按钮 */
 .add-button-container {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
   text-align: center;
 }
 
@@ -82,12 +91,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-3);
+  margin-bottom: var(--space-3);
 }
 
 .total {
   font-size: var(--font-size-sm);
-  color: var(--gray-600);
+  color: var(--color-gray-600);
 }
 
 /* 模库列表 */
@@ -97,47 +106,48 @@
 }
 
 .mold-item {
-  background-color: var(--white);
-  border-radius: var(--border-radius-xl);
-  padding: var(--spacing-3);
-  margin-bottom: var(--spacing-3);
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border: 1rpx solid var(--color-gray-200);
 }
 
 .mold-item:active {
-  transform: translateY(-2rpx);
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.12);
+  transform: translateY(-1rpx);
+  box-shadow: var(--shadow-md);
 }
 
 .mold-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-2);
+  margin-bottom: var(--space-2);
 }
 
 .mold-code {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--gray-800);
+  color: var(--color-gray-800);
   flex: 1;
-  margin-right: var(--spacing-2);
+  margin-right: var(--space-2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .mold-info {
-  margin-bottom: var(--spacing-2);
+  margin-bottom: var(--space-2);
 }
 
 .mold-name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
-  color: var(--gray-700);
+  color: var(--color-gray-700);
   display: block;
-  margin-bottom: var(--spacing-1);
+  margin-bottom: var(--space-1);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -145,7 +155,7 @@
 
 .mold-desc {
   font-size: var(--font-size-sm);
-  color: var(--gray-600);
+  color: var(--color-gray-600);
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,7 +169,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: var(--font-size-xs);
-  color: var(--gray-500);
+  color: var(--color-gray-500);
 }
 
 .mold-type {
@@ -169,7 +179,10 @@
 /* 空状态 */
 .empty-state {
   text-align: center;
-  padding: var(--spacing-6) 0;
-  color: var(--gray-500);
+  padding: var(--space-6) 0;
+  color: var(--color-gray-500);
   font-size: var(--font-size-sm);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-lg);
+  margin: var(--space-4) 0;
 }

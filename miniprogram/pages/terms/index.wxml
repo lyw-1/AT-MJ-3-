@@ -1,0 +1,70 @@
+<!-- 用户协议页面 -->
+<view class="terms-container">
+  <view class="terms-content">
+    <view class="terms-header">
+      <text class="terms-title">用户协议</text>
+    </view>
+    <view class="terms-body">
+      <text class="terms-text">
+        欢迎使用蜂窝陶瓷模具管理小程序。请您仔细阅读并理解本用户协议（以下简称"协议"），您点击"同意"或继续使用我们的服务，即表示您已同意本协议的全部条款。
+      </text>
+      
+      <view class="terms-section">
+        <text class="section-title">一、服务内容</text>
+        <text class="terms-text">
+          1. 蜂窝陶瓷模具管理小程序为您提供模具信息管理、扫描识别、任务管理等服务。
+          2. 我们有权根据业务发展需要调整或更新服务内容，无需另行通知。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">二、用户权利与义务</text>
+        <text class="terms-text">
+          1. 您有权使用我们提供的服务，但需遵守本协议的规定。
+          2. 您应当提供真实、准确的个人信息，不得冒用他人身份或提供虚假信息。
+          3. 您应当妥善保管您的账号和密码，对使用您账号进行的所有操作负责。
+          4. 您不得利用我们的服务从事违法违规活动，不得损害我们或其他用户的合法权益。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">三、服务条款的修改</text>
+        <text class="terms-text">
+          我们有权根据法律法规的变化或业务发展需要修改本协议。修改后的协议将在小程序内发布，您继续使用我们的服务即表示您同意修改后的协议。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">四、服务的终止</text>
+        <text class="terms-text">
+          1. 您可以随时终止使用我们的服务。
+          2. 如您违反本协议的规定，我们有权终止向您提供服务。
+          3. 我们有权根据业务发展需要终止部分或全部服务。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">五、免责声明</text>
+        <text class="terms-text">
+          1. 我们不对因不可抗力或第三方原因导致的服务中断或故障承担责任。
+          2. 我们不对您使用我们服务所产生的任何直接或间接损失承担责任。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">六、争议解决</text>
+        <text class="terms-text">
+          本协议的解释和执行均适用中华人民共和国法律。如您与我们之间发生争议，应首先通过友好协商解决；协商不成的，任何一方均有权向有管辖权的人民法院提起诉讼。
+        </text>
+      </view>
+      
+      <view class="terms-section">
+        <text class="section-title">七、其他条款</text>
+        <text class="terms-text">
+          1. 本协议构成您与我们之间关于使用我们服务的完整协议，取代之前的任何口头或书面协议。
+          2. 如本协议的任何条款被认定为无效或不可执行，不影响其他条款的效力。
+        </text>
+      </view>
+    </view>
+  </view>
+</view>

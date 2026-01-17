@@ -1,0 +1,3 @@
+<view class="tag {{className}}" bindtap="onTap">
+  <text class="tag-text">{{text}}</text>
+</view>

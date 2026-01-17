@@ -82,335 +82,362 @@
       <p class="page-subtitle" tabindex="0">查看和编辑模具的初始参数信息</p>
     </div>
     
-    <el-card>
-      <el-form 
-        ref="formRef"
-        :model="formData" 
-        label-width="120px" 
-        :disabled="!editing" 
-        v-loading="loading"
-        :rules="formRules"
-        class="mold-form"
-        role="form"
-        aria-labelledby="page-title"
-      >
-        <!-- 基本信息组 -->
-        <div class="form-section">
-          <h2 class="form-section-title">基本信息</h2>
-          
-          <!-- 第一行：申请编号、成品类别 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="申请编号" prop="applicationNumber">
-                <el-input v-model="formData.applicationNumber" placeholder="请输入申请编号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="成品类别" prop="productCategory">
-                <el-select 
-                  v-model="formData.productCategory" 
-                  placeholder="请选择成品类别" 
-                  style="width: 100%"
-                  filterable
-                >
-                  <el-option 
-                    v-for="category in productCategories" 
-                    :key="category" 
-                    :label="category" 
-                    :value="category" 
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第二行：模号、成品规格 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="模号" prop="moldNumber">
-                <el-input v-model="formData.moldNumber" placeholder="请输入模号" @input="handleMoldNumberInput" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="成品规格" prop="specification">
-                <el-select 
-                  v-model="formData.specification" 
-                  placeholder="请选择或输入成品规格" 
-                  style="width: 100%" 
-                  filterable 
-                  allow-create
-                  :loading="productLoading"
-                >
-                  <el-option 
-                    v-for="spec in filteredProductSpecs" 
-                    :key="spec" 
-                    :label="spec" 
-                    :value="spec" 
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
+    <el-card v-loading="loading">
+      <!-- 基本信息表格 -->
+      <div class="print-section">
+        <div class="section-header">
+          <h3 class="print-section-title">基本信息</h3>
+          <div class="qrcode-container">
+            <qrcode-vue
+              :value="qrcodeValue"
+              :size="100"
+              level="H"
+            />
+          </div>
         </div>
-
-        <!-- 材料与结构组 -->
-        <div class="form-section">
-          <h2 class="form-section-title">材料与结构</h2>
-          
-          <!-- 第三行：模具钢材、HRC -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="模具钢材" prop="material">
-                <el-select 
-                  v-model="formData.material" 
-                  placeholder="请选择模具钢材" 
-                  style="width: 100%"
-                  :loading="steelLoading"
-                >
-                  <el-option 
-                    v-for="steel in steelMaterials" 
-                    :key="steel" 
-                    :label="steel" 
-                    :value="steel" 
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="HRC" prop="hrc">
-                <el-input v-model="formData.hrc" placeholder="请输入HRC值，如：48-52" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第四行：结构、总收缩 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="结构" prop="structure">
-                <el-select v-model="formData.structure" placeholder="请选择结构" style="width: 100%">
-                  <el-option label="斜边模" value="斜边模" />
-                  <el-option label="直压模" value="直压模" />
-                  <el-option label="收边模" value="收边模" />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="总收缩(%)" prop="totalShrinkage">
-                <el-input-number
-                  v-model="formData.totalShrinkage"
-                  :max="100"
-                  :precision="2"
-                  placeholder="请输入总收缩（支持负值）"
-                  style="width: 100%"
+        <table class="print-table info-table">
+          <colgroup>
+            <col style="width: 15%">
+            <col style="width: 35%">
+            <col style="width: 15%">
+            <col style="width: 35%">
+          </colgroup>
+          <tr>
+            <th>申请编号</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.applicationNumber" placeholder="请输入申请编号" />
+              <span v-else>{{ formData.applicationNumber || '-' }}</span>
+            </td>
+            <th>成品类别</th>
+            <td>
+              <el-select 
+                v-if="editing"
+                v-model="formData.productCategory" 
+                placeholder="请选择成品类别" 
+                style="width: 100%"
+                filterable
+              >
+                <el-option 
+                  v-for="category in productCategories" 
+                  :key="category" 
+                  :label="category" 
+                  :value="category" 
                 />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-
-        <!-- 尺寸与外观组 -->
-        <div class="form-section">
-          <h2 class="form-section-title">尺寸与外观</h2>
-          
-          <!-- 第五行：模芯尺寸、外形 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="模芯尺寸">
-                <el-input v-model="formData.coreSize" placeholder="请输入模芯尺寸" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="外形">
-                <el-input v-model="formData.appearance" placeholder="请输入外形" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第六行：定位孔距 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="定位孔距">
-                <el-input v-model="formData.positioningHoleDistance" placeholder="请输入定位孔距" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-
-        <!-- 孔槽参数组 -->
-        <div class="form-section">
-          <h2 class="form-section-title">孔槽参数</h2>
-          
-          <!-- 第七行：进泥孔径、孔数 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="进泥孔径" prop="inletHoleDiameter">
-                <el-input-number
-                  v-model="formData.inletHoleDiameter"
-                  :min="0"
-                  :precision="3"
-                  placeholder="请输入进泥孔径"
-                  style="width: 100%"
+              </el-select>
+              <span v-else>{{ formData.productCategory || '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>模号</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.moldNumber" placeholder="请输入模号" @input="handleMoldNumberInput" />
+              <span v-else>{{ formData.moldNumber || '-' }}</span>
+            </td>
+            <th>成品规格</th>
+            <td>
+              <el-select 
+                v-if="editing"
+                v-model="formData.specification" 
+                placeholder="请选择或输入成品规格" 
+                style="width: 100%" 
+                filterable 
+                allow-create
+                :loading="productLoading"
+              >
+                <el-option 
+                  v-for="spec in filteredProductSpecs" 
+                  :key="spec" 
+                  :label="spec" 
+                  :value="spec" 
                 />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="孔数">
-                <el-input-number
-                  v-model="formData.holeCount"
-                  :min="0"
-                  :max="10000"
-                  placeholder="请输入孔数"
-                  style="width: 100%"
+              </el-select>
+              <span v-else>{{ formData.specification || '-' }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 材料与结构表格 -->
+      <div class="print-section">
+        <h3 class="print-section-title">材料与结构</h3>
+        <table class="print-table info-table">
+          <colgroup>
+            <col style="width: 15%">
+            <col style="width: 35%">
+            <col style="width: 15%">
+            <col style="width: 35%">
+          </colgroup>
+          <tr>
+            <th>模具钢材</th>
+            <td>
+              <el-select 
+                v-if="editing"
+                v-model="formData.material" 
+                placeholder="请选择模具钢材" 
+                style="width: 100%"
+                :loading="steelLoading"
+              >
+                <el-option 
+                  v-for="steel in steelMaterials" 
+                  :key="steel" 
+                  :label="steel" 
+                  :value="steel" 
                 />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第八行：孔深、间孔或全孔 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="孔深">
-                <el-input v-model="formData.holeDepth" placeholder="请输入孔深" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="间孔或全孔">
-                <el-radio-group v-model="formData.holeType">
-                  <el-radio value="间孔">间孔</el-radio>
-                  <el-radio value="全孔">全孔</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第九行：槽宽、槽深 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="槽宽" prop="slotWidth">
-                <el-input-number
-                  v-model="formData.slotWidth"
-                  :min="0.001"
-                  :precision="3"
-                  placeholder="请输入槽宽"
-                  style="width: 100%"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="槽深">
-                <el-input v-model="formData.slotDepth" placeholder="请输入槽深" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第十行：切入量、中心距 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="切入量">
-                <el-input v-model="formData.cutAmount" placeholder="请输入切入量" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="中心距" prop="centerDistance">
-                <el-input-number
-                  v-model="formData.centerDistance"
-                  :min="0"
-                  :precision="3"
-                  placeholder="请输入中心距"
-                  style="width: 100%"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 第十一行：供泥比 -->
-          <el-row :gutter="16">
-            <el-col :span="24">
-              <el-form-item label="供泥比">
-                <el-input v-model="formData.mudSupplyRatio" placeholder="请输入供泥比" :disabled="true" />
-                <div class="form-hint">
-                  <div class="formula-container">
-                    <el-button 
-                      type="text" 
-                      @click="toggleFormula" 
-                      class="formula-toggle-btn"
-                    >
-                      {{ showFormula ? '收起计算公式' : '查看计算公式' }}
-                      <el-icon>{{ showFormula ? 'ArrowUp' : 'ArrowDown' }}</el-icon>
-                    </el-button>
-                    <div v-if="showFormula" class="formula-explanation expanded">
-                      <h3>计算公式：</h3>
-                      <div class="formula-math">
-                        <p v-if="formData.holeType === '间孔'">
-                          供泥比 = <span class="formula-numerator">进泥孔径的面积</span> ÷ <span class="formula-denominator">(2 × (中心距² - (中心距 - 槽宽)²))</span>
-                        </p>
-                        <p v-else>
-                          供泥比 = <span class="formula-numerator">进泥孔径的面积</span> ÷ <span class="formula-denominator">(中心距² - (中心距 - 槽宽)²)</span>
-                        </p>
-                        <p class="formula-note">
-                          <small>说明：进泥孔径的面积 = π × (进泥孔径 ÷ 2)²</small>
-                        </p>
-                      </div>
-                      <div class="formula-variables">
-                        <h4>变量说明：</h4>
-                        <ul>
-                          <li><strong>进泥孔径</strong>：{{ formData.inletHoleDiameter || 0 }}</li>
-                          <li><strong>中心距</strong>：{{ formData.centerDistance || 0 }}</li>
-                          <li><strong>槽宽</strong>：{{ formData.slotWidth || 0 }}</li>
-                          <li><strong>孔类型</strong>：{{ formData.holeType }}</li>
-                        </ul>
-                      </div>
+              </el-select>
+              <span v-else>{{ formData.material || '-' }}</span>
+            </td>
+            <th>HRC</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.hrc" placeholder="请输入HRC值，如：48-52" />
+              <span v-else>{{ formData.hrc || '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>结构</th>
+            <td>
+              <el-select v-if="editing" v-model="formData.structure" placeholder="请选择结构" style="width: 100%">
+                <el-option label="斜边模" value="斜边模" />
+                <el-option label="直压模" value="直压模" />
+                <el-option label="收边模" value="收边模" />
+              </el-select>
+              <span v-else>{{ formData.structure || '-' }}</span>
+            </td>
+            <th>总收缩(%)</th>
+            <td>
+              <el-input-number
+                v-if="editing"
+                v-model="formData.totalShrinkage"
+                :max="100"
+                :precision="2"
+                placeholder="请输入总收缩（支持负值）"
+                style="width: 100%"
+              />
+              <span v-else>{{ formData.totalShrinkage !== undefined && formData.totalShrinkage !== null ? formData.totalShrinkage : '-' }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 尺寸与外观表格 -->
+      <div class="print-section">
+        <h3 class="print-section-title">尺寸与外观</h3>
+        <table class="print-table info-table">
+          <colgroup>
+            <col style="width: 15%">
+            <col style="width: 35%">
+            <col style="width: 15%">
+            <col style="width: 35%">
+          </colgroup>
+          <tr>
+            <th>模芯尺寸</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.coreSize" placeholder="请输入模芯尺寸" />
+              <span v-else>{{ formData.coreSize || '-' }}</span>
+            </td>
+            <th>外形</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.appearance" placeholder="请输入外形" />
+              <span v-else>{{ formData.appearance || '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>定位孔距</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.positioningHoleDistance" placeholder="请输入定位孔距" />
+              <span v-else>{{ formData.positioningHoleDistance || '-' }}</span>
+            </td>
+            <th>模芯台阶</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.coreStep" placeholder="请输入模芯台阶" />
+              <span v-else>{{ formData.coreStep || '-' }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      
+      <!-- 孔槽参数表格 -->
+      <div class="print-section">
+        <h3 class="print-section-title">孔槽参数</h3>
+        <table class="print-table info-table">
+          <colgroup>
+            <col style="width: 15%">
+            <col style="width: 35%">
+            <col style="width: 15%">
+            <col style="width: 35%">
+          </colgroup>
+          <tr>
+            <th>进泥孔径</th>
+            <td>
+              <el-input-number
+                v-if="editing"
+                v-model="formData.inletHoleDiameter"
+                :min="0"
+                :precision="3"
+                placeholder="请输入进泥孔径"
+                style="width: 100%"
+              />
+              <span v-else>{{ formData.inletHoleDiameter !== undefined && formData.inletHoleDiameter !== null ? formData.inletHoleDiameter : '-' }}</span>
+            </td>
+            <th>孔数</th>
+            <td>
+              <el-input-number
+                v-if="editing"
+                v-model="formData.holeCount"
+                :min="0"
+                :max="10000"
+                placeholder="请输入孔数"
+                style="width: 100%"
+              />
+              <span v-else>{{ formData.holeCount !== undefined && formData.holeCount !== null ? formData.holeCount : '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>孔深</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.holeDepth" placeholder="请输入孔深" />
+              <span v-else>{{ formData.holeDepth || '-' }}</span>
+            </td>
+            <th>间孔或全孔</th>
+            <td>
+              <el-radio-group v-if="editing" v-model="formData.holeType">
+                <el-radio value="间孔">间孔</el-radio>
+                <el-radio value="全孔">全孔</el-radio>
+              </el-radio-group>
+              <span v-else>{{ formData.holeType || '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>槽宽</th>
+            <td>
+              <el-input-number
+                v-if="editing"
+                v-model="formData.slotWidth"
+                :min="0.001"
+                :precision="3"
+                placeholder="请输入槽宽"
+                style="width: 100%"
+              />
+              <span v-else>{{ formData.slotWidth !== undefined && formData.slotWidth !== null ? formData.slotWidth : '-' }}</span>
+            </td>
+            <th>槽深</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.slotDepth" placeholder="请输入槽深" />
+              <span v-else>{{ formData.slotDepth || '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>切入量</th>
+            <td>
+              <el-input v-if="editing" v-model="formData.cutAmount" placeholder="请输入切入量" />
+              <span v-else>{{ formData.cutAmount || '-' }}</span>
+            </td>
+            <th>中心距</th>
+            <td>
+              <el-input-number
+                v-if="editing"
+                v-model="formData.centerDistance"
+                :min="0"
+                :precision="3"
+                placeholder="请输入中心距"
+                style="width: 100%"
+              />
+              <span v-else>{{ formData.centerDistance !== undefined && formData.centerDistance !== null ? formData.centerDistance : '-' }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>供泥比</th>
+            <td colspan="3">
+              <el-input v-if="editing" v-model="formData.mudSupplyRatio" placeholder="请输入供泥比" :disabled="true" />
+              <div v-else class="form-hint">
+                <div class="formula-container">
+                  <el-button 
+                    type="text" 
+                    @click="toggleFormula" 
+                    class="formula-toggle-btn"
+                  >
+                    {{ showFormula ? '收起计算公式' : '查看计算公式' }}
+                    <el-icon>{{ showFormula ? 'ArrowUp' : 'ArrowDown' }}</el-icon>
+                  </el-button>
+                  <div v-if="showFormula" class="formula-explanation expanded">
+                    <h3>计算公式：</h3>
+                    <div class="formula-math">
+                      <p v-if="formData.holeType === '间孔'">
+                        供泥比 = <span class="formula-numerator">进泥孔径的面积</span> ÷ <span class="formula-denominator">(2 × (中心距² - (中心距 - 槽宽)²))</span>
+                      </p>
+                      <p v-else>
+                        供泥比 = <span class="formula-numerator">进泥孔径的面积</span> ÷ <span class="formula-denominator">(中心距² - (中心距 - 槽宽)²)</span>
+                      </p>
+                      <p class="formula-note">
+                        <small>说明：进泥孔径的面积 = π × (进泥孔径 ÷ 2)²</small>
+                      </p>
+                    </div>
+                    <div class="formula-variables">
+                      <h4>变量说明：</h4>
+                      <ul>
+                        <li><strong>进泥孔径</strong>：{{ formData.inletHoleDiameter || 0 }}</li>
+                        <li><strong>中心距</strong>：{{ formData.centerDistance || 0 }}</li>
+                        <li><strong>槽宽</strong>：{{ formData.slotWidth || 0 }}</li>
+                        <li><strong>孔类型</strong>：{{ formData.holeType }}</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-
-        <!-- 其他信息组 -->
-        <div class="form-section">
-          <h2 class="form-section-title">其他信息</h2>
-          
-          <!-- 第十二行：模芯台阶、负责人 -->
-          <el-row :gutter="16">
-            <el-col :span="12">
-              <el-form-item label="模芯台阶">
-                <el-input v-model="formData.coreStep" placeholder="请输入模芯台阶" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="负责人" prop="responsiblePerson">
-                <el-input 
-                  v-model="formData.responsiblePerson" 
-                  style="width: 100%"
-                  placeholder="请输入负责人"
-                  clearable
-                >
-                  <template #prefix>
-                    <el-icon class="input-icon"><User /></el-icon>
-                  </template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <!-- 备注 -->
-          <el-row :gutter="16">
-            <el-col :span="24">
-              <el-form-item label="备注">
-                <el-input
-                  v-model="formData.remarks"
-                  type="textarea"
-                  :rows="4"
-                  placeholder="请输入备注信息"
-                  resize="vertical"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-      </el-form>
+                <span v-if="!showFormula">{{ formData.mudSupplyRatio || '-' }}</span>
+                </div>
+              </td>
+            </tr>
+        </table>
+      </div>
+      
+      <!-- 其他信息表格 -->
+      <div class="print-section">
+        <h3 class="print-section-title">其他信息</h3>
+        <table class="print-table info-table">
+          <colgroup>
+            <col style="width: 15%">
+            <col style="width: 35%">
+            <col style="width: 15%">
+            <col style="width: 35%">
+          </colgroup>
+          <tr>
+            <th>负责人</th>
+            <td>
+              <el-input 
+                v-if="editing"
+                v-model="formData.responsiblePerson" 
+                style="width: 100%"
+                placeholder="请输入负责人"
+                clearable
+              >
+                <template #prefix>
+                  <el-icon class="input-icon"><User /></el-icon>
+                </template>
+              </el-input>
+              <span v-else>{{ formData.responsiblePerson || '-' }}</span>
+            </td>
+            <th>状态</th>
+            <td>
+              <el-tag v-if="formData.status === 'active'" type="success">启用</el-tag>
+              <el-tag v-else-if="formData.status === 'inactive'" type="info">停用</el-tag>
+              <el-tag v-else type="warning">未知</el-tag>
+            </td>
+          </tr>
+          <tr>
+            <th>备注</th>
+            <td colspan="3">
+              <el-input
+                v-if="editing"
+                v-model="formData.remarks"
+                type="textarea"
+                :rows="4"
+                placeholder="请输入备注信息"
+                resize="vertical"
+              />
+              <span v-else>{{ formData.remarks || '-' }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
     </el-card>
   </div>
 </template>
@@ -421,6 +448,7 @@ import { useRoute } from 'vue-router'
 import { getMoldInitialParamDetail, updateMoldInitialParam } from '@/api/mold'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import QrcodeVue from 'qrcode.vue'
 
 // 引入成品相关API和类型
 import { getProducts } from '@/api/product'
@@ -470,6 +498,11 @@ const formData = reactive({
   responsiblePerson: '', // 负责人(下拉选择，筛选模具加工组员工角色)
   remarks: '', // 备注(多行文字属性)
   status: 'active' // 状态
+})
+
+// 二维码内容 - 生成模具详情页面的链接
+const qrcodeValue = computed(() => {
+  return `${window.location.origin}/mold/initial-params-detail/${formData.id}`
 })
 
 // 成品相关数据
@@ -763,6 +796,49 @@ onMounted(async () => {
   min-height: calc(100vh - 84px);
 }
 
+// 打印友好的表格样式
+.print-section {
+  padding: 0 20px 20px;
+}
+
+.print-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #1890ff;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: #fff;
+  
+  th, td {
+    border: 1px solid #d9d9d9;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+  }
+  
+  td {
+    background: #fff;
+  }
+  
+  .center {
+    text-align: center;
+  }
+}
+
 // 色彩系统定义
 :root {
   // 字体系统
@@ -830,47 +906,7 @@ body {
   background-color: var(--bg-color-primary);
 }
 
-// 表单提示样式
-.form-hint {
-  margin-top: 2px; // 减少提示与表单的间距
-  font-size: 12px;
-  color: #909399;
-  display: flex;
-  align-items: center;
-  
-  .hint-icon {
-    display: inline-block;
-    width: 14px; // 减小提示图标
-    height: 14px; // 减小提示图标
-    border-radius: 50%;
-    background-color: #ecf5ff;
-    color: #409eff;
-    text-align: center;
-    line-height: 14px;
-    margin-right: 4px;
-    cursor: pointer;
-  }
-  
-  .formula-explanation {
-    display: none;
-    margin-top: 6px; // 减少公式说明与提示的间距
-    padding: 6px 10px; // 减少公式说明的内边距
-    background-color: #f0f9eb;
-    border: 1px solid #d9f7be;
-    border-radius: 4px;
-    color: #67c23a;
-    font-size: 12px;
-    line-height: 1.4;
-    
-    p {
-      margin: 3px 0; // 减少段落间距
-    }
-  }
-  
-  &:hover .formula-explanation {
-    display: block;
-  }
-}
+
 
 // 页面标题样式
 .page-header {
@@ -924,50 +960,7 @@ body {
   opacity: 1 !important;
 }
 
-// 表单分组样式
-.form-section {
-  margin-bottom: 16px;
-  padding: 12px;
-  background-color: var(--bg-color-secondary);
-  border-radius: 6px;
-  border: 1px solid var(--border-color-light);
-  box-shadow: var(--box-shadow-light);
-}
 
-.form-section-title {
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-base);
-  color: var(--text-color-primary);
-  margin: 0 0 12px 0;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border-color-light);
-}
-
-// 表单行间距调整
-.el-row {
-  margin-bottom: 12px; // 减少表单行间距，使布局更紧凑
-}
-
-// 优化卡片内边距
-:deep(.el-card__body) {
-  padding: 16px; // 减少卡片内边距，使布局更紧凑
-}
-
-// 优化表单项的间距
-:deep(.el-form-item) {
-  margin-bottom: 12px; // 减少表单项间距，使布局更紧凑
-}
-
-// 调整表单标签样式
-:deep(.el-form-item__label) {
-  padding: 0 12px 0 0; // 调整标签内边距
-  font-weight: var(--font-weight-medium);
-  color: var(--text-color-primary);
-  font-size: var(--font-size-extra-small);
-  line-height: var(--line-height-small);
-  width: 100px; // 固定标签宽度，使布局更紧凑
-}
 
 // 响应式设计优化
 @media (max-width: 1024px) {
@@ -1276,7 +1269,7 @@ body {
 
 .formula-math {
   font-family: 'Courier New', Courier, monospace;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255,255,255,0.8);
   padding: 12px;
   border-radius: 4px;
   border: 1px solid rgba(103, 194, 58, 0.2);
@@ -1293,7 +1286,7 @@ body {
 }
 
 .formula-denominator {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255,255,255,0.6);
   padding: 2px 6px;
   border-radius: 3px;
 }
@@ -1306,7 +1299,7 @@ body {
 }
 
 .formula-variables {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255,255,255,0.8);
   padding: 12px;
   border-radius: 4px;
   border: 1px solid rgba(103, 194, 58, 0.2);
@@ -1328,5 +1321,42 @@ body {
 .formula-variables strong {
   color: var(--success-color);
   font-weight: var(--font-weight-bold);
+}
+
+// 二维码容器样式
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.qrcode-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background-color: #fff;
+  border: 1px solid var(--border-color-light);
+  border-radius: 6px;
+  box-shadow: var(--box-shadow-light);
+}
+
+.qrcode-container :deep(img) {
+  display: block;
+  border-radius: 4px;
+}
+
+// 响应式设计优化
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .qrcode-container {
+    align-self: flex-end;
+  }
 }
 </style>

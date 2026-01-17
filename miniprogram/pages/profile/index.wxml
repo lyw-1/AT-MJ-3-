@@ -1,0 +1,69 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="card user-card">
+    <view class="user-avatar">
+      <image src="{{userInfo && userInfo.avatar ? userInfo.avatar : '/assets/images/avatar-default.png'}}" mode="aspectFill"></image>
+    </view>
+    <view class="user-info">
+      <view class="user-name">{{userInfo && userInfo.name ? userInfo.name : '未获取'}}</view>
+      <view class="user-role">{{userInfo && userInfo.role ? userInfo.role : '普通用户'}}</view>
+      <view class="user-meta">
+        <text class="meta-item">
+          <text class="meta-icon">📊</text>
+          <text class="meta-text">任务数: {{taskCount || 0}}</text>
+        </text>
+        <text class="meta-item">
+          <text class="meta-icon">🏆</text>
+          <text class="meta-text">等级: {{level || 'Lv.1'}}</text>
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="card quick-actions-card">
+    <view class="quick-action-item" wx:for="{{quickActions}}" wx:key="id" bindtap="onMenuItemClick" data-item="{{item.id}}">
+      <view class="quick-action-icon" style="background-color: {{item.color}}">
+        <view class="icon-text">{{item.iconText}}</view>
+      </view>
+      <view class="quick-action-name">{{item.name}}</view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="section-title">功能菜单</view>
+
+    <!-- 第一组菜单 -->
+    <view class="menu-group">
+      <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" wx:if="{{item.id !== 'feedback'}}" bindtap="onMenuItemClick" data-item="{{item.id}}">
+        <view class="menu-icon" style="background-color: {{item.color}}">
+          <image src="{{item.icon}}" style="width: 48rpx; height: 48rpx; filter: brightness(0) invert(1);"></image>
+        </view>
+        <view class="menu-text">{{item.name}}</view>
+        <view class="menu-arrow">→</view>
+      </view>
+    </view>
+
+    <!-- 第二组菜单 -->
+    <view class="menu-group" wx:if="{{hasFeedback}}">
+      <view class="menu-item" wx:for="{{menuItems}}" wx:key="id" wx:if="{{item.id === 'feedback'}}" bindtap="onMenuItemClick" data-item="{{item.id}}">
+        <view class="menu-icon" style="background-color: {{item.color}}">
+          <image src="{{item.icon}}" style="width: 48rpx; height: 48rpx; filter: brightness(0) invert(1);"></image>
+        </view>
+        <view class="menu-text">{{item.name}}</view>
+        <view class="menu-arrow">→</view>
+      </view>
+    </view>
+
+    <!-- 退出登录按钮 -->
+    <view class="menu-group logout-group">
+      <view class="menu-item logout-item" bindtap="onLogout">
+        <view class="menu-icon logout-icon" style="background-color: #f5222d">
+          <image src="/assets/icons/arrow-right.svg" style="width: 48rpx; height: 48rpx; filter: brightness(0) invert(1);"></image>
+        </view>
+        <view class="menu-text logout-text">退出登录</view>
+      </view>
+    </view>
+  </view>
+</view>

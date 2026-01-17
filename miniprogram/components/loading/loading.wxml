@@ -1,0 +1,21 @@
+<view class="loading-container" style="--size: {{sizeMap[size]}};">
+  <!--  spinner 类型 -->
+  <view wx:if="{{type === 'spinner'}}" class="loading-spinner">
+    <view class="spinner-circle"></view>
+  </view>
+  
+  <!--  dots 类型 -->
+  <view wx:elif="{{type === 'dots'}}" class="loading-dots">
+    <view class="dot" style="animation-delay: 0s;"></view>
+    <view class="dot" style="animation-delay: 0.2s;"></view>
+    <view class="dot" style="animation-delay: 0.4s;"></view>
+  </view>
+  
+  <!--  pulse 类型 -->
+  <view wx:elif="{{type === 'pulse'}}" class="loading-pulse">
+    <view class="pulse-circle"></view>
+  </view>
+  
+  <!--  文字说明 -->
+  <text wx:if="{{text}}" class="loading-text">{{text}}</text>
+</view>

@@ -357,7 +357,7 @@ onMounted(() => {
 // Circle Soft设计风格 - 主页样式
 .home-container {
   padding: 15px 15px 2.5px 15px;
-  background-color: $gray-50;
+  background-color: $white;
   min-height: calc(100vh - 120px);
 }
 
@@ -439,7 +439,7 @@ onMounted(() => {
   gap: $spacing-3;
   width: 100%;
   margin: 0 0 1px 0;
-  background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%);
+  background-color: $white;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   border: 1px solid $gray-300;

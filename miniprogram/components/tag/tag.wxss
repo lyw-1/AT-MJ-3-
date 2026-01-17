@@ -1,0 +1,108 @@
+/* Tag组件样式 - Clarity Design规范 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 14rpx;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  border: 1rpx solid transparent;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.tag-text {
+  display: inline-block;
+}
+
+/* 主色调标签 */
+.tag-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+/* 成功标签 */
+.tag-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* 警告标签 */
+.tag-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+  border-color: rgba(245, 158, 12, 0.2);
+}
+
+/* 错误标签 */
+.tag-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+  border-color: rgba(239, 68, 69, 0.2);
+}
+
+/* 信息标签 */
+.tag-info {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: var(--color-info);
+  border-color: rgba(107, 114, 129, 0.2);
+}
+
+/* 状态标签 */
+.tag-all {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-200);
+}
+
+.tag-active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.tag-maintenance {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+  border-color: rgba(245, 158, 12, 0.2);
+}
+
+.tag-inactive {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+  border-color: rgba(239, 68, 69, 0.2);
+}
+
+/* 激活状态 */
+.tag.active {
+  transform: translateY(-1rpx);
+  box-shadow: var(--shadow-md);
+}
+
+.tag-all.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.tag-active.active {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.tag-maintenance.active {
+  background-color: var(--color-warning);
+  color: white;
+  border-color: var(--color-warning);
+}
+
+.tag-inactive.active {
+  background-color: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}

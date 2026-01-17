@@ -2,9 +2,9 @@
 @use './variables' as *;
 @use './common' as *;
 
-// Circle Soft设计风格 - 完整主题配置
+// Clarity Design Aone 基础组件库 - 完整主题配置
 :root {
-  // 主色调 - 紫色系，与Circle Soft设计完全一致
+  // 主色调 - 紫色系，与Clarity Design完全一致
   --el-color-primary: #{$primary-color};
   --el-color-primary-light-3: #{color.adjust($primary-color, $lightness: 15%)};
   --el-color-primary-light-5: #{color.adjust($primary-color, $lightness: 25%)};
@@ -49,31 +49,31 @@
   --el-color-info-light-9: #{color.adjust($info-color, $lightness: 45%)};
   --el-color-info-dark-2: #{color.adjust($info-color, $lightness: -15%)};
   
-  // 边框颜色 - 采用更浅的边框色，增强扁平感
+  // 边框颜色 - Clarity Design规范
   --el-border-color: #{$gray-200};
   --el-border-color-light: #{$gray-100};
   --el-border-color-lighter: #{$gray-50};
   --el-border-color-extra-light: transparent;
   
-  // 文字颜色 - 优化对比度，增强可读性
+  // 文字颜色 - Clarity Design规范
   --el-text-color-primary: #{$gray-900};
   --el-text-color-regular: #{$gray-700};
   --el-text-color-secondary: #{$gray-600};
   --el-text-color-placeholder: #{$gray-400};
   
-  // 背景颜色 - 采用更柔和的背景色
-  --el-bg-color: #{$white};
+  // 背景颜色 - Clarity Design规范
+  --el-bg-color: #{$gray-50};
   --el-bg-color-page: #{$gray-50};
   --el-bg-color-overlay: #{$white};
   --el-bg-color-hover: #{$primary-light};
   
-  // 边框圆角 - 全新扁平圆角风格，增大所有圆角值
-  --el-border-radius-base: #{$border-radius-xl};
-  --el-border-radius-small: #{$border-radius-lg};
-  --el-border-radius-round: #{$border-radius-2xl};
+  // 边框圆角 - Clarity Design规范
+  --el-border-radius-base: #{$border-radius-md};
+  --el-border-radius-small: #{$border-radius-sm};
+  --el-border-radius-round: #{$border-radius-lg};
   --el-border-radius-circle: 50%;
   
-  // 字体大小
+  // 字体大小 - Clarity Design规范
   --el-font-size-extra-large: #{$font-size-2xl};
   --el-font-size-large: #{$font-size-xl};
   --el-font-size-medium: #{$font-size-lg};
@@ -81,29 +81,33 @@
   --el-font-size-small: #{$font-size-sm};
   --el-font-size-extra-small: #{$font-size-xs};
   
-  // 间距
+  // 间距 - Clarity Design规范
   --el-spacing-xs: #{$spacing-1};
   --el-spacing-sm: #{$spacing-2};
   --el-spacing-md: #{$spacing-3};
   --el-spacing-lg: #{$spacing-4};
   --el-spacing-xl: #{$spacing-5};
   
-  // 阴影效果 - 采用柔和的阴影，增强层次感但不突兀
-  --el-box-shadow-light: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --el-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --el-box-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.12);
+  // 阴影效果 - Clarity Design规范，更浅的阴影
+  --el-box-shadow-light: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --el-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --el-box-shadow-dark: 0 4px 16px rgba(0, 0, 0, 0.12);
+  
+  // 字体家族 - Clarity Design规范
+  --el-font-family: #{$font-family};
 }
 
 // Element Plus组件样式覆盖
 .el-button {
-  // 参考Circle Soft设计风格按钮 - 简洁设计，清晰状态，流畅交互
+  // Clarity Design风格按钮 - 简洁设计，清晰状态，流畅交互
   border-radius: $button-radius;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   box-shadow: none;
   transition: all 0.2s ease;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
+  font-family: $font-family;
   
-  // 主按钮样式 - 参考Circle Soft设计，紫色背景
+  // 主按钮样式 - Clarity Design规范，紫色背景
   &.el-button--primary {
     background-color: $primary-color;
     border-color: $primary-color;
@@ -123,15 +127,15 @@
     }
   }
   
-  // 次要按钮样式 - 简洁白色背景，灰色边框
+  // 次要按钮样式 - Clarity Design规范，简洁白色背景，灰色边框
   &.el-button--default {
     background-color: $white;
-    border-color: $gray-200;
+    border-color: $gray-300;
     color: $gray-700;
     
     &:hover {
       background-color: $gray-50;
-      border-color: $gray-300;
+      border-color: $gray-400;
       color: $gray-800;
     }
     
@@ -140,7 +144,7 @@
     }
   }
   
-  // 成功按钮样式
+  // 成功按钮样式 - Clarity Design规范
   &.el-button--success {
     background-color: $success-color;
     border-color: $success-color;
@@ -151,7 +155,7 @@
     }
   }
   
-  // 警告按钮样式
+  // 警告按钮样式 - Clarity Design规范
   &.el-button--warning {
     background-color: $warning-color;
     border-color: $warning-color;
@@ -162,29 +166,40 @@
     }
   }
   
-  // 尺寸优化 - 合适的按钮尺寸，提升点击区域
+  // 错误按钮样式 - Clarity Design规范
+  &.el-button--danger {
+    background-color: $error-color;
+    border-color: $error-color;
+    color: $white;
+    
+    &:hover {
+      background-color: #{color.adjust($error-color, $lightness: -10%)};
+    }
+  }
+  
+  // 尺寸优化 - Clarity Design规范，合适的按钮尺寸，提升点击区域
   &.el-button--large {
-    height: 48px;
-    padding: 0 28px;
+    height: 44px;
+    padding: 0 24px;
     font-size: $font-size-lg;
   }
   
   &.el-button--medium {
-    height: 40px;
-    padding: 0 20px;
+    height: 36px;
+    padding: 0 16px;
     font-size: $font-size-base;
   }
   
   &.el-button--small {
     height: 32px;
-    padding: 0 16px;
+    padding: 0 12px;
     font-size: $font-size-sm;
   }
   
-  // 图标按钮样式优化
+  // 图标按钮样式优化 - Clarity Design规范
   &.el-button--icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     display: flex;
     align-items: center;
@@ -193,17 +208,19 @@
 }
 
 .el-input {
-  // 参考Circle Soft设计风格输入框 - 简洁设计，清晰边框，流畅交互
+  // Clarity Design风格输入框 - 简洁设计，清晰边框，流畅交互
+  font-family: $font-family;
+  
   .el-input__wrapper {
-    border-radius: $border-radius-md;
-    height: 48px;
+    border-radius: $input-radius;
+    height: 40px;
     box-shadow: none;
     background-color: $white;
-    border: 2px solid $gray-200;
+    border: 1px solid $gray-300;
     transition: all 0.2s ease;
     
     &:hover {
-      border-color: $gray-300;
+      border-color: $gray-400;
     }
     
     &.is-focus {
@@ -212,14 +229,14 @@
     }
     
     &.is-disabled {
-      border-color: $gray-100;
+      border-color: $gray-200;
       background-color: $gray-50;
     }
   }
   
   .el-input__inner {
-    height: 44px;
-    line-height: 44px;
+    height: 38px;
+    line-height: 38px;
     font-size: $font-size-base;
     color: $gray-800;
     font-weight: $font-weight-medium;
@@ -243,13 +260,14 @@
 }
 
 .el-card {
-  // 参考Circle Soft设计风格卡片 - 简洁阴影，清晰边框，柔和圆角
-  border-radius: $border-radius-lg;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  // Clarity Design风格卡片 - 简洁阴影，清晰边框，柔和圆角
+  border-radius: $card-radius;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   border: 1px solid $gray-200;
   background-color: $white;
   transition: all 0.2s ease;
   overflow: hidden;
+  font-family: $font-family;
   
   // 卡片悬停效果 - 轻微上浮，增强阴影
   &:hover {
@@ -257,9 +275,9 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
   
-  // 卡片头部样式优化 - 简洁设计
+  // 卡片头部样式优化 - Clarity Design规范
   .el-card__header {
-    padding: $spacing-3 $spacing-4;
+    padding: $spacing-3;
     border-bottom: 1px solid $gray-200;
     background-color: $white;
     font-weight: $font-weight-semibold;
@@ -267,19 +285,19 @@
     color: $gray-800;
   }
   
-  // 卡片主体样式优化 - 适当内边距
+  // 卡片主体样式优化 - Clarity Design规范，适当内边距
   .el-card__body {
-    padding: $spacing-4;
+    padding: $spacing-3;
     background-color: $white;
   }
   
-  // 数据统计卡片变体 - 参考Circle Soft设计
+  // 数据统计卡片变体 - Clarity Design规范
   &.stat-card {
     border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     
     .el-card__body {
-      padding: $spacing-4;
+      padding: $spacing-3;
     }
     
     // 统计数值样式
@@ -314,43 +332,44 @@
 }
 
 .el-table {
-  // 参考Circle Soft设计风格表格 - 简洁设计，清晰层次
+  // Clarity Design风格表格 - 简洁设计，清晰层次
   border-radius: $border-radius-lg;
   overflow: hidden;
   border: 1px solid $gray-200;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   background-color: $white;
+  font-family: $font-family;
   
-  // 表格头部样式优化 - 简洁白色背景
+  // 表格头部样式优化 - Clarity Design规范
   &__header-wrapper {
     .el-table__header {
       th {
           background-color: $white;
           color: $gray-700;
           font-weight: $font-weight-semibold;
-          height: 52px;
-          border-bottom: 2px solid $gray-200;
+          height: 48px;
+          border-bottom: 1px solid $gray-200;
           font-size: $font-size-sm;
           text-align: left;
           vertical-align: middle;
           
-          // 表头内边距
+          // 表头内边距 - Clarity Design规范
           &:first-child {
-            padding-left: $spacing-4;
+            padding-left: $spacing-3;
           }
           
           &:last-child {
-            padding-right: $spacing-4;
+            padding-right: $spacing-3;
           }
         }
     }
   }
   
-  // 表格主体样式优化
+  // 表格主体样式优化 - Clarity Design规范
   &__body-wrapper {
     .el-table__body {
       td {
-          height: 48px;
+          height: 44px;
           border-bottom: 1px solid $gray-100;
           color: $gray-700;
           font-weight: $font-weight-medium;
@@ -358,51 +377,50 @@
           text-align: left;
           vertical-align: middle;
           
-          // 单元格内边距优化
+          // 单元格内边距优化 - Clarity Design规范
           &:first-child {
-            padding-left: $spacing-4;
+            padding-left: $spacing-3;
           }
           
           &:last-child {
-            padding-right: $spacing-4;
+            padding-right: $spacing-3;
           }
         }
       
-      // 行样式优化
+      // 行样式优化 - Clarity Design规范
       tr {
         transition: background-color 0.2s ease;
         
-        // 行悬停效果 - 简洁背景色变化
+        // 行悬停效果 - Clarity Design规范
         &:hover {
           background-color: $gray-50;
         }
-        
-        // 移除隔行变色，保持简洁设计
       }
     }
   }
   
-  // 表格空状态样式优化
+  // 表格空状态样式优化 - Clarity Design规范
   &--empty {
     .el-table__empty-block {
-      padding: $spacing-6;
+      padding: $spacing-5;
       color: $gray-400;
     }
   }
 }
 
 .el-menu {
-  // 参考Circle Soft设计风格菜单 - 简洁白色背景，左侧紫色指示器
+  // Clarity Design风格菜单 - 简洁白色背景，左侧紫色指示器
   border-right: 1px solid $gray-200;
   background-color: $white;
   box-shadow: none;
   width: 240px;
+  font-family: $font-family;
   
-  // 菜单项样式优化
+  // 菜单项样式优化 - Clarity Design规范
   .el-menu-item {
-    height: 52px;
-    line-height: 52px;
-    padding: 0 $spacing-4 0 $spacing-5;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 $spacing-3 0 $spacing-4;
     margin: 0;
     border-right: none;
     transition: all 0.2s ease;
@@ -411,29 +429,29 @@
     font-size: $font-size-base;
     text-align: left;
     
-    // 菜单项悬停效果
+    // 菜单项悬停效果 - Clarity Design规范
     &:hover {
       background-color: $primary-light;
       color: $primary-color;
     }
     
-    // 菜单项激活状态 - 参考Circle Soft设计，左侧紫色指示器
+    // 菜单项激活状态 - Clarity Design规范，左侧紫色指示器
     &.is-active {
       background-color: $primary-light;
       color: $primary-color;
       border-left: 4px solid $primary-color;
       font-weight: $font-weight-semibold;
-      padding-left: $spacing-4;
+      padding-left: $spacing-3;
     }
   }
   
-  // 子菜单样式优化
+  // 子菜单样式优化 - Clarity Design规范
   .el-submenu {
     // 子菜单标题样式
     .el-submenu__title {
-      height: 52px;
-      line-height: 52px;
-      padding: 0 $spacing-4 0 $spacing-5;
+      height: 48px;
+      line-height: 48px;
+      padding: 0 $spacing-3 0 $spacing-4;
       margin: 0;
       color: $gray-700;
       font-weight: $font-weight-medium;
@@ -450,13 +468,13 @@
         background-color: $primary-light;
         color: $primary-color;
         border-left: 4px solid $primary-color;
-        padding-left: $spacing-4;
+        padding-left: $spacing-3;
       }
     }
     
     // 子菜单项样式
     .el-menu-item {
-      padding: 0 $spacing-4 0 $spacing-6;
+      padding: 0 $spacing-3 0 $spacing-5;
       margin-left: 0;
       
       &:hover {
@@ -465,19 +483,19 @@
       
       &.is-active {
         border-left: 4px solid $primary-color;
-        padding: 0 $spacing-4 0 $spacing-5;
+        padding: 0 $spacing-3 0 $spacing-4;
       }
     }
   }
   
-  // 水平菜单样式（如果使用）
+  // 水平菜单样式（如果使用）- Clarity Design规范
   &.el-menu--horizontal {
     border-bottom: 1px solid $gray-200;
     background-color: $white;
     
     .el-menu-item {
       margin: 0;
-      padding: 0 $spacing-4;
+      padding: 0 $spacing-3;
       border-radius: 0;
       border-left: none;
       
@@ -496,7 +514,7 @@
     .el-submenu {
       .el-submenu__title {
         margin: 0;
-        padding: 0 $spacing-4;
+        padding: 0 $spacing-3;
         border-radius: 0;
         
         &:hover {

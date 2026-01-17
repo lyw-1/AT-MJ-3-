@@ -104,6 +104,54 @@ export interface ScheduleTaskQuery extends PageQuery {
   endTime?: string
 }
 
+// 工序模板
+export interface ProcessTemplate {
+  id: number
+  code: string
+  name: string
+  description?: string
+  category: string
+  fields: TemplateField[]
+  status: 'active' | 'inactive'
+  createdAt: string
+  updatedAt: string
+}
+
+// 模板字段
+export interface TemplateField {
+  id?: number
+  fieldName: string
+  fieldLabel: string
+  fieldType: 'input' | 'number' | 'select' | 'date' | 'checkbox' | 'textarea'
+  required: boolean
+  defaultValue?: any
+  options?: { label: string; value: any }[]
+  placeholder?: string
+  min?: number
+  max?: number
+  step?: number
+  rows?: number
+}
+
+// 模板查询参数
+export interface ProcessTemplateQuery extends PageQuery {
+  code?: string
+  name?: string
+  category?: string
+  status?: string
+}
+
+// 模板创建/更新参数
+export interface ProcessTemplateForm {
+  id?: number
+  code: string
+  name: string
+  description?: string
+  category: string
+  fields: TemplateField[]
+  status: 'active' | 'inactive'
+}
+
 // 工序创建/更新参数
 export interface ProcessForm {
   id?: number
@@ -277,4 +325,44 @@ export const getProcessGanttData = (params: {
   endTime?: string
 }): Promise<ApiResponse<any[]>> => {
   return request.get('/process/gantt-data', { params })
+}
+
+// 获取工序模板列表
+export const getProcessTemplates = (params: ProcessTemplateQuery): Promise<ApiResponse<PageData<ProcessTemplate>>> => {
+  return request.get('/process/templates', { params })
+}
+
+// 获取所有工序模板（不分页）
+export const getAllProcessTemplates = (): Promise<ApiResponse<ProcessTemplate[]>> => {
+  return request.get('/process/templates/all')
+}
+
+// 获取工序模板详情
+export const getProcessTemplateDetail = (id: number): Promise<ApiResponse<ProcessTemplate>> => {
+  return request.get(`/process/templates/${id}`)
+}
+
+// 创建工序模板
+export const createProcessTemplate = (data: ProcessTemplateForm): Promise<ApiResponse<ProcessTemplate>> => {
+  return request.post('/process/templates', data)
+}
+
+// 更新工序模板
+export const updateProcessTemplate = (id: number, data: ProcessTemplateForm): Promise<ApiResponse<ProcessTemplate>> => {
+  return request.put(`/process/templates/${id}`, data)
+}
+
+// 删除工序模板
+export const deleteProcessTemplate = (id: number): Promise<ApiResponse<void>> => {
+  return request.delete(`/process/templates/${id}`)
+}
+
+// 批量删除工序模板
+export const batchDeleteProcessTemplates = (ids: number[]): Promise<ApiResponse<void>> => {
+  return request.delete('/process/templates/batch', { data: { ids } })
+}
+
+// 获取工序模板类型
+export const getProcessTemplateCategories = (): Promise<ApiResponse<{ label: string; value: string }[]>> => {
+  return request.get('/process/templates/categories')
 }

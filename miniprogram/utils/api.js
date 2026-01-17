@@ -10,12 +10,21 @@ const baseUrl = app.globalData.baseUrl
 const timeout = 10000
 
 // 请求方法
-const request = (url, method, data = {}) => {
+const request = (url, method, data = {}, options = {}) => {
+  const {
+    showLoading = true,
+    loadingTitle = '加载中...',
+    loadingMask = false
+  } = options
+  
   return new Promise((resolve, reject) => {
     // 显示加载动画
-    wx.showLoading({
-      title: '加载中...'
-    })
+    if (showLoading) {
+      wx.showLoading({
+        title: loadingTitle,
+        mask: loadingMask
+      })
+    }
     
     // 发送请求
     wx.request({
@@ -29,7 +38,9 @@ const request = (url, method, data = {}) => {
       timeout: timeout,
       success: (res) => {
         // 隐藏加载动画
-        wx.hideLoading()
+        if (showLoading) {
+          wx.hideLoading()
+        }
         
         // 处理响应
         if (res.statusCode === 200) {
@@ -54,7 +65,9 @@ const request = (url, method, data = {}) => {
       },
       fail: (err) => {
         // 隐藏加载动画
-        wx.hideLoading()
+        if (showLoading) {
+          wx.hideLoading()
+        }
         
         wx.showToast({
           title: '网络请求失败',
@@ -67,23 +80,23 @@ const request = (url, method, data = {}) => {
 }
 
 // GET请求
-export const get = (url, data = {}) => {
-  return request(url, 'GET', data)
+export const get = (url, data = {}, options = {}) => {
+  return request(url, 'GET', data, options)
 }
 
 // POST请求
-export const post = (url, data = {}) => {
-  return request(url, 'POST', data)
+export const post = (url, data = {}, options = {}) => {
+  return request(url, 'POST', data, options)
 }
 
 // PUT请求
-export const put = (url, data = {}) => {
-  return request(url, 'PUT', data)
+export const put = (url, data = {}, options = {}) => {
+  return request(url, 'PUT', data, options)
 }
 
 // DELETE请求
-export const del = (url, data = {}) => {
-  return request(url, 'DELETE', data)
+export const del = (url, data = {}, options = {}) => {
+  return request(url, 'DELETE', data, options)
 }
 
 // API接口列表

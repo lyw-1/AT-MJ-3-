@@ -104,7 +104,9 @@ public class SecurityConfig {
                     "/temp/**",
                     "/v1/api/auth/forgot-password",
                     "/v1/api/auth/validate-reset-code/**",
-                    "/v1/api/auth/reset-password-by-code"
+                    "/v1/api/auth/reset-password-by-code",
+                    "/api/process-preset/**",
+                    "/api/process-preset"
             ).permitAll();
 
             if (devBypassProcessStateMachine) {

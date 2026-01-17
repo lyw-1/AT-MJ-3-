@@ -38,38 +38,7 @@ const routes: RouteRecordRaw[] = [
           roles: ['admin', 'manager']
         }
       },
-      // 工序管理
-      {
-        path: '/process',
-        name: 'Process',
-        meta: { 
-          title: '工序管理',
-          icon: 'List',
-          roles: ['admin', 'manager', 'user']
-        },
-        children: [
-          {
-            path: 'process-detail',
-            name: 'ProcessDetail',
-            component: () => import('@/pages/process/ProcessDetail.vue'),
-            meta: {
-              title: '工序详细设置',
-              hidden: true,
-              roles: ['admin', 'manager', 'user']
-            }
-          },
-          {
-            path: 'material-preparation',
-            name: 'MaterialPreparation',
-            component: () => import('@/pages/process/MaterialPreparation.vue'),
-            meta: {
-              title: '备料工序',
-              hidden: true,
-              roles: ['admin', 'manager', 'user']
-            }
-          }
-        ]
-      },
+
       // 加工管理
       {
         path: '/mold',
@@ -100,7 +69,7 @@ const routes: RouteRecordRaw[] = [
             meta: { title: '任务列表', roles: ['admin', 'manager', 'user', 'operator'] }
           },
           {
-            path: 'initial-params/:id',
+            path: 'initial-params-detail/:id',
             name: 'MoldInitialParamDetail',
             component: () => import('@/pages/mold/InitialParamDetail.vue'),
             meta: {
@@ -134,6 +103,56 @@ const routes: RouteRecordRaw[] = [
             name: 'NonMoldApplication',
             component: () => import('@/pages/mold/Application.vue'),
             meta: { title: '加工申请单（非模具）', roles: ['admin', 'manager', 'user'] }
+          },
+          // 工序管理
+          {
+            path: 'process',
+            name: 'Process',
+            meta: { 
+              title: '工序管理',
+              roles: ['admin', 'manager', 'user']
+            },
+            children: [
+              { 
+                path: 'process-detail',
+                name: 'ProcessDetail',
+                component: () => import('@/pages/process/ProcessDetail.vue'),
+                meta: { 
+                  title: '工序详细设置',
+                  hidden: true,
+                  roles: ['admin', 'manager', 'user'] 
+                }
+              },
+              { 
+                path: 'material-preparation',
+                name: 'MaterialPreparation',
+                component: () => import('@/pages/process/MaterialPreparation.vue'),
+                meta: { 
+                  title: '备料工序',
+                  hidden: true,
+                  roles: ['admin', 'manager', 'user'] 
+                }
+              },
+              { 
+                path: 'templates',
+                name: 'ProcessTemplates',
+                component: () => import('@/pages/process/ProcessTemplatePage.vue'),
+                meta: { 
+                  title: '工序模板管理',
+                  roles: ['admin', 'manager', 'user'] 
+                }
+              },
+              { 
+                path: 'template-config/:id?',
+                name: 'ProcessTemplateConfig',
+                component: () => import('@/pages/process/ProcessTemplatePage.vue'),
+                meta: { 
+                  title: '工序模板配置',
+                  hidden: true,
+                  roles: ['admin', 'manager', 'user'] 
+                }
+              }
+            ]
           },
 
         ]

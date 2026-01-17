@@ -1,0 +1,230 @@
+/* 页面特定样式 */
+
+/* 用户卡片样式 */
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: var(--space-5);
+  gap: var(--space-4);
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background-color: var(--color-gray-100);
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--space-1);
+  line-height: 1.3;
+}
+
+.user-role {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-2);
+}
+
+.user-meta {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+}
+
+.meta-icon {
+  font-size: var(--font-size-base);
+}
+
+/* 快捷操作卡片 */
+.quick-actions-card {
+  padding: var(--space-5);
+  margin-top: var(--space-4);
+  margin-left: var(--space-4);
+  margin-right: var(--space-4);
+}
+
+.quick-actions-section {
+  display: flex;
+  justify-content: space-around;
+  gap: var(--space-4);
+}
+
+.quick-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quick-action-item:active {
+  transform: scale(0.95);
+}
+
+.quick-action-icon {
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.18),
+              0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+}
+
+.icon-text {
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.quick-action-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-700);
+  font-weight: 500;
+}
+
+/* 菜单区域样式 */
+.menu-section {
+  margin-top: var(--space-4);
+}
+
+.section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-500);
+  margin-bottom: var(--space-2);
+  padding: 0 var(--space-4);
+}
+
+.menu-group {
+  background-color: var(--color-white);
+  border-radius: 24rpx;
+  overflow: hidden;
+  margin-bottom: var(--space-3);
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.18),
+              0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid var(--color-gray-100);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 40rpx;
+  gap: var(--space-3);
+  border-bottom: 1rpx solid var(--color-gray-100);
+  transition: all 0.3s ease;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(0.98);
+}
+
+.menu-icon {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.12),
+              0 2rpx 6rpx rgba(0, 0, 0, 0.08);
+}
+
+.menu-text {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--color-gray-800);
+  font-weight: 500;
+}
+
+.menu-arrow {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-400);
+  width: 32rpx;
+  text-align: right;
+}
+
+/* 退出登录区域 */
+.logout-group {
+  margin-top: var(--space-2);
+}
+
+.logout-item {
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid var(--color-gray-100);
+  transition: all 0.3s ease;
+}
+
+.logout-item:last-child {
+  border-bottom: none;
+}
+
+.logout-item:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(0.98);
+}
+
+.logout-icon {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.12),
+              0 2rpx 6rpx rgba(0, 0, 0, 0.08);
+}
+
+.logout-text {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: #f5222d;
+  font-weight: 500;
+}
+
+/* 响应式调整 */
+@media (max-width: 768rpx) {
+  .user-card {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+  
+  .user-avatar {
+    width: 100rpx;
+    height: 100rpx;
+  }
+  
+  .menu-item {
+    padding: 28rpx 32rpx;
+  }
+}

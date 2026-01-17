@@ -1,21 +1,17 @@
-// Circle Soft设计风格 - 紫色主色调
+// Clarity Design Aone 基础组件库 - 设计变量
+
+// 主色调 - 紫色系，与Clarity Design完全一致
 $primary-color: #6150BF;
 $primary-light: #EEF2FF;
 $primary-dark: #4F46E5;
 
-// 数据可视化颜色 - 与Circle Soft保持一致
-$primary-chart: #6150BF;
-$secondary-chart: #E0E7FF;
-$success-chart: #10B981;
-$warning-chart: #F59E0B;
-$error-chart: #EF4444;
-
-// 状态颜色 - 与Circle Soft设计匹配
+// 辅助色
 $success-color: #10B981;
 $warning-color: #F59E0B;
 $error-color: #EF4444;
 $info-color: #6B7280;
 
+// 中性色
 $white: #FFFFFF;
 $gray-50: #F9FAFB;
 $gray-100: #F3F4F6;
@@ -28,9 +24,11 @@ $gray-700: #374151;
 $gray-800: #1F2937;
 $gray-900: #111827;
 
-$bg-color: #F9F9FA;
-$card-bg: #FFFFFF;
+// 背景色
+$bg-color: $gray-50;
+$card-bg: $white;
 
+// 间距系统 - Clarity Design规范
 $spacing-1: 8px;
 $spacing-2: 16px;
 $spacing-3: 24px;
@@ -38,23 +36,21 @@ $spacing-4: 32px;
 $spacing-5: 40px;
 $spacing-6: 48px;
 
-// 全新扁平圆角风格设计
-// 核心设计理念：大圆角、低饱和度、柔和阴影、简洁扁平
+// 圆角系统 - Clarity Design规范
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+$border-radius-2xl: 20px;
+$border-radius-3xl: 24px;
 
-// 圆角系统 - 采用更大的圆角值，营造柔和圆润的视觉效果
-$border-radius-sm: 12px;
-$border-radius-md: 16px;
-$border-radius-lg: 20px;
-$border-radius-xl: 24px;
-$border-radius-2xl: 28px;
-$border-radius-3xl: 32px;
+// 组件圆角配置 - Clarity Design规范
+$button-radius: 12px;
+$input-radius: 8px;
+$card-radius: 20px;
+$modal-radius: 16px;
 
-// 组件圆角配置 - 为不同组件分配合适的圆角大小
-$button-radius: $border-radius-xl;
-$input-radius: $border-radius-lg;
-$card-radius: $border-radius-2xl;
-$modal-radius: $border-radius-3xl;
-
+// 排版系统 - Clarity Design规范
 $font-size-xs: 12px;
 $font-size-sm: 14px;
 $font-size-base: 14px;
@@ -64,6 +60,9 @@ $font-size-2xl: 20px;
 
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
+
+// 字体家族 - Clarity Design规范
+$font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
 // 遮罩层样式变量
 $mask-color: rgba(0, 0, 0, 0.5); // 遮罩层背景色和透明度

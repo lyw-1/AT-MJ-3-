@@ -78,6 +78,19 @@ const handleBack = () => {
   router.push('/mold/initial-params-list')
 }
 
+// 工序key到code的映射关系
+const processKeyToCodeMap: Record<string, string> = {
+  '备料': 'PREP',
+  '非分层进泥孔': 'DRILL_NON_LAYER',
+  '分层进泥孔': 'DRILL_LAYER',
+  '热处理': 'HEAT_TREATMENT',
+  '导料槽加工': 'GUIDE_SLOT',
+  '外形加工': 'SHAPE',
+  '裸模自检': 'SELF_CHECK',
+  '品质检测': 'QUALITY_CHECK',
+  '入库': 'IN_STORAGE'
+}
+
 // 下一步按钮点击事件
 const handleNextStep = () => {
   if (selected.value.length === 0) {
@@ -85,8 +98,25 @@ const handleNextStep = () => {
     return
   }
   
-  // 导航到详细工序设置页面
-  router.push(`/mold/process-preset/${moldId}`)
+  // 转换选中的工序列表为ProcessPresetPage所需的格式
+  const selectedProcesses = selected.value.map(item => ({
+    code: processKeyToCodeMap[item.key],
+    name: item.name
+  }))
+  
+  // 导航到详细工序设置页面，使用路由名称和参数对象
+  router.push({
+      name: 'ProcessPreset',
+      params: { 
+        id: moldId
+      },
+      query: { 
+        processes: JSON.stringify(selectedProcesses),
+        moldNumber: moldInfo.value?.moldNumber,
+        specification: moldInfo.value?.specification,
+        owner: moldInfo.value?.responsiblePerson
+      }
+    })
 }
 
 // 加载模具详情
@@ -227,18 +257,161 @@ const remove = (i: number) => {
   background-color: var(--el-color-primary-light-9);
   color: var(--el-color-primary);
 }
-.list-title { font-weight: 600; margin-bottom: 8px; text-align: center; }
-.step-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: center; }
-.step-item { padding: 8px; border: 1px solid var(--el-border-color-light); border-radius: 8px; cursor: pointer; text-align: center; }
-.selected-title { font-weight: 600; margin-bottom: 8px; }
-.selected-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--el-border-color-lighter); }
-.selected-item > * { text-align: left; }
-.selected-name { flex: 0 0 auto; min-width: 120px; }
+.list-title {
+  font-size: 20px;
+  font-family: PingFang SC;
+  font-weight: 600;
+  line-height: 30px;
+  margin-bottom: 20px;
+  color: rgba(38, 38, 38, 1);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+/* 添加标题前的蓝色指示点 */
+.list-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 28px;
+  background-color: rgba(27, 154, 238, 1);
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.selected-title {
+  font-size: 20px;
+  font-family: PingFang SC;
+  font-weight: 600;
+  line-height: 30px;
+  margin-bottom: 20px;
+  color: rgba(38, 38, 38, 1);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+/* 添加标题前的蓝色指示点 */
+.selected-title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 28px;
+  background-color: rgba(27, 154, 238, 1);
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+/* 调整卡片样式 */
+:deep(.el-card) {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:deep(.el-card__body) {
+  padding: 0;
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background-color: #f9fafb;
+}
+
+.step-item {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  font-family: PingFang SC;
+  line-height: 20px;
+  color: rgba(38, 38, 38, 1);
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.step-item:hover {
+  background-color: #f0f9ff;
+  border-color: #93c5fd;
+}
+
+.selected-list {
+  padding: 16px;
+  background-color: #f9fafb;
+  min-height: 200px;
+}
+
+.selected-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.selected-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.selected-name {
+  flex: 0 0 auto;
+  min-width: 140px;
+  font-size: 14px;
+  font-family: PingFang SC;
+  line-height: 20px;
+  color: rgba(38, 38, 38, 1);
+}
+
 .selected-item :deep(.el-select),
 .selected-item :deep(.el-input) {
   text-align: left;
+  font-size: 14px;
+  font-family: PingFang SC;
 }
+
 .selected-item :deep(.el-button) {
   text-align: center;
+  font-size: 14px;
+  font-family: PingFang SC;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+/* 调整下一步按钮样式 */
+:deep(.el-button--primary) {
+  background-color: rgba(27, 154, 238, 1);
+  border-color: rgba(27, 154, 238, 1);
+  font-size: 16px;
+  font-family: PingFang SC;
+  padding: 8px 32px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-button--primary:hover) {
+  background-color: rgba(22, 130, 200, 1);
+  border-color: rgba(22, 130, 200, 1);
+}
+
+/* 调整整体布局 */
+:deep(.el-row) {
+  margin-top: 16px;
+}
+
+:deep(.el-col) {
+  padding: 0 6px;
 }
 </style>

@@ -93,29 +93,31 @@ const handleClick = (e: MouseEvent) => {
 // 导入变量
 @import '../styles/variables.scss';
 
-// 自定义按钮样式 - 增强交互体验
+// Clarity Design风格按钮样式
 .custom-button {
-  // 确保按钮样式符合设计规范
-  font-family: inherit;
+  // 确保按钮样式符合Clarity Design规范
+  font-family: $font-family;
+  border-radius: $button-radius;
+  font-weight: $font-weight-medium;
+  box-shadow: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
   
-  // 悬停效果 - 平滑过渡
-  transition: all 0.3s ease;
-  
-  // 增强悬停效果
+  // 增强悬停效果 - Clarity Design规范
   &:not(:disabled):not(.is-loading) {
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
     
-    // 点击反馈 - 按压效果
+    // 点击反馈 - 按压效果 - Clarity Design规范
     &:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transform: translateY(1px);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
   }
   
-  // 加载状态优化
+  // 加载状态优化 - Clarity Design规范
   &.is-loading {
     // 确保加载动画在不同尺寸按钮上显示正常
     .el-icon-loading {
@@ -124,87 +126,135 @@ const handleClick = (e: MouseEvent) => {
     }
   }
   
-  // 禁用状态优化
+  // 禁用状态优化 - Clarity Design规范
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     
     // 确保禁用状态下的文字清晰可见
     color: rgba(0, 0, 0, 0.25);
-    background-color: #f5f7fa;
-    border-color: #e4e7ed;
+    background-color: $gray-50;
+    border-color: $gray-200;
   }
   
-  // 主按钮样式增强
+  // 主按钮样式 - Clarity Design规范
   &.el-button--primary {
     background-color: $primary-color;
     border-color: $primary-color;
+    color: $white;
     
     &:not(:disabled):not(.is-loading):hover {
       background-color: $primary-dark;
       border-color: $primary-dark;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+      box-shadow: 0 2px 8px rgba($primary-color, 0.3);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
     }
   }
   
-  // 成功按钮样式增强
+  // 次要按钮样式 - Clarity Design规范
+  &.el-button--default {
+    background-color: $white;
+    border-color: $gray-300;
+    color: $gray-700;
+    
+    &:not(:disabled):not(.is-loading):hover {
+      background-color: $gray-50;
+      border-color: $gray-400;
+      color: $gray-800;
+    }
+  }
+  
+  // 成功按钮样式 - Clarity Design规范
   &.el-button--success {
     background-color: $success-color;
     border-color: $success-color;
+    color: $white;
     
     &:not(:disabled):not(.is-loading):hover {
-      background-color: darken($success-color, 10%);
-      border-color: darken($success-color, 10%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($success-color, 0.3);
+      background-color: #{color.adjust($success-color, $lightness: -10%)};
+      border-color: #{color.adjust($success-color, $lightness: -10%)};
     }
   }
   
-  // 警告按钮样式增强
+  // 警告按钮样式 - Clarity Design规范
   &.el-button--warning {
     background-color: $warning-color;
     border-color: $warning-color;
+    color: $white;
     
     &:not(:disabled):not(.is-loading):hover {
-      background-color: darken($warning-color, 10%);
-      border-color: darken($warning-color, 10%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($warning-color, 0.3);
+      background-color: #{color.adjust($warning-color, $lightness: -10%)};
+      border-color: #{color.adjust($warning-color, $lightness: -10%)};
     }
   }
   
-  // 危险按钮样式增强
+  // 危险按钮样式 - Clarity Design规范
   &.el-button--danger {
     background-color: $error-color;
     border-color: $error-color;
+    color: $white;
     
     &:not(:disabled):not(.is-loading):hover {
-      background-color: darken($error-color, 10%);
-      border-color: darken($error-color, 10%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($error-color, 0.3);
+      background-color: #{color.adjust($error-color, $lightness: -10%)};
+      border-color: #{color.adjust($error-color, $lightness: -10%)};
     }
   }
   
-  // 信息按钮样式增强
+  // 信息按钮样式 - Clarity Design规范
   &.el-button--info {
     background-color: $info-color;
     border-color: $info-color;
+    color: $white;
     
     &:not(:disabled):not(.is-loading):hover {
-      background-color: darken($info-color, 10%);
-      border-color: darken($info-color, 10%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($info-color, 0.3);
+      background-color: #{color.adjust($info-color, $lightness: -10%)};
+      border-color: #{color.adjust($info-color, $lightness: -10%)};
     }
   }
   
-  // 朴素按钮样式增强
+  // 尺寸优化 - Clarity Design规范
+  &.el-button--large {
+    height: 44px;
+    padding: 0 24px;
+    font-size: $font-size-lg;
+  }
+  
+  &.el-button--medium {
+    height: 36px;
+    padding: 0 16px;
+    font-size: $font-size-base;
+  }
+  
+  &.el-button--small {
+    height: 32px;
+    padding: 0 12px;
+    font-size: $font-size-sm;
+  }
+  
+  // 朴素按钮样式 - Clarity Design规范
   &.el-button--plain {
     &:not(:disabled):not(.is-loading):hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+  }
+  
+  // 文本按钮样式 - Clarity Design规范
+  &.el-button--text {
+    background-color: transparent;
+    border-color: transparent;
+    color: $primary-color;
+    box-shadow: none;
+    
+    &:not(:disabled):not(.is-loading):hover {
+      background-color: $primary-light;
+      border-color: transparent;
+    }
+    
+    &:active {
+      transform: translateY(1px);
     }
   }
 }

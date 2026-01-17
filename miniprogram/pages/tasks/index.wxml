@@ -25,29 +25,48 @@
     </view>
   </view>
 
+  <!-- 页面加载状态 -->
+  <view wx:if="{{loading}}" class="page-loading">
+    <loading size="large" type="spinner" text="加载中..."></loading>
+  </view>
+  
   <!-- 任务列表 -->
-  <view class="card">
-    <view class="card-header">
-      <h3>任务列表</h3>
-      <text class="total">{{tasks.length}} 个任务</text>
+  <view wx:else class="content">
+    <view class="card">
+      <view class="card-header">
+        <h3>任务列表</h3>
+        <text class="total">{{tasks.length}} 个任务</text>
+      </view>
+      <view class="tasks-list">
+        <view wx:for="{{tasks}}" wx:key="id" class="task-item" bindtap="navigateToTaskDetail" data-id="{{item.id}}">
+          <view class="task-header">
+            <text class="task-title">{{item.title}}</text>
+            <tag class="tag tag-{{item.status}}">{{item.statusText}}</tag>
+          </view>
+          <view class="task-info">
+            <text class="task-desc">{{item.description}}</text>
+          </view>
+          <view class="task-meta">
+            <text class="task-time">{{item.createTime}}</text>
+            <text class="task-assignee">负责人: {{item.assignee}}</text>
+          </view>
+        </view>
+        <view wx:if="{{tasks.length === 0}}" class="empty-state">
+          <view class="empty-icon">📋</view>
+          <text class="empty-title">暂无任务</text>
+          <text class="empty-desc">当前筛选条件下没有任务</text>
+        </view>
+      </view>
     </view>
-    <view class="tasks-list">
-      <view wx:for="{{tasks}}" wx:key="id" class="task-item" bindtap="navigateToTaskDetail" data-id="{{item.id}}">
-        <view class="task-header">
-          <text class="task-title">{{item.title}}</text>
-          <tag class="tag tag-{{item.status}}">{{item.statusText}}</tag>
-        </view>
-        <view class="task-info">
-          <text class="task-desc">{{item.description}}</text>
-        </view>
-        <view class="task-meta">
-          <text class="task-time">{{item.createTime}}</text>
-          <text class="task-assignee">负责人: {{item.assignee}}</text>
-        </view>
-      </view>
-      <view wx:if="{{tasks.length === 0}}" class="empty-state">
-        <text>暂无任务</text>
-      </view>
+    
+    <!-- 上拉加载更多 -->
+    <view wx:if="{{loadingMore}}" class="loading-more">
+      <loading size="small" type="dots" text="加载更多..."></loading>
+    </view>
+    
+    <!-- 没有更多数据 -->
+    <view wx:elif="{{!hasMore}}" class="no-more">
+      <text class="no-more-text">没有更多数据了</text>
     </view>
   </view>
 </view>

@@ -1,0 +1,156 @@
+/* 扫描页面样式 */
+.scan-container {
+  padding: var(--space-4);
+  background-color: var(--color-gray-50);
+  min-height: 100vh;
+}
+
+/* 头部 */
+.scan-header {
+  margin-bottom: var(--space-5);
+  padding: var(--space-4) 0;
+  text-align: center;
+}
+
+.scan-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+}
+
+/* 内容区域 */
+.scan-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* 扫描区域 */
+.scan-area {
+  background-color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.scan-icon {
+  width: 160rpx;
+  height: 160rpx;
+  opacity: 0.8;
+}
+
+.scan-text {
+  font-size: var(--font-size-base);
+  color: var(--color-gray-600);
+  line-height: 1.6;
+}
+
+.scan-button {
+  width: 240rpx;
+  height: 80rpx;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-2);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.scan-button:active {
+  background-color: var(--color-primary-dark);
+  transform: translateY(1rpx);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 扫描历史 */
+.scan-history {
+  background-color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 通用section样式 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-1);
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+}
+
+/* 历史列表 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.history-item:active {
+  background-color: var(--color-gray-100);
+}
+
+.history-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-title {
+  font-size: var(--font-size-base);
+  color: var(--color-gray-800);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  margin-bottom: var(--space-1);
+  display: block;
+}
+
+.history-time {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-400);
+}
+
+.history-arrow {
+  margin-left: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arrow-icon {
+  width: 24rpx;
+  height: 24rpx;
+  color: var(--color-gray-400);
+}

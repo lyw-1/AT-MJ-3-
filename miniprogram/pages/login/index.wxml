@@ -1,0 +1,87 @@
+<!-- 登录页面 -->
+<view class="login-container">
+  <!-- 顶部状态栏 -->
+  <view class="status-bar">
+    <image class="status-bar-bg" src="/assets/Frame_48_95.png"></image>
+  </view>
+  
+  <!-- 主内容区域 -->
+  <view class="main-content">
+    <!-- Logo区域 -->
+    <view class="logo-section">
+      <image class="logo-image" src="/assets/f1044208e2bf07575c43c2aa3959367cff05ca00.png"></image>
+    </view>
+    
+    <!-- 欢迎信息区域 -->
+    <view class="welcome-section">
+      <text class="welcome-title">安天模具管理系统</text>
+      <text class="welcome-subtitle">让今天更有效率</text>
+    </view>
+    
+    <!-- 输入框区域 -->
+    <view class="input-section">
+      <!-- 账号输入 -->
+      <view class="input-group">
+        <text class="input-label">账号</text>
+        <view class="input-wrapper">
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="请输入账号" 
+            bindinput="onAccountInput"
+            value="{{account}}"
+          />
+          <image class="input-bg" src="/assets/Vector_1_1516.png"></image>
+        </view>
+      </view>
+
+      <!-- 密码输入 -->
+      <view class="input-group">
+        <text class="input-label">密码</text>
+        <view class="input-wrapper">
+          <input 
+            class="input-field" 
+            type="password" 
+            placeholder="请输入密码" 
+            bindinput="onPasswordInput"
+            value="{{password}}"
+          />
+          <image class="input-bg" src="/assets/Vector_1_1531.png"></image>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 登录按钮 -->
+    <button 
+      class="login-button" 
+      type="primary" 
+      bindtap="onLogin"
+      loading="{{loading}}"
+      disabled="{{loading || !account || !password}}"
+    >
+      <view class="button-content">
+        <image class="button-icon" src="/assets/Boolean_operation_1_1508.png"></image>
+        <text class="button-text">登录</text>
+      </view>
+    </button>
+  </view>
+  
+  <!-- 底部区域 -->
+  <view class="bottom-section">
+    <!-- 第三方登录区域 -->
+    <view class="third-party-section">
+      <text class="third-party-text">第三方登录</text>
+      <button 
+        class="wechat-login-btn" 
+        open-type="getUserInfo" 
+        bindgetuserinfo="onWechatLogin"
+        loading="{{wechatLoading}}"
+      >
+        <image class="wechat-icon" src="/assets/Boolean_operation_1_1567.png"></image>
+      </button>
+    </view>
+    
+    <!-- 底部装饰线 -->
+    <image class="bottom-decoration" src="/assets/Vector_1_1485.png"></image>
+  </view>
+</view>

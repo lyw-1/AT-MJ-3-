@@ -87,7 +87,8 @@ public class DevTokenAuthenticationFilter extends OncePerRequestFilter {
                 uri.startsWith("/api/equipment-types") ||
                 uri.startsWith("/api/products") ||
                 uri.startsWith("/api/v1/admin/auth") ||
-                uri.startsWith("/process")
+                uri.startsWith("/process") ||
+                uri.startsWith("/api/process-preset")
         );
     }
 }

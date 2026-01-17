@@ -1,0 +1,92 @@
+/* 自定义tabBar样式 */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150rpx;
+  background: white;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 2rpx solid #F4F5F9;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 20rpx;
+}
+
+/* 移除不再使用的按钮组样式 */
+
+.tab-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  width: 80rpx;
+}
+
+.tab-bar-icon {
+  width: 56rpx;
+  height: 56rpx;
+  margin-bottom: 10rpx;
+}
+
+/* 未选中状态 - 显示原色 */
+.tab-bar-icon {
+  filter: none;
+}
+
+/* 未选中状态 - 半透明 */
+.tab-bar-icon {
+  opacity: 0.6;
+}
+
+/* 选中状态 - 不透明 */
+.tab-bar-item .tab-bar-icon.active {
+  opacity: 1 !important;
+}
+
+/* 选中状态 - 文字绿色 */
+.tab-bar-item .tab-bar-text.active {
+  color: #74ca00 !important;
+  font-weight: bold;
+}
+
+/* 未选中状态 - 文字原色 */
+.tab-bar-text {
+  font-size: 28rpx;
+  font-family: "Noto Sans SC";
+  font-weight: 500;
+  color: #989aca;
+  text-align: center;
+  line-height: 32rpx;
+}
+
+/* 中间扫描按钮 */
+.scan-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 0rpx;
+  flex-shrink: 0;
+  width: 200rpx;
+}
+
+.scan-button {
+  width: 200rpx;
+  height: 160rpx;
+  display: block;
+  position: relative;
+  z-index: 10;
+  transition: all 0.2s ease;
+  border-radius: 20rpx;
+  box-shadow: none;
+  border: none;
+}
+
+.scan-button:active {
+  transform: scale(0.95);
+}

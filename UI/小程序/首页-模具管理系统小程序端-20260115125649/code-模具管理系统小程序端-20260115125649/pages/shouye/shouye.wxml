@@ -1,0 +1,143 @@
+<view class="flex-col page">
+  <view class="flex-col">
+    <view class="flex-col">
+      <view class="flex-col justify-start section">
+        <view class="flex-col justify-start section_2">
+          <view class="flex-col section_3">
+            <view class="flex-row justify-between group">
+              <text class="text">9:41</text>
+              <view class="flex-row">
+                <image
+                  class="image"
+                  src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=ecf77cb9c1c86acdd75bbab8c200dece.png"
+                />
+                <image
+                  class="image_2 ml-5"
+                  src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=cc035752619c0e268909f66e9f9ec512.png"
+                />
+                <image
+                  class="image_3 ml-5"
+                  src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=9a8f2fc0cf21c0df2b19f21912a2452c.png"
+                />
+              </view>
+            </view>
+            <view class="flex-row justify-center items-center relative mt-29">
+              <image
+                class="image_4 pos"
+                src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=048debd3bbdf7a1c9ae6d2cb80ffc8be.png"
+              />
+              <text class="font text_2">主页</text>
+              <image
+                class="image_5 pos_2"
+                src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=8001c875cdc9aead87bfcf932e8b9622.png"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="flex-row items-center section_4">
+        <image
+          class="image_6"
+          src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=de8e4d1a991441a5625b3cd1fcfd6c66.png"
+        />
+        <text class="ml-12 font text_3">全局智能搜索</text>
+      </view>
+      <view class="flex-row justify-between section_6">
+        <view class="flex-col section_5">
+          <text class="self-start font_2 text_4">加工管理</text>
+          <view class="mt-14 self-center section_7"></view>
+        </view>
+        <view class="flex-col justify-start items-center text-wrapper"><text class="font_2">调模管理</text></view>
+        <view class="flex-col justify-start items-center text-wrapper">
+          <text class="font_2 text_5">生产管理</text>
+        </view>
+        <view class="flex-col justify-start items-center text-wrapper">
+          <text class="font_2 text_6">设备管理</text>
+        </view>
+        <view class="flex-col justify-start items-end text-wrapper_2"><text class="font_2">耗材管理</text></view>
+      </view>
+      <view class="flex-row equal-division section_8">
+        <view class="flex-col items-center section_9 equal-division-item">
+          <text class="font_3">加工</text>
+          <text class="font_3 mt-3">申请</text>
+        </view>
+        <view class="ml-14 flex-col items-center section_9 equal-division-item">
+          <text class="font_3">初始</text>
+          <text class="font_3 mt-3">参数</text>
+        </view>
+        <view class="ml-14 flex-col items-center section_9 equal-division-item">
+          <text class="font_3">新模</text>
+          <text class="font_3 mt-3">建档</text>
+        </view>
+        <view class="ml-14 flex-col items-center section_9 equal-division-item">
+          <text class="font_3">模具</text>
+          <text class="font_3 mt-3">领用</text>
+        </view>
+        <view class="ml-14 flex-col items-center section_9 equal-division-item">
+          <text class="font_3">模具</text>
+          <text class="font_3 mt-3">归还</text>
+        </view>
+      </view>
+    </view>
+    <view class="grid">
+      <view class="flex-col items-center relative grid-item">
+        <text class="font_4">98.5%</text>
+        <text class="mt-8 font">模具合格率</text>
+      </view>
+      <view class="flex-col items-center relative grid-item">
+        <text class="font_4">123</text>
+        <text class="mt-8 font">裸模库数量</text>
+      </view>
+      <view class="flex-col items-center relative grid-item">
+        <text class="font_4">456</text>
+        <text class="mt-8 font">可用库数量</text>
+      </view>
+      <view class="flex-col items-center relative grid-item">
+        <text class="font_4">89</text>
+        <text class="mt-8 font">封层库数量</text>
+      </view>
+    </view>
+    <view class="flex-col group_2">
+      <text class="self-start text_7">调模样品图片</text>
+      <view class="shrink-0 self-stretch section_10"></view>
+    </view>
+  </view>
+  <view class="flex-row justify-between items-center section_11 mt-55">
+    <view class="flex-col items-center">
+      <image
+        class="image_8"
+        src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=a8b6bc02f3842613406062219ffe47b2.png"
+      />
+      <text class="mt-6 font_5 text_8">首页</text>
+    </view>
+    <view class="flex-row">
+      <view class="flex-col items-center group_3">
+        <image
+          class="image_9"
+          src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=7c6ab5d0a9abf5523ada4b64435d33ba.png"
+        />
+        <text class="font_5 text_9 mt-5">模库</text>
+      </view>
+      <view class="flex-col justify-start items-center image-wrapper ml-33">
+        <image
+          class="image_11"
+          src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=a32cbfad1d5a7375b88ca93fdb4442e5.png"
+        />
+      </view>
+      <view class="flex-col items-center group_4 ml-33">
+        <image
+          class="image_10"
+          src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=ef6f58d60ad09469f061cc040f9437ac.png"
+        />
+        <text class="font_5 text_10 mt-7">任务</text>
+      </view>
+    </view>
+    <view class="flex-col items-center">
+      <image
+        class="image_7"
+        src="https://ide.code.fun/api/image?token=6968d6044683ce0011d8c441&name=9a7d136d0000d142bd6446d73bc12725.png"
+      />
+      <text class="mt-4 font_5">我的</text>
+    </view>
+  </view>
+</view>
