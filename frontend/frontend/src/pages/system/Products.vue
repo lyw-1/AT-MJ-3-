@@ -728,7 +728,7 @@ const handleImportSubmit = async () => {
     resetImportForm()
     // 重新获取数据
     fetchProducts()
-  } catch (error) {
+  } catch {
     ElMessage.error('导入失败，请检查文件格式和内容')
   } finally {
     importLoading.value = false
@@ -742,7 +742,7 @@ const handleDownloadTemplate = () => {
 }
 
 // 处理筛选变化
-const handleFilterChange = (filters: any) => {
+const handleFilterChange = (_filters: any) => {
   // 保存筛选状态
   // TODO: 实现筛选状态保存逻辑
   

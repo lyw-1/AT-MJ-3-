@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { View, Edit } from '@element-plus/icons-vue';
 import { formatDate } from '@/utils/date';
 

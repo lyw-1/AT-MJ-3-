@@ -86,6 +86,13 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(registry -> {
+            // 允许所有请求访问process相关接口
+            registry.requestMatchers("/api/process/**").permitAll();
+            // 明确允许所有请求访问process templates接口
+            registry.requestMatchers("/api/process/templates/**").permitAll();
+            // 明确允许GET请求访问process templates接口
+            registry.requestMatchers(HttpMethod.GET, "/api/process/templates/**").permitAll();
+            
             registry.requestMatchers(
                     "/v1/api/auth/login",
                     "/v1/api/auth/refresh-token",
@@ -197,8 +204,9 @@ public class SecurityConfig {
             registry.anyRequest().authenticated();
         });
 
-        http.addFilterBefore(devTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 确保DevTokenAuthenticationFilter在JwtAuthenticationFilter之前执行
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(devTokenAuthenticationFilter, JwtAuthenticationFilter.class);
 
         http.exceptionHandling(handling -> handling
             .authenticationEntryPoint((request, response, authException) -> {

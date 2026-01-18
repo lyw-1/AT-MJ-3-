@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export const getOperationLogs = (params: any) => {
   return request({
-    url: '/v1/api/log/operation/page',
+    url: '/api/v1/log/operation/page',
     method: 'GET',
     params
   })
@@ -20,7 +20,7 @@ export const getOperationLogs = (params: any) => {
  */
 export const getOperationLogDetail = (id: number) => {
   return request({
-    url: `/v1/api/log/operation/${id}`,
+    url: `/api/v1/log/operation/${id}`,
     method: 'GET'
   })
 }
@@ -32,7 +32,7 @@ export const getOperationLogDetail = (id: number) => {
  */
 export const deleteOperationLogs = (ids: number[]) => {
   return request({
-    url: '/v1/api/log/operation/batch',
+    url: '/api/v1/log/operation/batch',
     method: 'DELETE',
     data: ids
   })
@@ -44,7 +44,7 @@ export const deleteOperationLogs = (ids: number[]) => {
  */
 export const cleanOperationLogs = () => {
   return request({
-    url: '/v1/api/log/operation/clean',
+    url: '/api/v1/log/operation/clean',
     method: 'DELETE'
   })
 }

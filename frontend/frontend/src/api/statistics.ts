@@ -108,7 +108,7 @@ export const getMoldProductionStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<MoldProductionStats>> => {
-  return request.get('/statistics/mold-production', { params })
+  return request.get('/api/statistics/mold-production', { params })
 }
 
 // 获取工序效率统计
@@ -117,7 +117,7 @@ export const getProcessEfficiencyStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<ProcessEfficiencyStats[]>> => {
-  return request.get('/statistics/process-efficiency', { params })
+  return request.get('/api/statistics/process-efficiency', { params })
 }
 
 // 获取异常统计
@@ -126,7 +126,7 @@ export const getExceptionStats = (params: {
   endTime?: string
   severity?: string
 }): Promise<ApiResponse<ExceptionStats>> => {
-  return request.get('/statistics/exceptions', { params })
+  return request.get('/api/statistics/exceptions', { params })
 }
 
 // 获取人员绩效统计
@@ -135,7 +135,7 @@ export const getOperatorPerformanceStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<OperatorPerformanceStats[]>> => {
-  return request.get('/statistics/operator-performance', { params })
+  return request.get('/api/statistics/operator-performance', { params })
 }
 
 // 获取生产进度趋势
@@ -143,7 +143,7 @@ export const getProductionTrend = (params: {
   period: 'day' | 'week' | 'month' | 'year' // 统计周期
   days?: number // 天数范围，默认为30天
 }): Promise<ApiResponse<ProductionTrend[]>> => {
-  return request.get('/statistics/production-trend', { params })
+  return request.get('/api/statistics/production-trend', { params })
 }
 
 // 获取生产计划达成率
@@ -153,7 +153,7 @@ export const getProductionPlanAchievement = (params: {
   month?: number
   quarter?: number
 }): Promise<ApiResponse<ProductionPlanAchievement>> => {
-  return request.get('/statistics/production-plan-achievement', { params })
+  return request.get('/api/statistics/production-plan-achievement', { params })
 }
 
 // 获取设备利用率统计
@@ -162,7 +162,7 @@ export const getEquipmentUtilizationStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<EquipmentUtilizationStats[]>> => {
-  return request.get('/statistics/equipment-utilization', { params })
+  return request.get('/api/statistics/equipment-utilization', { params })
 }
 
 // 获取工时统计
@@ -172,7 +172,7 @@ export const getWorkTimeStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<any>> => {
-  return request.get('/statistics/work-time', { params })
+  return request.get('/api/statistics/work-time', { params })
 }
 
 // 获取模具生命周期统计
@@ -181,7 +181,7 @@ export const getMoldLifecycleStats = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<any>> => {
-  return request.get('/statistics/mold-lifecycle', { params })
+  return request.get('/api/statistics/mold-lifecycle', { params })
 }
 
 // 导出统计报表
@@ -191,7 +191,7 @@ export const exportStatisticsReport = (params: {
   endTime: string
   format: 'excel' | 'pdf' | 'csv'
 }): Promise<Blob> => {
-  return request.get('/statistics/export-report', {
+  return request.get('/api/statistics/export-report', {
     params,
     responseType: 'blob'
   })
@@ -220,7 +220,7 @@ export const getRealTimeProductionBoard = (): Promise<ApiResponse<{
     reportTime: string
   }>
 }>> => {
-  return request.get('/statistics/real-time-board')
+  return request.get('/api/statistics/real-time-board')
 }
 
 // 获取质量统计
@@ -244,5 +244,5 @@ export const getQualityStats = (params: {
     defectCount: number
   }>
 }>> => {
-  return request.get('/statistics/quality', { params })
+  return request.get('/api/statistics/quality', { params })
 }

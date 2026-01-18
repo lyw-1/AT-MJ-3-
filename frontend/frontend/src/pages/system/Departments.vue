@@ -255,27 +255,7 @@ const handleSearch = async (showMessage: boolean = true) => {
   }
 }
 
-// 构建部门列表（带有层级信息）
-const buildDepartmentList = (departments: Department[], level: number = 0): Department[] => {
-  const result: Department[] = []
-  
-  const processDepartment = (dept: Department, currentLevel: number) => {
-    const newDept = { ...dept, level: currentLevel }
-    result.push(newDept)
-    
-    if (dept.children && dept.children.length > 0) {
-      dept.children.forEach(child => {
-        processDepartment(child, currentLevel + 1)
-      })
-    }
-  }
-  
-  departments.forEach(dept => {
-    processDepartment(dept, level)
-  })
-  
-  return result
-}
+
 
 const handleReset = () => {
   Object.assign(filterForm, {

@@ -22,8 +22,38 @@
       </div>
     </div>
 
+    <!-- 统计卡片区域 -->
+    <el-card class="stats-card">
+      <h3 class="stats-title">模具参数分类统计</h3>
+      <div class="stats-container" v-loading="statsLoading">
+        <div 
+          v-for="item in categoryStats" 
+          :key="item.category"
+          class="stat-item" 
+          :class="{ 'active': selectedCategory === item.category }"
+          @click="handleCategoryClick(item.category)"
+        >
+          <div class="stat-label">{{ item.category || '未知类别' }}</div>
+          <div class="stat-value">{{ item.count || 0 }}</div>
+        </div>
+      </div>
+      <div v-if="!statsLoading && categoryStats.length === 0" class="no-stats">
+        <el-empty description="暂无统计数据" />
+      </div>
+    </el-card>
+
     <!-- 搜索表单 -->
     <el-card class="search-card">
+      <div class="search-header">
+        <div class="search-title">搜索条件</div>
+        <el-button 
+          type="text" 
+          @click="isFilterExpanded = !isFilterExpanded"
+          :icon="isFilterExpanded ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+        >
+          {{ isFilterExpanded ? '收起' : '展开' }}
+        </el-button>
+      </div>
       <el-form :model="filterForm" :inline="true" size="small">
         <el-form-item label="申请编号">
           <el-input v-model="filterForm.applicationNumber" placeholder="请输入申请编号" clearable />
@@ -57,6 +87,21 @@
           </el-button>
         </el-form-item>
       </el-form>
+      <el-collapse-transition>
+        <div v-if="isFilterExpanded" class="filter-expanded">
+          <el-form :model="filterForm" :inline="true" size="small">
+            <el-form-item label="成品规格">
+              <el-input v-model="filterForm.specification" placeholder="请输入成品规格" clearable />
+            </el-form-item>
+            <el-form-item label="总收缩">
+              <el-input v-model="filterForm.totalShrinkage" placeholder="请输入总收缩" clearable />
+            </el-form-item>
+            <el-form-item label="备注">
+              <el-input v-model="filterForm.remarks" placeholder="请输入备注" clearable />
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-collapse-transition>
     </el-card>
 
     <!-- 数据表格 -->
@@ -501,17 +546,20 @@ const loading = ref(false)
 const tableData = ref<any[]>([])
 
 // 筛选表单
-const filterForm = reactive({
-  applicationNumber: '',
-  productCategory: '',
-  moldNumber: '',
-  specification: '',
-  totalShrinkage: '',
-  responsiblePerson: '',
-  remarks: '',
-  page: 1,
-  size: 10
-})
+  const filterForm = reactive({
+    applicationNumber: '',
+    productCategory: '',
+    moldNumber: '',
+    specification: '',
+    totalShrinkage: '',
+    responsiblePerson: '',
+    remarks: '',
+    page: 1,
+    size: 10
+  })
+
+  // 筛选表单折叠状态
+  const isFilterExpanded = ref(false)
 
 // 分页
 const pagination = reactive({
@@ -519,6 +567,13 @@ const pagination = reactive({
   size: 10,
   total: 5
 })
+
+// 分类统计数据
+const categoryStats = ref<Array<{ category: string; count: number }>>([])
+// 当前选中的类别（用于筛选）
+const selectedCategory = ref<string | null>(null)
+// 统计数据加载状态
+const statsLoading = ref(false)
 
 // 对话框
 const dialogVisible = ref(false)
@@ -1313,7 +1368,73 @@ onMounted(() => {
   fetchDataWithRetry('params', handleSearch, false)
   fetchDataWithRetry('products', fetchProducts)
   fetchDataWithRetry('materials', fetchSteelMaterials)
+  // 获取分类统计数据
+  fetchCategoryStats()
 })
+
+// 获取分类统计数据
+const fetchCategoryStats = async () => {
+  statsLoading.value = true
+  try {
+    // 获取足够多的数据用于统计
+    const response = await getMoldInitialParams({ page: 1, size: 1000 })
+    let allData = []
+    
+    // 处理多种响应格式
+    if (response && Array.isArray(response.records)) {
+      allData = response.records
+    } else if (response && Array.isArray(response.list)) {
+      allData = response.list
+    } else if (Array.isArray(response)) {
+      allData = response
+    } else if (response && Array.isArray(response.data?.records)) {
+      allData = response.data.records
+    } else if (response && Array.isArray(response.data?.list)) {
+      allData = response.data.list
+    }
+    
+    categoryStats.value = calculateCategoryStats(allData)
+  } catch (error) {
+    console.error('获取分类统计数据失败:', error)
+    categoryStats.value = []
+  } finally {
+    statsLoading.value = false
+  }
+}
+
+// 计算分类统计数据
+const calculateCategoryStats = (data: any[]) => {
+  const statsMap = new Map<string, number>()
+  
+  // 按成品类别统计数量
+  data.forEach(item => {
+    const category = item.productCategory || '未分类'
+    const count = statsMap.get(category) || 0
+    statsMap.set(category, count + 1)
+  })
+  
+  // 转换为数组并排序
+  return Array.from(statsMap.entries())
+    .map(([category, count]) => ({ category, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
+// 点击统计卡片筛选
+const handleCategoryClick = (category: string) => {
+  if (selectedCategory.value === category) {
+    // 再次点击取消筛选
+    selectedCategory.value = null
+    filterForm.productCategory = ''
+  } else {
+    // 点击筛选该类别
+    selectedCategory.value = category
+    filterForm.productCategory = category
+  }
+  
+  // 重置分页并重新搜索
+  pagination.current = 1
+  handleSearch()
+}
 
 // 带重试机制的数据获取函数
 const fetchDataWithRetry = async (type: keyof typeof loadingStates.value, fetchFunc: any, ...args: any[]) => {
@@ -1511,10 +1632,153 @@ const handleSetRoute = async (row: any) => {
 }
 
 .search-card {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+  padding: 12px;
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.search-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.filter-expanded {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e0e0e0;
+}
+
+.search-card .el-form {
+  margin-bottom: 0;
+}
+
+.search-card .el-form-item {
+  margin-bottom: 8px;
+}
+
+.search-card .el-form-item__label {
+  padding: 0 12px 0 0;
+  font-size: 12px;
+}
+
+.search-card .el-input {
+  width: 160px;
+}
+
+.search-card .el-select {
+  width: 160px;
+}
+
+.search-card .el-button {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+/* 统计卡片样式 */
+.stats-card {
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+  padding: 12px;
+}
+
+.stats-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #374151;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+.stat-item {
+  flex: 0 0 auto;
+  min-width: 100px;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  font-size: 12px;
+}
+
+.stat-item:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item.active {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.no-stats {
+  padding: 16px 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .stats-container {
+    gap: 6px;
+  }
+  
+  .stat-item {
+    min-width: 80px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  
+  .stat-value {
+    font-size: 16px;
+  }
+  
+  .search-card .el-input,
+  .search-card .el-select {
+    width: 140px;
+  }
 }
 
 // 响应式设计

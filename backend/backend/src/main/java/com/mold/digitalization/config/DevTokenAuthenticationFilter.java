@@ -68,6 +68,8 @@ public class DevTokenAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean matchesDevTokenPath(HttpServletRequest request) {
         String uri = request.getRequestURI();
+        // 添加日志来调试路径匹配
+        System.out.println("[DevTokenFilter] Checking URI: " + uri);
         return (
                 uri.startsWith("/api/process-state-machine/") ||
                 uri.startsWith("/api/mold-process") ||
@@ -88,7 +90,10 @@ public class DevTokenAuthenticationFilter extends OncePerRequestFilter {
                 uri.startsWith("/api/products") ||
                 uri.startsWith("/api/v1/admin/auth") ||
                 uri.startsWith("/process") ||
-                uri.startsWith("/api/process-preset")
+                uri.startsWith("/api/process-preset") ||
+                uri.startsWith("/api/process/templates") ||
+                // 确保包含完整路径
+                uri.equals("/api/process/templates/1")
         );
     }
 }

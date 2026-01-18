@@ -192,47 +192,86 @@ export interface ScheduleTaskForm {
 
 // 获取工序列表
 export const getProcesses = (params: ProcessQuery): Promise<ApiResponse<PageData<Process>>> => {
-  return request.get('/process/processes', { params })
+  return request.get('/api/process/processes', {
+    params,
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取所有工序（不分页）
 export const getAllProcesses = (): Promise<ApiResponse<Process[]>> => {
-  return request.get('/process/processes/all')
+  return request.get('/api/process/processes/all', {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序详情
 export const getProcessDetail = (id: number): Promise<ApiResponse<Process>> => {
-  return request.get(`/process/processes/${id}`)
+  return request.get(`/api/process/processes/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 创建工序
 export const createProcess = (data: ProcessForm): Promise<ApiResponse<Process>> => {
-  return request.post('/process/processes', data)
+  return request.post('/api/process/processes', data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 更新工序
 export const updateProcess = (id: number, data: ProcessForm): Promise<ApiResponse<Process>> => {
-  return request.put(`/process/processes/${id}`, data)
+  return request.put(`/api/process/processes/${id}`, data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 删除工序
 export const deleteProcess = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/process/processes/${id}`)
+  return request.delete(`/api/process/processes/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 批量删除工序
 export const batchDeleteProcesses = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/process/processes/batch', { data: { ids } })
+  return request.delete('/api/process/processes/batch', {
+    data: { ids },
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序路线列表
 export const getProcessRoutes = (params: ProcessRouteQuery): Promise<ApiResponse<PageData<ProcessRoute>>> => {
-  return request.get('/process/routes', { params })
+  return request.get('/api/process/routes', {
+    params,
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取所有工序路线（不分页）
 export const getAllProcessRoutes = (): Promise<ApiResponse<ProcessRoute[]>> => {
-  return request.get('/process/routes/all')
+  return request.get('/api/process/routes/all', {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序路线详情
@@ -240,42 +279,76 @@ export const getProcessRouteDetail = (id: number): Promise<ApiResponse<{
   route: ProcessRoute
   processDetails: ProcessRouteDetail[]
 }>> => {
-  return request.get(`/process/routes/${id}`)
+  return request.get(`/api/process/routes/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 创建工序路线
 export const createProcessRoute = (data: ProcessRouteForm): Promise<ApiResponse<ProcessRoute>> => {
-  return request.post('/process/routes', data)
+  return request.post('/api/process/routes', data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 更新工序路线
 export const updateProcessRoute = (id: number, data: ProcessRouteForm): Promise<ApiResponse<ProcessRoute>> => {
-  return request.put(`/process/routes/${id}`, data)
+  return request.put(`/api/process/routes/${id}`, data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 删除工序路线
 export const deleteProcessRoute = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/process/routes/${id}`)
+  return request.delete(`/api/process/routes/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 批量删除工序路线
 export const batchDeleteProcessRoutes = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/process/routes/batch', { data: { ids } })
+  return request.delete('/api/process/routes/batch', {
+    data: { ids },
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取调度任务列表
 export const getScheduleTasks = (params: ScheduleTaskQuery): Promise<ApiResponse<PageData<ScheduleTask>>> => {
-  return request.get('/process/schedule-tasks', { params })
+  return request.get('/api/process/schedule-tasks', {
+    params,
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取调度任务详情
 export const getScheduleTaskDetail = (id: number): Promise<ApiResponse<ScheduleTask>> => {
-  return request.get(`/process/schedule-tasks/${id}`)
+  return request.get(`/api/process/schedule-tasks/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 创建调度任务
 export const createScheduleTask = (data: ScheduleTaskForm): Promise<ApiResponse<ScheduleTask>> => {
-  return request.post('/process/schedule-tasks', data)
+  return request.post('/api/process/schedule-tasks', data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 更新调度任务
@@ -284,7 +357,11 @@ export const updateScheduleTask = (id: number, data: Partial<ScheduleTaskForm> &
   actualStartTime?: string
   actualEndTime?: string
 }): Promise<ApiResponse<ScheduleTask>> => {
-  return request.put(`/process/schedule-tasks/${id}`, data)
+  return request.put(`/api/process/schedule-tasks/${id}`, data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 批量更新调度任务
@@ -292,30 +369,49 @@ export const batchUpdateScheduleTasks = (data: {
   ids: number[]
   status: string
 }): Promise<ApiResponse<void>> => {
-  return request.put('/process/schedule-tasks/batch', data)
+  return request.put('/api/process/schedule-tasks/batch', data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 删除调度任务
 export const deleteScheduleTask = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/process/schedule-tasks/${id}`)
+  return request.delete(`/api/process/schedule-tasks/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 导出调度任务
 export const exportScheduleTasks = (params: ScheduleTaskQuery): Promise<Blob> => {
-  return request.get('/process/schedule-tasks/export', {
+  return request.get('/api/process/schedule-tasks/export', {
     params,
-    responseType: 'blob'
+    responseType: 'blob',
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
   })
 }
 
 // 获取模具的工序路线
 export const getMoldProcessRoute = (moldId: number): Promise<ApiResponse<ProcessRouteDetail[]>> => {
-  return request.get(`/process/molds/${moldId}/route`)
+  return request.get(`/api/process/molds/${moldId}/route`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 设置模具的工序路线
 export const setMoldProcessRoute = (moldId: number, routeId: number): Promise<ApiResponse<void>> => {
-  return request.post(`/process/molds/${moldId}/set-route`, { routeId })
+  return request.post(`/api/process/molds/${moldId}/set-route`, { routeId }, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序甘特图数据
@@ -324,45 +420,86 @@ export const getProcessGanttData = (params: {
   startTime?: string
   endTime?: string
 }): Promise<ApiResponse<any[]>> => {
-  return request.get('/process/gantt-data', { params })
+  return request.get('/api/process/gantt-data', {
+    params,
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序模板列表
 export const getProcessTemplates = (params: ProcessTemplateQuery): Promise<ApiResponse<PageData<ProcessTemplate>>> => {
-  return request.get('/process/templates', { params })
+  // 添加日志以调试请求
+  console.log('[API_CALL] getProcessTemplates', params)
+  return request.get('/api/process/templates', {
+    params,
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取所有工序模板（不分页）
 export const getAllProcessTemplates = (): Promise<ApiResponse<ProcessTemplate[]>> => {
-  return request.get('/process/templates/all')
+  return request.get('/api/process/templates/all', {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序模板详情
 export const getProcessTemplateDetail = (id: number): Promise<ApiResponse<ProcessTemplate>> => {
-  return request.get(`/process/templates/${id}`)
+  return request.get(`/api/process/templates/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 创建工序模板
 export const createProcessTemplate = (data: ProcessTemplateForm): Promise<ApiResponse<ProcessTemplate>> => {
-  return request.post('/process/templates', data)
+  return request.post('/api/process/templates', data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 更新工序模板
 export const updateProcessTemplate = (id: number, data: ProcessTemplateForm): Promise<ApiResponse<ProcessTemplate>> => {
-  return request.put(`/process/templates/${id}`, data)
+  return request.put(`/api/process/templates/${id}`, data, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 删除工序模板
 export const deleteProcessTemplate = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/process/templates/${id}`)
+  return request.delete(`/api/process/templates/${id}`, {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 批量删除工序模板
 export const batchDeleteProcessTemplates = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/process/templates/batch', { data: { ids } })
+  return request.delete('/api/process/templates/batch', {
+    data: { ids },
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }
 
 // 获取工序模板类型
 export const getProcessTemplateCategories = (): Promise<ApiResponse<{ label: string; value: string }[]>> => {
-  return request.get('/process/templates/categories')
+  return request.get('/api/process/templates/categories', {
+    headers: {
+      'X-Dev-Token': import.meta.env.VITE_DEV_TOKEN || 'dev-123'
+    }
+  })
 }

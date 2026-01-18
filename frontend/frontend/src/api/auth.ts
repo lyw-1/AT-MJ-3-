@@ -29,25 +29,25 @@ export const login = async (credentials: LoginCredentials): Promise<any> => {
 
 // 获取用户信息
 export const getUserInfo = (): Promise<any> => {
-  return request.get('/auth/userinfo')
+  return request.get('/api/auth/userinfo')
 }
 
 // 刷新token
 export const refreshToken = (refreshToken: string): Promise<any> => {
-  return request.post('/auth/refresh', { refreshToken })
+  return request.post('/api/auth/refresh', { refreshToken })
 }
 
 // 登出
 export const logout = (): Promise<any> => {
-  return request.post('/auth/logout')
+  return request.post('/api/auth/logout')
 }
 
 // 修改密码
 export const changePassword = (oldPassword: string, newPassword: string): Promise<any> => {
-  return request.put('/auth/password', { oldPassword, newPassword })
+  return request.put('/api/auth/password', { oldPassword, newPassword })
 }
 
 // 重置密码
 export const resetPassword = (username: string, email: string): Promise<any> => {
-  return request.post('/auth/reset-password', { username, email })
+  return request.post('/api/auth/reset-password', { username, email })
 }

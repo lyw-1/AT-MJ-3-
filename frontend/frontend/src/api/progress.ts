@@ -120,52 +120,52 @@ export interface WorkTimeCreateForm {
 
 // 获取进度记录列表
 export const getProgressRecords = (params: ProgressQuery): Promise<ApiResponse<PageData<ProgressRecord>>> => {
-  return request.get('/progress/records', { params })
+  return request.get('/api/progress/records', { params })
 }
 
 // 获取进度记录详情
 export const getProgressRecordDetail = (id: number): Promise<ApiResponse<ProgressRecord>> => {
-  return request.get(`/progress/records/${id}`)
+  return request.get(`/api/progress/records/${id}`)
 }
 
 // 更新进度记录
 export const updateProgressRecord = (id: number, data: ProgressUpdateForm): Promise<ApiResponse<ProgressRecord>> => {
-  return request.put(`/progress/records/${id}`, data)
+  return request.put(`/api/progress/records/${id}`, data)
 }
 
 // 获取模具进度详情
 export const getMoldProgress = (moldId: number): Promise<ApiResponse<ProgressRecord>> => {
-  return request.get(`/progress/molds/${moldId}`)
+  return request.get(`/api/progress/molds/${moldId}`)
 }
 
 // 获取工序进度列表
 export const getProcessProgresses = (params: ProcessProgressQuery): Promise<ApiResponse<PageData<ProcessProgress>>> => {
-  return request.get('/progress/processes', { params })
+  return request.get('/api/progress/processes', { params })
 }
 
 // 更新工序进度
 export const updateProcessProgress = (id: number, data: ProcessProgressUpdateForm): Promise<ApiResponse<ProcessProgress>> => {
-  return request.put(`/progress/processes/${id}`, data)
+  return request.put(`/api/progress/processes/${id}`, data)
 }
 
 // 批量更新工序进度
 export const batchUpdateProcessProgress = (data: { ids: number[]; status: string }): Promise<ApiResponse<void>> => {
-  return request.put('/progress/processes/batch-update', data)
+  return request.put('/api/progress/processes/batch-update', data)
 }
 
 // 创建工时记录
 export const createWorkTimeRecord = (data: WorkTimeCreateForm): Promise<ApiResponse<WorkTimeRecord>> => {
-  return request.post('/progress/work-time', data)
+  return request.post('/api/progress/work-time', data)
 }
 
 // 获取工时记录列表
 export const getWorkTimeRecords = (params: WorkTimeQuery): Promise<ApiResponse<PageData<WorkTimeRecord>>> => {
-  return request.get('/progress/work-time', { params })
+  return request.get('/api/progress/work-time', { params })
 }
 
 // 导出工时记录
 export const exportWorkTimeRecords = (params: WorkTimeQuery): Promise<Blob> => {
-  return request.get('/progress/work-time/export', {
+  return request.get('/api/progress/work-time/export', {
     params,
     responseType: 'blob'
   })
@@ -178,7 +178,7 @@ export const getWorkTimeStatistics = (params: {
   operatorId?: number
   processId?: number
 }): Promise<ApiResponse<any>> => {
-  return request.get('/progress/work-time/statistics', { params })
+  return request.get('/api/progress/work-time/statistics', { params })
 }
 
 // 获取进度统计
@@ -187,17 +187,17 @@ export const getProgressStatistics = (params: {
   endTime: string
   status?: string
 }): Promise<ApiResponse<any>> => {
-  return request.get('/progress/statistics', { params })
+  return request.get('/api/progress/statistics', { params })
 }
 
 // 暂停进度
 export const pauseProgress = (id: number, remark?: string): Promise<ApiResponse<void>> => {
-  return request.post(`/progress/records/${id}/pause`, { remark })
+  return request.post(`/api/progress/records/${id}/pause`, { remark })
 }
 
 // 恢复进度
 export const resumeProgress = (id: number, remark?: string): Promise<ApiResponse<void>> => {
-  return request.post(`/progress/records/${id}/resume`, { remark })
+  return request.post(`/api/progress/records/${id}/resume`, { remark })
 }
 
 // 获取进度趋势数据
@@ -205,5 +205,5 @@ export const getProgressTrend = (params: {
   moldId: number
   days: number
 }): Promise<ApiResponse<any[]>> => {
-  return request.get('/progress/records/trend', { params })
+  return request.get('/api/progress/records/trend', { params })
 }

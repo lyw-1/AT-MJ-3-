@@ -86,16 +86,39 @@
 
     <!-- 快捷入口容器 -->
     <div class="quick-access-container">
-      <!-- 快捷入口 - Circle Soft风格 -->
-      <el-row :gutter="15" class="quick-access-row">
-        <el-col :xs="24" :sm="12" :md="6" :lg="4" v-for="item in filteredQuickAccessItems" :key="item.title">
-          <div class="quick-access-card" @click="handleQuickAccessClick(item)">
-            <div class="quick-access-content">
-              <div class="quick-access-title">{{ item.title }}</div>
-            </div>
+      <!-- 快捷入口 - 图标墙风格 -->
+      <div class="quick-access-wall">
+        <div 
+          class="quick-access-item" 
+          :class="`quick-access-${item.permission}`" 
+          @click="handleQuickAccessClick(item)"
+          v-for="item in filteredQuickAccessItems" 
+          :key="item.title"
+        >
+          <div class="quick-access-icon">
+            <el-icon>
+              <Tools v-if="item.icon === 'Tools'" />
+              <Box v-else-if="item.icon === 'Box'" />
+              <Setting v-else-if="item.icon === 'Setting'" />
+              <TrendCharts v-else-if="item.icon === 'TrendCharts'" />
+              <CircleCheck v-else-if="item.icon === 'CircleCheck'" />
+              <ArrowRight v-else-if="item.icon === 'ArrowRight'" />
+              <Bell v-else-if="item.icon === 'Bell'" />
+              <Search v-else-if="item.icon === 'Search'" />
+              <User v-else-if="item.icon === 'User'" />
+              <DataAnalysis v-else-if="item.icon === 'DataAnalysis'" />
+              <Document v-else-if="item.icon === 'Document'" />
+              <Back v-else-if="item.icon === 'Back'" />
+              <DataLine v-else-if="item.icon === 'DataLine'" />
+              <Check v-else-if="item.icon === 'Check'" />
+              <DocumentAdd v-else-if="item.icon === 'DocumentAdd'" />
+              <Edit v-else-if="item.icon === 'Edit'" />
+              <Setting v-else />
+            </el-icon>
           </div>
-        </el-col>
-      </el-row>
+          <div class="quick-access-title">{{ item.title }}</div>
+        </div>
+      </div>
     </div>
 
     <!-- 底部功能版块容器 -->
@@ -142,10 +165,10 @@
         </div>
       </div>
 
-      <!-- 最近生产数据录入记录 -->
+      <!-- 最近成型录入记录 -->
       <div class="bottom-section production-data-section">
         <div class="section-header">
-          <h3 class="section-title">最近生产数据录入记录</h3>
+          <h3 class="section-title">最近成型录入记录</h3>
           <div class="section-actions">
             <button class="el-button el-button--small el-button--default">查看全部</button>
           </div>
@@ -171,7 +194,10 @@ import { useUserStore } from '@/stores/user'
 import { 
   User, Tools, Box, Setting,
   Warning,
-  CircleCheck, TrendCharts
+  CircleCheck, TrendCharts,
+  ArrowRight, Bell, Search,
+  DataAnalysis, Document, Back,
+  DataLine, Check, DocumentAdd, Edit
 } from '@element-plus/icons-vue'
 
 const userStore = useUserStore()
@@ -206,32 +232,20 @@ const currentDate = computed(() => {
   })
 })
 
-// 预设浅色调色板（稍微深一些，明度在70%-85%之间，符合WCAG AA级对比度）
-const lightColorPalette = [
-  '#DBEAFE', // 浅蓝色
-  '#D1FAE5', // 浅绿色
-  '#FDE68A', // 浅黄色
-  '#FECACA', // 浅红色
-  '#EDE9FE', // 浅紫色
-  '#BAE6FD', // 浅天蓝色
-  '#A7F3D0', // 浅青绿色
-  '#FEF9C3', // 浅柠檬黄
-  '#FBCFE8', // 浅粉色
-  '#E0E7FF'  // 浅靛蓝色
-]
 
-// 快捷入口（按角色管理显示）
+
+// 快捷入口（按角色管理显示） - 与微信小程序端统一
 const quickAccessItems = ref([
-  { title: '加工申请（非模具）', description: '提交非模具加工申请', path: '/mold/application', icon: 'Tools', permission: 'apply_non_mold' },
-  { title: '建立模具初始参数', description: '创建模具初始参数', path: '/mold/initial-params-list', icon: 'Box', permission: 'mold_initial_params_create' },
-  { title: '新模入库建档', description: '新模入库与建档', path: '/storage/records', icon: 'Box', permission: 'mold_storage_create' },
-  { title: '模具领用申请', description: '模具领用流程', path: '/storage/mold-list?action=use', icon: 'Box', permission: 'mold_use_apply' },
-  { title: '模具归还申请', description: '模具归还流程', path: '/storage/mold-list?action=return', icon: 'Box', permission: 'mold_return_apply' },
-  { title: '耗材及备品领用申请', description: '耗材/备品领用', path: '/storage/accessories', icon: 'Setting', permission: 'consumables_apply' },
-  { title: '生产数据录入', description: '录入生产关键数据', path: '/production/data-entry', icon: 'Box', permission: 'production_data_entry' },
-  { title: '测量数据录入', description: '录入测量数据', path: '/storage/measure-input', icon: 'TrendCharts', permission: 'measure_data_entry' },
-  { title: '调模记录录入', description: '记录调模过程', path: '/tuning/tuning-records', icon: 'Setting', permission: 'tuning_record_entry' },
-  { title: '调模验收记录录入', description: '记录调模验收', path: '/tuning/acceptance-records', icon: 'CircleCheck', permission: 'tuning_acceptance_entry' }
+  { title: '加工申请', description: '提交非模具加工申请', path: '/mold/application', icon: 'DocumentAdd', permission: 'apply_non_mold' },
+  { title: '初始参数', description: '创建模具初始参数', path: '/mold/initial-params-list', icon: 'DataAnalysis', permission: 'mold_initial_params_create' },
+  { title: '新模建档', description: '新模入库与建档', path: '/storage/records', icon: 'Document', permission: 'mold_storage_create' },
+  { title: '模具领用', description: '模具领用流程', path: '/storage/mold-list?action=use', icon: 'Tools', permission: 'mold_use_apply' },
+  { title: '模具归还', description: '模具归还流程', path: '/storage/mold-list?action=return', icon: 'Back', permission: 'mold_return_apply' },
+  { title: '耗材领用', description: '耗材/备品领用', path: '/storage/accessories', icon: 'Box', permission: 'consumables_apply' },
+  { title: '成型录入', description: '录入生产关键数据', path: '/production/data-entry', icon: 'DataLine', permission: 'production_data_entry' },
+  { title: '测量录入', description: '录入测量数据', path: '/storage/measure-input', icon: 'DataLine', permission: 'measure_data_entry' },
+  { title: '调模录入', description: '记录调模过程', path: '/tuning/tuning-records', icon: 'Edit', permission: 'tuning_record_entry' },
+  { title: '验收记录', description: '记录调模验收', path: '/tuning/acceptance-records', icon: 'Check', permission: 'tuning_acceptance_entry' }
 ])
 
 const filteredQuickAccessItems = computed(() => {
@@ -248,7 +262,7 @@ const statistics = ref([
     year: '（2025年之后）',
     value: '98.5%', 
     icon: 'TrendCharts',
-    gradient: 'linear-gradient(135deg, #047857 0%, #1E3A8A 100%)'
+    gradient: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)'
   },
   { 
     key: 'bare_storage', 
@@ -257,7 +271,7 @@ const statistics = ref([
     icon: 'Box', 
     clickPath: '/storage/mold-list', 
     clickQuery: { store: 'bare' },
-    gradient: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)'
+    gradient: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)'
   },
   { 
     key: 'available_storage', 
@@ -266,7 +280,7 @@ const statistics = ref([
     icon: 'Box', 
     clickPath: '/storage/mold-list', 
     clickQuery: { store: 'available' },
-    gradient: 'linear-gradient(135deg, #0E7490 0%, #06B6D4 100%)'
+    gradient: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)'
   },
   { 
     key: 'sealed_storage', 
@@ -275,20 +289,13 @@ const statistics = ref([
     icon: 'Box', 
     clickPath: '/storage/mold-list', 
     clickQuery: { store: 'sealed' },
-    gradient: 'linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)'
+    gradient: 'linear-gradient(135deg, #64748B 0%, #94A3B8 100%)'
   }
 ])
 
 
 
-// 图标映射表，将快捷入口中的图标名称映射到实际组件
-const iconMap = {
-  Tools,
-  Box,
-  Setting,
-  TrendCharts,
-  CircleCheck
-}
+
 
 // 快捷入口点击处理函数
 const handleQuickAccessClick = (item: any) => {
@@ -296,22 +303,12 @@ const handleQuickAccessClick = (item: any) => {
   window.location.href = item.path
 }
 
-// 统计卡片点击
-const handleStatClick = (stat: any) => {
-  if (stat.clickPath) {
-    // 使用模板中的 $router 进行跳转
-    // @ts-ignore
-    const r = (typeof window !== 'undefined' && (window as any).$router) || null
-    if (r) {
-      r.push({ path: stat.clickPath, query: stat.clickQuery || {} })
-    }
-  }
-}
+
 
 // 待办事项模拟数据
 const todoList = ref([
   { id: 1, title: '完成模具初始参数设置', dueDate: '2025-12-05', priority: '高', status: 'pending', statusText: '待处理' },
-  { id: 2, title: '审核模具领用申请', dueDate: '2025-12-06', priority: '中', status: 'pending', statusText: '待处理' },
+  { id: 2, title: '审核模具领用', dueDate: '2025-12-06', priority: '中', status: 'pending', statusText: '待处理' },
   { id: 3, title: '更新生产数据记录', dueDate: '2025-12-07', priority: '低', status: 'pending', statusText: '待处理' }
 ])
 
@@ -335,11 +332,11 @@ const nonMoldTasks = ref([
   { id: 3, title: '非模具加工任务Z', type: '紧急加工', progress: 85 }
 ])
 
-// 最近生产数据录入记录模拟数据
+// 最近成型录入记录模拟数据
 const productionData = ref([
-  { id: 1, title: '生产数据录入1', product: '产品A', recordTime: '2025-12-04 14:30', status: 'completed', statusText: '已完成' },
-  { id: 2, title: '生产数据录入2', product: '产品B', recordTime: '2025-12-04 13:15', status: 'completed', statusText: '已完成' },
-  { id: 3, title: '生产数据录入3', product: '产品C', recordTime: '2025-12-04 12:00', status: 'pending', statusText: '待审核' }
+  { id: 1, title: '成型录入1', product: '产品A', recordTime: '2025-12-04 14:30', status: 'completed', statusText: '已完成' },
+  { id: 2, title: '成型录入2', product: '产品B', recordTime: '2025-12-04 13:15', status: 'completed', statusText: '已完成' },
+  { id: 3, title: '成型录入3', product: '产品C', recordTime: '2025-12-04 12:00', status: 'pending', statusText: '待审核' }
 ])
 
 // 加载数据
@@ -371,55 +368,278 @@ onMounted(() => {
   padding: $spacing-3;
   margin: 1px 0 1px 0;
   transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
 }
 
-// 快捷入口行样式
-.quick-access-row {
-  margin: 0;
-  
-  .el-col {
-    margin-bottom: 1px;
-    padding: 0;
-  }
+// 图标墙布局
+.quick-access-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: $spacing-1;
+  width: 100%;
+  justify-items: center;
 }
 
-// 快捷入口卡片样式 - Circle Soft风格
-.quick-access-card {
-  background-color: $white;
-  border-radius: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid $gray-200;
-  padding: $spacing-1 $spacing-2;
-  transition: all 0.2s ease;
-  cursor: pointer;
+// 单个图标项样式
+.quick-access-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  padding: $spacing-2;
+  border-radius: $border-radius-lg;
+  width: 100%;
+  max-width: 140px;
   
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-color: $primary-color;
+    transform: translateY(-2px);
   }
   
-  // 快捷入口内容样式
-  .quick-access-content {
-    text-align: center;
+  // 图标样式 - 与微信小程序端统一
+  .quick-access-icon {
+    width: 81px;
+    height: 81px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.1);
     
-    // 标题样式
-    .quick-access-title {
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      color: $gray-900;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .el-icon {
+      font-size: 40px;
+      transition: all 0.2s ease;
     }
+  }
+  
+  // 标题样式
+  .quick-access-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $gray-800;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+    margin-top: $spacing-1;
+    width: 100%;
+  }
+}
+  
+// 移除旧样式，直接为每个快捷操作项设置明确样式
+
+// 悬停状态样式
+.quick-access-item {
+  &:hover .quick-access-icon {
+    el-icon,
+    .el-icon,
+    svg {
+      color: $white !important;
+      fill: $white !important;
+    }
+  }
+}
+
+// 加工申请 - 蓝色系
+.quick-access-apply_non_mold {
+  .quick-access-icon {
+    background: $quick-apply-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-apply-color !important;
+      fill: $quick-apply-color !important;
+    }
+    
+    &:hover {
+      background: $quick-apply-hover !important;
+    }
+  }
+}
+
+// 模具初始参数 - 绿色系
+.quick-access-mold_initial_params_create {
+  .quick-access-icon {
+    background: $quick-initial-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-initial-color !important;
+      fill: $quick-initial-color !important;
+    }
+    
+    &:hover {
+      background: $quick-initial-hover !important;
+    }
+  }
+}
+
+// 新模建档 - 紫色系
+.quick-access-mold_storage_create {
+  .quick-access-icon {
+    background: $quick-new-mold-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-new-mold-color !important;
+      fill: $quick-new-mold-color !important;
+    }
+    
+    &:hover {
+      background: $quick-new-mold-hover !important;
+    }
+  }
+}
+
+// 模具领用 - 橙色系
+.quick-access-mold_use_apply {
+  .quick-access-icon {
+    background: $quick-use-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-use-color !important;
+      fill: $quick-use-color !important;
+    }
+    
+    &:hover {
+      background: $quick-use-hover !important;
+    }
+  }
+}
+
+// 模具归还 - 青色系
+.quick-access-mold_return_apply {
+  .quick-access-icon {
+    background: $quick-return-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-return-color !important;
+      fill: $quick-return-color !important;
+    }
+    
+    &:hover {
+      background: $quick-return-hover !important;
+    }
+  }
+}
+
+// 耗材领用 - 粉色系
+.quick-access-consumables_apply {
+  .quick-access-icon {
+    background: $quick-consumable-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-consumable-color !important;
+      fill: $quick-consumable-color !important;
+    }
+    
+    &:hover {
+      background: $quick-consumable-hover !important;
+    }
+  }
+}
+
+// 成型录入 - 黄色系
+.quick-access-production_data_entry {
+  .quick-access-icon {
+    background: $quick-production-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-production-color !important;
+      fill: $quick-production-color !important;
+    }
+    
+    &:hover {
+      background: $quick-production-hover !important;
+    }
+  }
+}
+
+// 测量录入 - 蓝绿色系
+.quick-access-measure_data_entry {
+  .quick-access-icon {
+    background: $quick-measure-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-measure-color !important;
+      fill: $quick-measure-color !important;
+    }
+    
+    &:hover {
+      background: $quick-measure-hover !important;
+    }
+  }
+}
+
+// 调模录入 - 红色系
+.quick-access-tuning_record_entry {
+  .quick-access-icon {
+    background: $quick-tuning-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-tuning-color !important;
+      fill: $quick-tuning-color !important;
+    }
+    
+    &:hover {
+      background: $quick-tuning-hover !important;
+    }
+  }
+}
+
+// 验收记录 - 黄色系
+.quick-access-tuning_acceptance_entry {
+  .quick-access-icon {
+    background: $quick-acceptance-bg !important;
+    
+    el-icon,
+    .el-icon,
+    svg {
+      color: $quick-acceptance-color !important;
+      fill: $quick-acceptance-color !important;
+    }
+    
+    &:hover {
+      background: $quick-acceptance-hover !important;
+    }
+  }
+}
+
+// 默认样式（确保所有图标都有颜色）
+.quick-access-item .quick-access-icon {
+  background-color: $primary-light !important;
+  
+  el-icon,
+  .el-icon,
+  svg {
+    color: $primary-color !important;
+    fill: $primary-color !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  &:hover {
+    background-color: $primary-dark !important;
   }
 }
 

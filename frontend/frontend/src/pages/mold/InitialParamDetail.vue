@@ -447,7 +447,7 @@ import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getMoldInitialParamDetail, updateMoldInitialParam } from '@/api/mold'
 import { ElMessage } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import QrcodeVue from 'qrcode.vue'
 
 // 引入成品相关API和类型
@@ -569,39 +569,7 @@ watch(() => [formData.inletHoleDiameter, formData.slotWidth, formData.centerDist
   calculateMudSupplyRatio();
 }, { deep: true, immediate: true });
 
-// 表单验证规则
-const formRules = reactive<FormRules>({
-  applicationNumber: [
-    { required: true, message: '请输入申请编号', trigger: 'blur' }
-  ],
-  productCategory: [
-    { required: true, message: '请选择成品类别', trigger: 'change' }
-  ],
-  moldNumber: [
-    { required: true, message: '请输入模号', trigger: 'blur' }
-  ],
-  specification: [
-    { required: true, message: '请输入或选择成品规格', trigger: 'blur' }
-  ],
-  material: [
-    { required: true, message: '请选择模具钢材', trigger: 'change' }
-  ],
-  structure: [
-    { required: true, message: '请选择结构', trigger: 'change' }
-  ],
-  inletHoleDiameter: [
-    { required: true, message: '请输入进泥孔径', trigger: 'blur' }
-  ],
-  slotWidth: [
-    { required: true, message: '请输入槽宽', trigger: 'blur' }
-  ],
-  centerDistance: [
-    { required: true, message: '请输入中心距', trigger: 'blur' }
-  ],
-  responsiblePerson: [
-    { required: true, message: '请输入负责人', trigger: 'blur' }
-  ]
-});
+
 
 // 加载模具参数详情
 const loadMoldParamDetail = async () => {

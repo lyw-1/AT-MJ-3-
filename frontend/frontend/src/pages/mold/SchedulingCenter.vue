@@ -260,12 +260,12 @@ const handleConflictCheck = () => {
 }
 
 // 处理查看任务
-const handleViewTask = (row: ScheduleTask) => {
+const handleViewTask = (_row: ScheduleTask) => {
   ElMessage.info('查看任务详情功能开发中')
 }
 
 // 处理编辑任务
-const handleEditTask = (row: ScheduleTask) => {
+const handleEditTask = (_row: ScheduleTask) => {
   ElMessage.info('编辑任务功能开发中')
 }
 

@@ -14,13 +14,7 @@
           <el-button type="primary" @click="savePresets" :loading="saving">保存预设置</el-button>
         </div>
       </div>
-      <div class="qrcode-container">
-        <qrcode-vue
-          :value="qrcodeValue"
-          :size="80"
-          level="H"
-        />
-      </div>
+
     </div>
     
     <el-row :gutter="20">
@@ -47,58 +41,76 @@
       <el-col :span="16">
         <!-- 备料工序 - 表格形式（适合A4打印） -->
         <el-card v-if="selectedProcess && selectedProcess.code === 'PREP'" class="preset-card">
-          <div class="card-title">{{ selectedProcess.name }} - 预设置</div>
+          <div class="card-title">
+            {{ selectedProcess.name }} - 预设置
+            <div class="card-actions">
+              <el-button type="primary" size="small" @click="openTemplateDialog">
+                选择模板
+              </el-button>
+            </div>
+          </div>
           
           <!-- 模具基本信息表格 -->
-          <div class="print-section">
-            <h3 class="print-section-title">模具基本信息</h3>
-            <table class="print-table info-table">
-              <colgroup>
-                <col style="width: 10%">
-                <col style="width: 15%">
-                <col style="width: 10%">
-                <col style="width: 65%">
-              </colgroup>
-              <tbody>
-                <tr>
-                  <th>负责人</th>
-                  <td><el-input v-model="moldInfo.responsiblePerson" placeholder="请输入" /></td>
-                  <th>模具刻字</th>
-                  <td><el-input v-model="moldInfo.moldEngraving" placeholder="请输入" /></td>
-                </tr>
-                <tr>
-                  <th>模具编号</th>
-                  <td><el-input v-model="moldInfo.moldNumber" placeholder="请输入" /></td>
-                  <th>成品规格</th>
-                  <td>
-                    <el-input v-model="moldInfo.productSpec" placeholder="请输入" style="flex: 2" />
-                    <span class="cell-label">材料</span>
-                    <el-input v-model="moldInfo.material" placeholder="请输入" style="flex: 1" />
-                    <span class="cell-label">硬度</span>
-                    <el-input v-model="moldInfo.hardness" placeholder="请输入" style="flex: 1" />
-                  </td>
-                </tr>
-                <tr>
-                  <th>定位孔中心距</th>
-                  <td><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入" /></td>
-                  <th>模具厚度</th>
-                  <td><el-input v-model="moldInfo.moldThickness" placeholder="请输入" /></td>
-                </tr>
-                <tr>
-                  <th>进泥孔直径</th>
-                  <td>
-                    <el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入" style="flex: 2" />
-                    <span class="cell-label">槽宽</span>
-                    <el-input v-model="moldInfo.slotWidth" placeholder="请输入" style="flex: 1" />
-                    <span class="cell-label">槽间距</span>
-                    <el-input v-model="moldInfo.slotSpacing" placeholder="请输入" style="flex: 1" />
-                  </td>
-                  <th></th>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+      <div class="print-section">
+        <div class="section-header">
+          <h3 class="print-section-title">模具基本信息</h3>
+          <div class="qrcode-container-bottom">
+            <qrcode-vue
+              :value="qrcodeValue"
+              :size="120"
+              level="H"
+            />
           </div>
+        </div>
+        <div class="mold-info-wrapper">
+          <table class="print-table info-table">
+            <colgroup>
+              <col style="width: 10%">
+              <col style="width: 15%">
+              <col style="width: 10%">
+              <col style="width: 65%">
+            </colgroup>
+            <tbody>
+              <tr>
+                <th>负责人</th>
+                <td><el-input v-model="moldInfo.responsiblePerson" placeholder="请输入" /></td>
+                <th>模具刻字</th>
+                <td><el-input v-model="moldInfo.moldEngraving" placeholder="请输入" /></td>
+              </tr>
+              <tr>
+                <th>模具编号</th>
+                <td><el-input v-model="moldInfo.moldNumber" placeholder="请输入" /></td>
+                <th>成品规格</th>
+                <td>
+                  <el-input v-model="moldInfo.productSpec" placeholder="请输入" style="flex: 2" />
+                  <span class="cell-label">材料</span>
+                  <el-input v-model="moldInfo.material" placeholder="请输入" style="flex: 1" />
+                  <span class="cell-label">硬度</span>
+                  <el-input v-model="moldInfo.hardness" placeholder="请输入" style="flex: 1" />
+                </td>
+              </tr>
+              <tr>
+                <th>定位孔中心距</th>
+                <td><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入" /></td>
+                <th>模具厚度</th>
+                <td><el-input v-model="moldInfo.moldThickness" placeholder="请输入" /></td>
+              </tr>
+              <tr>
+                <th>进泥孔直径</th>
+                <td>
+                  <el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入" style="flex: 2" />
+                  <span class="cell-label">槽宽</span>
+                  <el-input v-model="moldInfo.slotWidth" placeholder="请输入" style="flex: 1" />
+                  <span class="cell-label">槽间距</span>
+                  <el-input v-model="moldInfo.slotSpacing" placeholder="请输入" style="flex: 1" />
+                </td>
+                <th></th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
           
           <!-- 工序内容表格 -->
           <div class="print-section">
@@ -141,7 +153,14 @@
         
         <!-- 其他工序 - 表单形式 -->
         <el-card v-else>
-          <div class="card-title">{{ selectedProcess ? selectedProcess.name + ' - 预设置' : '请选择工序' }}</div>
+          <div class="card-title">
+            {{ selectedProcess ? selectedProcess.name + ' - 预设置' : '请选择工序' }}
+            <div class="card-actions">
+              <el-button type="primary" size="small" @click="openTemplateDialog" v-if="selectedProcess">
+                选择模板
+              </el-button>
+            </div>
+          </div>
           
           <el-form v-if="selectedProcess" :model="presetForm" label-width="120px" class="preset-form">
             <!-- 动态生成预设置表单字段 -->
@@ -224,6 +243,26 @@
         </el-card>
       </el-col>
     </el-row>
+    
+    <!-- 模板选择对话框 -->
+    <el-dialog
+      v-model="showTemplateDialog"
+      title="选择工序模板"
+      width="600px"
+    >
+      <template #default>
+        <template-selector
+          :process-code="selectedProcess.code"
+          @select="handleTemplateSelect"
+        />
+      </template>
+      
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showTemplateDialog = false">取消</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -232,7 +271,9 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getProcessPresets, batchSaveProcessPresets, getMoldInitialParamDetail, updateMoldInitialParam } from '@/api/mold'
+import { getProcessTemplateDetail } from '@/api/process'
 import QrcodeVue from 'qrcode.vue'
+import TemplateSelector from '@/components/process/TemplateSelector.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -243,6 +284,9 @@ const moldNumber = ref('')
 const specification = ref('')
 const owner = ref('')
 const moldId = ref<number>(0)
+
+// 模板选择相关状态
+const showTemplateDialog = ref(false)
 
 // 二维码内容 - 生成工序预设置页面的链接
 const qrcodeValue = ref('')
@@ -614,14 +658,108 @@ const savePresets = async () => {
   }
 }
 
+// 打开模板选择对话框
+const openTemplateDialog = () => {
+  if (selectedProcess.value) {
+    showTemplateDialog.value = true
+  } else {
+    ElMessage.warning('请先选择一个工序')
+  }
+}
+
+// 处理模板选择
+const handleTemplateSelect = (template: any, applyMode: string) => {
+  if (template) {
+    loadTemplateData(template.id, applyMode)
+    showTemplateDialog.value = false
+  }
+}
+
+// 加载模板数据并填充
+const loadTemplateData = async (templateId: number, applyMode: string) => {
+  try {
+    const response = await getProcessTemplateDetail(templateId)
+    if (response.data) {
+      const templateData = response.data
+      if (selectedProcess.value.code === 'PREP') {
+        // 备料工序 - 填充表格数据
+        if (applyMode === 'replace') {
+          // 完全替换模式
+          Object.entries(templateData.config || {}).forEach(([key, value]) => {
+            if (key.startsWith('mold_')) {
+              // 模具基本信息
+              const field = key.replace('mold_', '')
+              if (moldInfo.value.hasOwnProperty(field)) {
+                moldInfo.value[field as keyof typeof moldInfo.value] = value
+              }
+            } else if (key.startsWith('process_')) {
+              // 工序内容
+              const match = key.match(/^process_(\d+)_(\w+)$/)
+              if (match) {
+                const index = parseInt(match[1])
+                const field = match[2]
+                if (processList.value[index] && processList.value[index].hasOwnProperty(field)) {
+                  if (field === 'date') {
+                    processList.value[index][field as keyof typeof processList.value[0]] = new Date(value)
+                  } else {
+                    processList.value[index][field as keyof typeof processList.value[0]] = value
+                  }
+                }
+              }
+            }
+          })
+        } else {
+          // 合并模式 - 只填充空值
+          Object.entries(templateData.config || {}).forEach(([key, value]) => {
+            if (key.startsWith('mold_')) {
+              // 模具基本信息
+              const field = key.replace('mold_', '')
+              if (moldInfo.value.hasOwnProperty(field) && !moldInfo.value[field as keyof typeof moldInfo.value]) {
+                moldInfo.value[field as keyof typeof moldInfo.value] = value
+              }
+            } else if (key.startsWith('process_')) {
+              // 工序内容
+              const match = key.match(/^process_(\d+)_(\w+)$/)
+              if (match) {
+                const index = parseInt(match[1])
+                const field = match[2]
+                if (processList.value[index] && processList.value[index].hasOwnProperty(field) && !processList.value[index][field as keyof typeof processList.value[0]]) {
+                  if (field === 'date') {
+                    processList.value[index][field as keyof typeof processList.value[0]] = new Date(value)
+                  } else {
+                    processList.value[index][field as keyof typeof processList.value[0]] = value
+                  }
+                }
+              }
+            }
+          })
+        }
+        ElMessage.success('模板应用成功')
+      } else {
+        // 其他工序 - 填充表单数据
+        if (applyMode === 'replace') {
+          // 完全替换模式
+          Object.assign(presetForm.value, templateData.config || {})
+        } else {
+          // 合并模式 - 只填充空值
+          Object.entries(templateData.config || {}).forEach(([key, value]) => {
+            if (!presetForm.value[key]) {
+              presetForm.value[key] = value
+            }
+          })
+        }
+        ElMessage.success('模板应用成功')
+      }
+    }
+  } catch (error) {
+    ElMessage.error('加载模板数据失败')
+    console.error('加载模板数据失败:', error)
+  }
+}
+
 // 返回列表
 const handleBack = () => {
   router.push('/mold/initial-params-list')
-}
-
-// 跳转到备料工序表格页面
-const goToMaterialPreparation = () => {
-  router.push('/mold/process/material-preparation')
 }
 </script>
 
@@ -687,6 +825,50 @@ const goToMaterialPreparation = () => {
   border-radius: 4px;
 }
 
+/* 模具信息和二维码布局 */
+.mold-info-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* 章节标题和二维码布局 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* 底部二维码样式 */
+.qrcode-container-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background-color: #fff;
+  border: 1px solid var(--el-border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.qrcode-container-bottom :deep(.qrcode-vue) {
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .qrcode-container-bottom {
+    align-self: flex-start;
+  }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .preset-header {
@@ -709,7 +891,13 @@ const goToMaterialPreparation = () => {
   color: rgba(38, 38, 38, 1);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 16px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .ml-20 {
@@ -977,8 +1165,30 @@ const goToMaterialPreparation = () => {
     border-bottom: 1px solid #333;
   }
   
+  /* 模具信息和二维码打印布局 */
+  .section-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .mold-info-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .qrcode-container-bottom {
+    display: flex !important;
+    padding: 8px;
+    border: 1px solid #333;
+    margin-top: 0;
+  }
+  
   .print-table {
     font-size: 11px;
+    width: 100%;
     
     th, td {
       border: 1px solid #333;

@@ -82,12 +82,12 @@ export interface MoldInitialParamForm {
 
 // 获取模具初始参数列表
 export const getMoldInitialParams = (params: MoldInitialParamQuery): Promise<ApiResponse<PageData<MoldInitialParam>>> => {
-  return request.get('/mold-initial-parameters', { params })
+  return request.get('/api/mold-initial-parameters', { params })
 }
 
 // 获取模具初始参数详情
 export const getMoldInitialParamDetail = (id: number): Promise<ApiResponse<MoldInitialParam>> => {
-  return request.get(`/mold-initial-parameters/${id}`)
+  return request.get(`/api/mold-initial-parameters/${id}`)
 }
 
 // 创建模具初始参数
@@ -119,7 +119,7 @@ export const createMoldInitialParam = (data: any): Promise<ApiResponse<MoldIniti
     remark: data.remarks, // 备注
     status: data.status // 状态
   }
-  return request.post('/mold-initial-parameters', backendData)
+  return request.post('/api/mold-initial-parameters', backendData)
 }
 
 // 更新模具初始参数
@@ -151,22 +151,22 @@ export const updateMoldInitialParam = (id: number, data: any): Promise<ApiRespon
     remark: data.remarks, // 备注
     status: data.status // 状态
   }
-  return request.put(`/mold-initial-parameters/${id}`, backendData)
+  return request.put(`/api/mold-initial-parameters/${id}`, backendData)
 }
 
 // 删除模具初始参数
 export const deleteMoldInitialParam = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/mold-initial-parameters/${id}`)
+  return request.delete(`/api/mold-initial-parameters/${id}`)
 }
 
 // 批量删除模具初始参数
 export const batchDeleteMoldInitialParams = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/mold-initial-parameters/batch', { data: { ids } })
+  return request.delete('/api/mold-initial-parameters/batch', { data: { ids } })
 }
 
 // 导出模具初始参数
 export const exportMoldInitialParams = (params: MoldInitialParamQuery): Promise<Blob> => {
-  return request.get('/mold-initial-parameters/export', {
+  return request.get('/api/mold-initial-parameters/export', {
     params,
     responseType: 'blob'
   })
@@ -174,7 +174,7 @@ export const exportMoldInitialParams = (params: MoldInitialParamQuery): Promise<
 
 // 设置模具加工工序路线
 export const setMoldProcessRoute = (id: number): Promise<ApiResponse<void>> => {
-  return request.post(`/mold-initial-parameters/${id}/set-route`)
+  return request.post(`/api/mold-initial-parameters/${id}/set-route`)
 }
 
 // 加工预设置类型定义
@@ -197,42 +197,44 @@ export interface ProcessPresetQuery {
 
 // 获取加工预设置列表
 export const getProcessPresets = (moldId: number, processCode: string): Promise<ApiResponse<ProcessPreset[]>> => {
-  return request.get('/process-preset', {
+  return request.get('/api/process-preset', {
     params: { moldId, processCode }
   })
 }
 
 // 获取单个加工预设置
 export const getProcessPreset = (id: number): Promise<ApiResponse<ProcessPreset>> => {
-  return request.get(`/process-preset/${id}`)
+  return request.get(`/api/process-preset/${id}`)
 }
 
 // 创建加工预设置
 export const createProcessPreset = (data: ProcessPreset): Promise<ApiResponse<ProcessPreset>> => {
-  return request.post('/process-preset', data)
+  return request.post('/api/process-preset', data)
 }
 
 // 批量保存加工预设置
 export const batchSaveProcessPresets = (data: ProcessPreset[]): Promise<ApiResponse<void>> => {
-  return request.post('/process-preset/batch', data)
+  return request.post('/api/process-preset/batch', data)
 }
 
 // 更新加工预设置
 export const updateProcessPreset = (id: number, data: ProcessPreset): Promise<ApiResponse<ProcessPreset>> => {
-  return request.put(`/process-preset/${id}`, data)
+  return request.put(`/api/process-preset/${id}`, data)
 }
 
 // 删除加工预设置
 export const deleteProcessPreset = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/process-preset/${id}`)
+  return request.delete(`/api/process-preset/${id}`)
 }
 
 // 批量删除加工预设置
 export const batchDeleteProcessPresets = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/process-preset/batch', { data: { ids } })
+  return request.delete('/api/process-preset/batch', { data: { ids } })
 }
 
 // 根据角色获取员工列表
 export const getEmployeesByRole = (role: string): Promise<ApiResponse<Employee[]>> => {
-  return request.get('/employees', { params: { role } })
+  return request.get('/api/employees', {
+    params: { role }
+  })
 }

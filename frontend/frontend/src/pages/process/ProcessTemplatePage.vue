@@ -2,9 +2,6 @@
   <div class="process-template-wrap">
     <div class="template-header">
       <div class="header-buttons">
-        <el-button @click="handleBack">
-          返回列表
-        </el-button>
         <el-button type="primary" @click="saveTemplate" :loading="saving">保存模板</el-button>
       </div>
     </div>
@@ -13,18 +10,27 @@
       <!-- 左侧工序列表 -->
       <el-col :span="8">
         <el-card>
-          <div class="card-title">工序模板列表</div>
+          <div class="left-card-title">工序模板列表</div>
+
           <div class="template-list">
-            <el-radio-group v-model="selectedTemplate" @change="loadTemplate">
-              <el-radio-button
-                v-for="template in templates"
+            <el-skeleton v-if="loadingTemplates" :rows="5" animated :throttle="0">
+              <template #template>
+                <div class="template-skeleton">
+                  <div class="template-skeleton-title"></div>
+                </div>
+              </template>
+            </el-skeleton>
+            <div v-else class="process-template-list">
+              <div 
+                v-for="template in templates" 
                 :key="template.id"
-                :label="template"
-                class="template-item"
+                class="process-template-item"
+                :class="{ 'selected': selectedTemplate?.id === template.id }"
+                @click="selectTemplate(template)"
               >
                 {{ template.name }}
-              </el-radio-button>
-            </el-radio-group>
+              </div>
+            </div>
           </div>
           <div class="template-actions">
             <el-button type="primary" size="small" @click="addTemplate">
@@ -39,199 +45,278 @@
       
       <!-- 右侧模板配置表单 -->
       <el-col :span="16">
-        <el-card v-if="selectedTemplate">
-          <div class="card-title">{{ selectedTemplate.name }} - 模板配置</div>
-          
-          <!-- 模板基本信息 -->
-          <div class="template-basic-info">
-            <el-form :model="selectedTemplate" label-width="120px" class="template-info-form">
-              <el-form-item label="模板名称" prop="name" :rules="[{ required: true, message: '请输入模板名称' }]">
-                <el-input v-model="selectedTemplate.name" placeholder="请输入模板名称" />
-              </el-form-item>
-              <el-form-item label="模板描述">
-                <el-input 
-                  v-model="selectedTemplate.description" 
-                  placeholder="请输入模板描述" 
-                  type="textarea" 
-                  :rows="3"
-                />
-              </el-form-item>
-              <el-form-item label="适用工序" prop="processCode" :rules="[{ required: true, message: '请选择适用工序' }]">
-                <el-select v-model="selectedTemplate.processCode" placeholder="请选择适用工序" style="width: 100%">
-                  <el-option
-                    v-for="process in processes"
-                    :key="process.code"
-                    :label="process.name"
-                    :value="process.code"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="是否启用" prop="isEnabled">
-                <el-switch v-model="selectedTemplate.isEnabled" />
-              </el-form-item>
-            </el-form>
-          </div>
-          
-          <!-- 模板配置字段 -->
-          <div class="template-config-fields">
-            <h3 class="section-title">工序配置</h3>
-            
-            <!-- 备料工序 - 表格形式 -->
-            <div v-if="selectedTemplate.processCode === 'PREP'">
-              <!-- 模具基本信息模板 -->
-              <div class="table-section">
-                <h4 class="subsection-title">模具基本信息</h4>
-                <div class="table-container">
-                  <table class="basic-info-table">
-                    <tr>
-                      <th>负责人:</th>
-                      <td><el-input v-model="moldInfo.responsiblePerson" placeholder="请输入负责人" /></td>
-                      <th>模具刻字:</th>
-                      <td colspan="5"><el-input v-model="moldInfo.moldEngraving" placeholder="请输入模具刻字" /></td>
-                    </tr>
-                    <tr>
-                      <th>模具编号:</th>
-                      <td><el-input v-model="moldInfo.moldNumber" placeholder="请输入模具编号" /></td>
-                      <th>成品规格:</th>
-                      <td><el-input v-model="moldInfo.productSpec" placeholder="请输入成品规格" /></td>
-                      <th>材料:</th>
-                      <td><el-input v-model="moldInfo.material" placeholder="请输入材料" /></td>
-                      <th>硬度:</th>
-                      <td><el-input v-model="moldInfo.hardness" placeholder="请输入硬度" /></td>
-                    </tr>
-                    <tr>
-                      <th>模具规格:</th>
-                      <td><el-input v-model="moldInfo.moldSpec" placeholder="请输入模具规格" /></td>
-                      <th colspan="3">定位孔中心距:</th>
-                      <td colspan="3"><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入定位孔中心距" /></td>
-                    </tr>
-                    <tr>
-                      <th>模具厚度:</th>
-                      <td><el-input v-model="moldInfo.moldThickness" placeholder="请输入模具厚度" /></td>
-                      <th>进泥孔直径:</th>
-                      <td><el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入进泥孔直径" /></td>
-                      <th>槽宽:</th>
-                      <td><el-input v-model="moldInfo.slotWidth" placeholder="请输入槽宽" /></td>
-                      <th>槽间距:</th>
-                      <td><el-input v-model="moldInfo.slotSpacing" placeholder="请输入槽间距" /></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-              
-              <!-- 工序内容表格 -->
-              <div class="table-section">
-                <h4 class="subsection-title">工序内容</h4>
-                <div class="table-container">
-                  <table class="process-content-table">
-                    <thead>
-                      <tr>
-                        <th>序号</th>
-                        <th>工艺名称</th>
-                        <th>设备</th>
-                        <th>详细内容</th>
-                        <th>责任人</th>
-                        <th>日期</th>
-                        <th>备注</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(process, index) in processList" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td><el-input v-model="process.processName" placeholder="请输入工艺名称" /></td>
-                        <td><el-input v-model="process.equipment" placeholder="请输入设备" /></td>
-                        <td><el-input v-model="process.details" placeholder="请输入详细内容" /></td>
-                        <td><el-input v-model="process.responsiblePerson" placeholder="请输入责任人" /></td>
-                        <td><el-date-picker v-model="process.date" type="date" placeholder="选择日期" style="width: 100%" /></td>
-                        <td><el-input v-model="process.remark" placeholder="请输入备注" /></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+        <transition name="fade" mode="out-in">
+          <el-card v-if="selectedTemplate" :key="selectedTemplate.id" class="template-config-card">
+            <div class="card-title-container">
+              <div class="card-title">{{ selectedTemplate.name }}</div>
+              <div class="card-subtitle">模板配置</div>
             </div>
             
-            <!-- 其他工序 - 表单形式 -->
-            <el-form v-else :model="templateForm" label-width="120px" class="template-form">
-              <!-- 动态生成模板配置字段 -->
-              <el-form-item
-                v-for="(field, index) in templateFields"
-                :key="index"
-                :label="field.label"
-                :prop="field.key"
-                :rules="[{ required: field.required, message: '请输入' + field.label }]"
-              >
-                <!-- 根据字段类型渲染不同的表单控件 -->
-                <el-input
-                  v-if="field.type === 'text'"
-                  v-model="templateForm[field.key]"
-                  :placeholder="'请输入' + field.label"
-                />
-                <el-input-number
-                  v-else-if="field.type === 'number'"
-                  v-model="templateForm[field.key]"
-                  :min="field.min || 0"
-                  :max="field.max || 99999"
-                  :step="field.step || 1"
-                  :placeholder="'请输入' + field.label"
-                />
-                <el-select
-                  v-else-if="field.type === 'select'"
-                  v-model="templateForm[field.key]"
-                  :placeholder="'请选择' + field.label"
-                >
-                  <el-option
-                    v-for="option in field.options"
-                    :key="option.value"
-                    :label="option.label"
-                    :value="option.value"
-                  />
-                </el-select>
-                <el-switch
-                  v-else-if="field.type === 'boolean'"
-                  v-model="templateForm[field.key]"
-                />
-              </el-form-item>
-              
-              <!-- 自定义模板字段 -->
-              <el-divider />
-              <div class="custom-fields">
-                <div class="custom-title">自定义字段</div>
-                <div
-                  v-for="(customField, index) in customFields"
-                  :key="index"
-                  class="custom-field-item"
-                >
-                  <el-input
-                    v-model="customField.key"
-                    placeholder="键名"
-                    style="width: 200px; margin-right: 10px"
-                  />
-                  <el-input
-                    v-model="customField.value"
-                    placeholder="值"
-                    style="width: 300px; margin-right: 10px"
-                  />
-                  <el-button
-                    type="danger"
-                    size="small"
-                    @click="removeCustomField(index)"
-                  >
-                    删除
-                  </el-button>
+            <!-- 加载状态指示器 -->
+            <el-skeleton v-if="loadingTemplateDetail" :rows="10" animated :throttle="0" style="padding: 0 20px;">
+              <template #template>
+                <div class="template-detail-skeleton">
+                  <div class="template-detail-skeleton-header">
+                    <div class="template-detail-skeleton-title"></div>
+                  </div>
+                  <div class="template-detail-skeleton-content">
+                    <div class="template-detail-skeleton-row">
+                      <div class="template-detail-skeleton-label"></div>
+                      <div class="template-detail-skeleton-input"></div>
+                    </div>
+                    <div class="template-detail-skeleton-row">
+                      <div class="template-detail-skeleton-label"></div>
+                      <div class="template-detail-skeleton-input"></div>
+                    </div>
+                    <div class="template-detail-skeleton-row">
+                      <div class="template-detail-skeleton-label"></div>
+                      <div class="template-detail-skeleton-textarea"></div>
+                    </div>
+                  </div>
                 </div>
-                <el-button type="primary" size="small" @click="addCustomField">
-                  添加自定义字段
-                </el-button>
+              </template>
+            </el-skeleton>
+            
+            <!-- 模板配置内容 -->
+            <template v-else>
+              <!-- 模板基本信息 -->
+              <div class="template-basic-info card-section">
+                <div class="section-header">
+                  <el-icon class="section-icon"><InfoFilled /></el-icon>
+                  <h3 class="section-title">基本信息</h3>
+                </div>
+                <el-form :model="selectedTemplate" label-width="140px" class="template-info-form">
+                  <el-row :gutter="24">
+                    <el-col :span="12">
+                      <el-form-item label="模板名称" prop="name" :rules="[{ required: true, message: '请输入模板名称' }]">
+                        <el-input v-model="selectedTemplate.name" placeholder="请输入模板名称" size="large" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="适用工序" prop="processCode" :rules="[{ required: true, message: '请选择适用工序' }]">
+                        <el-select v-model="selectedTemplate.processCode" placeholder="请选择适用工序" style="width: 100%" size="large">
+                          <el-option
+                            v-for="process in processes"
+                            :key="process.code"
+                            :label="process.name"
+                            :value="process.code"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-form-item label="模板描述">
+                    <el-input 
+                      v-model="selectedTemplate.description" 
+                      placeholder="请输入模板描述" 
+                      type="textarea" 
+                      :rows="3"
+                      size="large"
+                    />
+                  </el-form-item>
+                  <el-form-item label="是否启用" prop="isEnabled">
+                    <el-switch v-model="selectedTemplate.isEnabled" size="large" />
+                  </el-form-item>
+                </el-form>
               </div>
-            </el-form>
+              
+              <!-- 模板配置字段 -->
+              <div class="template-config-fields card-section">
+                <div class="section-header">
+                  <el-icon class="section-icon"><Setting /></el-icon>
+                  <h3 class="section-title">工序配置</h3>
+                </div>
+                
+                <!-- 备料工序 - 表格形式 -->
+                <div v-if="selectedTemplate.processCode === 'PREP'">
+                  <!-- 模具基本信息模板 -->
+                  <div class="table-section prep-section">
+                    <div class="subsection-header">
+                      <el-icon class="subsection-icon"><Metal /></el-icon>
+                      <h4 class="subsection-title">模具基本信息</h4>
+                    </div>
+                    <div class="table-container">
+                      <table class="basic-info-table">
+                        <tr>
+                          <th>负责人:</th>
+                          <td><el-input v-model="moldInfo.responsiblePerson" placeholder="请输入负责人" size="small" /></td>
+                          <th>模具刻字:</th>
+                          <td colspan="5"><el-input v-model="moldInfo.moldEngraving" placeholder="请输入模具刻字" size="small" /></td>
+                        </tr>
+                        <tr>
+                          <th>模具编号:</th>
+                          <td><el-input v-model="moldInfo.moldNumber" placeholder="请输入模具编号" size="small" /></td>
+                          <th>成品规格:</th>
+                          <td><el-input v-model="moldInfo.productSpec" placeholder="请输入成品规格" size="small" /></td>
+                          <th>材料:</th>
+                          <td><el-input v-model="moldInfo.material" placeholder="请输入材料" size="small" /></td>
+                          <th>硬度:</th>
+                          <td><el-input v-model="moldInfo.hardness" placeholder="请输入硬度" size="small" /></td>
+                        </tr>
+                        <tr>
+                          <th>模具规格:</th>
+                          <td><el-input v-model="moldInfo.moldSpec" placeholder="请输入模具规格" size="small" /></td>
+                          <th colspan="3">定位孔中心距:</th>
+                          <td colspan="3"><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入定位孔中心距" size="small" /></td>
+                        </tr>
+                        <tr>
+                          <th>模具厚度:</th>
+                          <td><el-input v-model="moldInfo.moldThickness" placeholder="请输入模具厚度" size="small" /></td>
+                          <th>进泥孔直径:</th>
+                          <td><el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入进泥孔直径" size="small" /></td>
+                          <th>槽宽:</th>
+                          <td><el-input v-model="moldInfo.slotWidth" placeholder="请输入槽宽" size="small" /></td>
+                          <th>槽间距:</th>
+                          <td><el-input v-model="moldInfo.slotSpacing" placeholder="请输入槽间距" size="small" /></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  
+                  <!-- 工序内容表格 -->
+                  <div class="table-section prep-section">
+                    <div class="subsection-header">
+                      <el-icon class="subsection-icon"><List /></el-icon>
+                      <h4 class="subsection-title">工序内容</h4>
+                    </div>
+                    <div class="table-container">
+                      <table class="process-content-table">
+                        <thead>
+                          <tr>
+                            <th>序号</th>
+                            <th>工艺名称</th>
+                            <th>设备</th>
+                            <th>详细内容</th>
+                            <th>责任人</th>
+                            <th>日期</th>
+                            <th>备注</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(process, index) in processList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td><el-input v-model="process.processName" placeholder="请输入工艺名称" size="small" /></td>
+                            <td><el-input v-model="process.equipment" placeholder="请输入设备" size="small" /></td>
+                            <td><el-input v-model="process.details" placeholder="请输入详细内容" size="small" /></td>
+                            <td><el-input v-model="process.responsiblePerson" placeholder="请输入责任人" size="small" /></td>
+                            <td><el-date-picker v-model="process.date" type="date" placeholder="选择日期" style="width: 100%" size="small" /></td>
+                            <td><el-input v-model="process.remark" placeholder="请输入备注" size="small" /></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 其他工序 - 表单形式 -->
+                <div v-else class="form-section">
+                  <el-form :model="templateForm" label-width="140px" class="template-form">
+                    <!-- 动态生成模板配置字段 -->
+                    <el-row :gutter="24" style="margin-bottom: 24px;">
+                      <el-col :span="12" v-for="(field, index) in templateFields" :key="index">
+                        <el-form-item
+                          :label="field.label"
+                          :prop="field.key"
+                          :rules="[{ required: field.required, message: '请输入' + field.label }]"
+                        >
+                          <!-- 根据字段类型渲染不同的表单控件 -->
+                          <el-input
+                            v-if="field.type === 'text'"
+                            v-model="templateForm[field.key]"
+                            :placeholder="'请输入' + field.label"
+                            size="large"
+                          />
+                          <el-input-number
+                            v-else-if="field.type === 'number'"
+                            v-model="templateForm[field.key]"
+                            :min="field.min || 0"
+                            :max="field.max || 99999"
+                            :step="field.step || 1"
+                            :placeholder="'请输入' + field.label"
+                            size="large"
+                          />
+                          <el-select
+                            v-else-if="field.type === 'select'"
+                            v-model="templateForm[field.key]"
+                            :placeholder="'请选择' + field.label"
+                            size="large"
+                            style="width: 100%"
+                          >
+                            <el-option
+                              v-for="option in field.options"
+                              :key="option.value"
+                              :label="option.label"
+                              :value="option.value"
+                            />
+                          </el-select>
+                          <el-switch
+                            v-else-if="field.type === 'boolean'"
+                            v-model="templateForm[field.key]"
+                            size="large"
+                          />
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    
+                    <!-- 自定义模板字段 -->
+                    <div class="custom-fields-section">
+                      <div class="section-header">
+                        <el-icon class="section-icon"><Plus /></el-icon>
+                        <h4 class="section-title">自定义字段</h4>
+                      </div>
+                      <div class="custom-fields">
+                        <transition-group name="custom-field" tag="div">
+                          <div
+                            v-for="(customField, index) in customFields"
+                            :key="index"
+                            class="custom-field-item"
+                          >
+                            <el-input
+                              v-model="customField.key"
+                              placeholder="键名"
+                              style="width: 220px; margin-right: 12px"
+                              size="large"
+                            />
+                            <el-input
+                              v-model="customField.value"
+                              placeholder="值"
+                              style="width: 320px; margin-right: 12px"
+                              size="large"
+                            />
+                            <el-button
+                              type="danger"
+                              size="large"
+                              @click="removeCustomField(index)"
+                            >
+                              <el-icon><Delete /></el-icon> 删除
+                            </el-button>
+                          </div>
+                        </transition-group>
+                        <div class="custom-field-actions">
+                          <el-button type="primary" size="large" @click="addCustomField">
+                            <el-icon><Plus /></el-icon> 添加自定义字段
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>
+                  </el-form>
+                </div>
+              </div>
+            </template>
+          </el-card>
+          
+          <!-- 无模板选择时的提示 -->
+          <div v-else key="empty" class="empty-tip-container">
+            <el-empty
+              description="请选择或添加一个模板来配置工序参数"
+              image="empty"
+            >
+              <el-button type="primary" @click="addTemplate">
+                <el-icon><Plus /></el-icon> 添加模板
+              </el-button>
+            </el-empty>
           </div>
-        </el-card>
-        
-        <!-- 无模板选择时的提示 -->
-        <div v-else class="empty-tip">
-          请选择或添加一个模板来配置工序参数
-        </div>
+        </transition>
       </el-col>
     </el-row>
   </div>
@@ -248,6 +333,8 @@ const route = useRoute()
 
 // 页面状态
 const saving = ref(false)
+const loadingTemplates = ref(false)
+const loadingTemplateDetail = ref(false)
 
 // 是否从模具初始参数页面跳转过来
 const isFromMoldParam = computed(() => {
@@ -257,15 +344,13 @@ const isFromMoldParam = computed(() => {
 // 接收的模具基本数据
 const receivedMoldData = ref<any>(null)
 
-// 模板列表
-const templates = ref([
-  { id: 1, name: '标准备料模板', processCode: 'PREP', description: '标准备料工序模板', isEnabled: true },
-  { id: 2, name: '钻孔工序模板', processCode: 'DRILL_NON_LAYER', description: '标准钻孔工序模板', isEnabled: true },
-  { id: 3, name: '热处理模板', processCode: 'HEAT_TREATMENT', description: '标准热处理工序模板', isEnabled: false }
-])
+// 模板列表 - 确保初始值是数组
+const templates = ref<any[]>([])
 
 // 选中的模板
 const selectedTemplate = ref<any>(null)
+
+
 
 // 工序列表
 const processes = ref([
@@ -339,14 +424,213 @@ onMounted(() => {
   }
 })
 
+// 加载本地模板数据
+const loadLocalTemplates = () => {
+  // 本地模板数据，与API返回格式保持一致
+  const localTemplates = [
+    {
+      id: 1,
+      name: "加工工序汇总",
+      code: "TEMPLATE_PROCESS_SUMMARY",
+      category: "SUMMARY",
+      description: "用于汇总和管理模具加工的所有工序，提供完整的工艺路线视图",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 2,
+      name: "备料",
+      code: "TEMPLATE_MATERIAL_PREP",
+      category: "PREP",
+      description: "备料工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 3,
+      name: "进泥孔粗加工",
+      code: "TEMPLATE_MUD_HOLE_ROUGH",
+      category: "DRILL_NON_LAYER",
+      description: "进泥孔粗加工工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 4,
+      name: "热处理",
+      code: "TEMPLATE_HEAT_TREATMENT",
+      category: "HEAT_TREATMENT",
+      description: "热处理工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 5,
+      name: "精磨",
+      code: "TEMPLATE_PRECISION_GRINDING",
+      category: "GRINDING",
+      description: "精磨工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 6,
+      name: "进泥孔精加工",
+      code: "TEMPLATE_MUD_HOLE_FINISH",
+      category: "DRILL_LAYER",
+      description: "进泥孔精加工工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 7,
+      name: "导料槽加工-中丝",
+      code: "TEMPLATE_GUIDE_SLOT_WIRE_CUT",
+      category: "GUIDE_SLOT",
+      description: "导料槽加工-中丝工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 8,
+      name: "导料槽加工-切槽机",
+      code: "TEMPLATE_GUIDE_SLOT_CUTTER",
+      category: "GUIDE_SLOT",
+      description: "导料槽加工-切槽机工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 9,
+      name: "导料槽加工-放电",
+      code: "TEMPLATE_GUIDE_SLOT_EDM",
+      category: "GUIDE_SLOT",
+      description: "导料槽加工-放电工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 10,
+      name: "外形加工",
+      code: "TEMPLATE_SHAPE_ROUGH",
+      category: "SHAPE",
+      description: "外形加工工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 11,
+      name: "斜边放电",
+      code: "TEMPLATE_CHAMFER_EDM",
+      category: "EDM",
+      description: "斜边放电工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 12,
+      name: "外形精加工",
+      code: "TEMPLATE_SHAPE_FINISH",
+      category: "SHAPE",
+      description: "外形精加工工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 13,
+      name: "模芯台阶加工",
+      code: "TEMPLATE_CORE_STEP",
+      category: "CORE_STEP",
+      description: "模芯台阶加工工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 14,
+      name: "自检",
+      code: "TEMPLATE_SELF_CHECK",
+      category: "SELF_CHECK",
+      description: "自检工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 15,
+      name: "品质检测",
+      code: "TEMPLATE_QUALITY_CHECK",
+      category: "QUALITY_CHECK",
+      description: "品质检测工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: 16,
+      name: "入库",
+      code: "TEMPLATE_IN_STORAGE",
+      category: "IN_STORAGE",
+      description: "入库工序模板",
+      status: "active",
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ]
+  
+  return localTemplates
+}
+
 // 加载模板列表
 const loadTemplates = async () => {
+  loadingTemplates.value = true
   try {
-    const response = await getProcessTemplates()
-    templates.value = response || []
+    // 传递空参数，避免不必要的查询条件
+    const response = await getProcessTemplates({})
+    // 确保templates.value始终是数组
+    if (Array.isArray(response) && response.length > 0) {
+      templates.value = response
+      ElMessage.success('模板列表加载成功')
+    } else {
+      // 如果API返回为空，加载本地模板
+      templates.value = loadLocalTemplates()
+      ElMessage.info('使用本地模板数据')
+    }
   } catch (error) {
-    ElMessage.error('加载模板列表失败')
     console.error('加载模板列表失败:', error)
+    // API调用失败，加载本地模板
+    templates.value = loadLocalTemplates()
+    ElMessage.warning('API调用失败，使用本地模板数据')
+  } finally {
+    loadingTemplates.value = false
   }
 }
 
@@ -361,6 +645,12 @@ const addTemplate = () => {
   }
   templates.value.push(newTemplate)
   selectedTemplate.value = newTemplate
+  loadTemplate()
+}
+
+// 选择模板
+const selectTemplate = (template: any) => {
+  selectedTemplate.value = template
   loadTemplate()
 }
 
@@ -436,93 +726,99 @@ const getFieldsByProcess = (processCode: string) => {
 }
 
 // 加载模板数据
-const loadTemplate = async () => {
-  if (!selectedTemplate.value) return
-  
-  // 初始化数据
-  if (selectedTemplate.value.processCode === 'PREP') {
-    // 备料工序 - 初始化表格数据
-    moldInfo.value = {
-      responsiblePerson: '',
-      moldEngraving: '',
-      moldNumber: '',
-      productSpec: '',
-      material: '',
-      hardness: '',
-      moldSpec: '',
-      positioningHoleDistance: '',
-      moldThickness: '',
-      mudInletDiameter: '',
-      slotWidth: '',
-      slotSpacing: ''
+  const loadTemplate = async () => {
+    if (!selectedTemplate.value) return
+    
+    loadingTemplateDetail.value = true
+    
+    // 初始化数据
+    if (selectedTemplate.value.processCode === 'PREP') {
+      // 备料工序 - 初始化表格数据
+      moldInfo.value = {
+        responsiblePerson: '',
+        moldEngraving: '',
+        moldNumber: '',
+        productSpec: '',
+        material: '',
+        hardness: '',
+        moldSpec: '',
+        positioningHoleDistance: '',
+        moldThickness: '',
+        mudInletDiameter: '',
+        slotWidth: '',
+        slotSpacing: ''
+      }
+      
+      // 工序内容列表重置
+      processList.value = [
+        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
+        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
+        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
+        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
+      ]
+      
+      // 如果有接收到模具数据，自动填充
+      if (receivedMoldData.value) {
+        Object.entries(receivedMoldData.value).forEach(([key, value]) => {
+          if (moldInfo.value.hasOwnProperty(key)) {
+            moldInfo.value[key as keyof typeof moldInfo.value] = value
+          }
+        })
+      }
+    } else {
+      // 其他工序 - 初始化表单数据
+      templateFields.value = getFieldsByProcess(selectedTemplate.value.processCode)
+      templateForm.value = {}
     }
     
-    // 工序内容列表重置
-    processList.value = [
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
-    ]
-    
-    // 如果有接收到模具数据，自动填充
-    if (receivedMoldData.value) {
-      Object.entries(receivedMoldData.value).forEach(([key, value]) => {
-        if (moldInfo.value.hasOwnProperty(key)) {
-          moldInfo.value[key as keyof typeof moldInfo.value] = value
-        }
-      })
-    }
-  } else {
-    // 其他工序 - 初始化表单数据
-    templateFields.value = getFieldsByProcess(selectedTemplate.value.processCode)
-    templateForm.value = {}
-  }
-  
-  // 加载模板数据
-  try {
-    if (selectedTemplate.value.id) {
-      const response = await getProcessTemplateDetail(selectedTemplate.value.id)
-      if (response) {
-        if (selectedTemplate.value.processCode === 'PREP') {
-          // 备料工序 - 填充表格数据
-          Object.entries(response.config || {}).forEach(([key, value]) => {
-            if (key.startsWith('mold_')) {
-              // 模具基本信息
-              const field = key.replace('mold_', '')
-              if (moldInfo.value.hasOwnProperty(field)) {
-                moldInfo.value[field as keyof typeof moldInfo.value] = value
-              }
-            } else if (key.startsWith('process_')) {
-              // 工序内容
-              const match = key.match(/^process_(\d+)_(\w+)$/)
-              if (match) {
-                const index = parseInt(match[1])
-                const field = match[2]
-                if (processList.value[index] && processList.value[index].hasOwnProperty(field)) {
-                  if (field === 'date') {
-                    processList.value[index][field as keyof typeof processList.value[0]] = new Date(value)
-                  } else {
-                    processList.value[index][field as keyof typeof processList.value[0]] = value
+    // 加载模板数据
+    try {
+      if (selectedTemplate.value.id) {
+        const response = await getProcessTemplateDetail(selectedTemplate.value.id)
+        if (response && response.data) {
+          const templateData = response.data
+          if (selectedTemplate.value.processCode === 'PREP') {
+            // 备料工序 - 填充表格数据
+            Object.entries(templateData.config || {}).forEach(([key, value]) => {
+              if (key.startsWith('mold_')) {
+                // 模具基本信息
+                const field = key.replace('mold_', '')
+                if (moldInfo.value.hasOwnProperty(field)) {
+                  moldInfo.value[field as keyof typeof moldInfo.value] = value
+                }
+              } else if (key.startsWith('process_')) {
+                // 工序内容
+                const match = key.match(/^process_(\d+)_(\w+)$/)
+                if (match) {
+                  const index = parseInt(match[1])
+                  const field = match[2]
+                  if (processList.value[index] && processList.value[index].hasOwnProperty(field)) {
+                    if (field === 'date') {
+                      processList.value[index][field as keyof typeof processList.value[0]] = new Date(value)
+                    } else {
+                      processList.value[index][field as keyof typeof processList.value[0]] = value
+                    }
                   }
                 }
               }
-            }
-          })
-        } else {
-          // 其他工序 - 填充表单数据
-          templateForm.value = { ...response.config || {} }
+            })
+          } else {
+            // 其他工序 - 填充表单数据
+            templateForm.value = { ...templateData.config || {} }
+          }
         }
       }
-    }
-  } catch (error) {
-    // 只有在有模板ID的情况下才显示错误，否则忽略（新增模板）
-    if (selectedTemplate.value.id) {
-      ElMessage.error('加载模板数据失败')
-      console.error('加载模板数据失败:', error)
+    } catch (error) {
+      // 只有在有模板ID的情况下才记录错误，否则忽略（新增模板）
+      if (selectedTemplate.value.id) {
+        console.error('加载模板数据失败:', error)
+        // 不显示错误信息，避免影响用户体验
+        // ElMessage.error('加载模板数据失败')
+      }
+    } finally {
+      loadingTemplateDetail.value = false
     }
   }
-}
 
 // 添加自定义字段
 const addCustomField = () => {
@@ -545,7 +841,7 @@ const saveTemplate = async () => {
   try {
     let templateData: any = {
       name: selectedTemplate.value.name,
-      code: selectedTemplate.value.code,
+      code: `TEMPLATE_${Date.now()}`,
       description: selectedTemplate.value.description,
       category: selectedTemplate.value.processCode,
       status: selectedTemplate.value.isEnabled ? 'active' : 'inactive',
@@ -645,7 +941,7 @@ const handleBack = () => {
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--el-border-color);
 }
 
@@ -654,128 +950,349 @@ const handleBack = () => {
   gap: 12px;
 }
 
-.card-title {
+/* 右侧配置卡片样式 */
+.template-config-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--el-border-color-light);
+  background: linear-gradient(135deg, var(--el-bg-color), var(--el-color-primary-light-5));
+}
+
+.template-config-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.left-card-title {
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--el-text-color-primary);
+  color: #374151;
+  margin-bottom: 16px;
+  padding: 0;
+  background: none;
+  text-shadow: none;
+  letter-spacing: 0.3px;
+}
+
+.card-title-container {
+  margin-bottom: 32px;
+  padding: 24px 24px 20px;
+  background: linear-gradient(135deg, rgba(64, 158, 255, 0.9), rgba(103, 186, 255, 0.9));
+  color: white;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  margin-bottom: 8px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+  opacity: 1;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  opacity: 0.95;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 卡片内部区域样式 */
+.card-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--el-border-color-light);
+}
+
+.card-section:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 区域标题样式 */
+.section-header {
   display: flex;
   align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--el-color-primary-light-5);
+  background: linear-gradient(90deg, var(--el-color-primary-light-9), transparent);
+  padding-left: 8px;
+  border-radius: 4px 0 0 4px;
 }
 
-.template-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+.section-icon {
+  font-size: 22px;
+  color: var(--el-color-primary);
+  margin-right: 12px;
+  transition: transform 0.3s ease;
 }
 
-.template-item {
-  width: 100%;
-  text-align: left;
-}
-
-.template-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
+.section-header:hover .section-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .section-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 20px 0 10px 0;
+  font-size: 19px;
+  font-weight: 700;
   color: var(--el-text-color-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+}
+
+.subsection-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: var(--el-color-primary-light-9);
+  border-radius: 8px;
+  border-left: 4px solid var(--el-color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.subsection-icon {
+  font-size: 20px;
+  color: var(--el-color-primary);
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.subsection-header:hover .subsection-icon {
+  transform: scale(1.1);
 }
 
 .subsection-title {
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
-  margin: 10px 0;
+  margin: 0;
   color: var(--el-text-color-primary);
+  letter-spacing: 0.3px;
 }
 
-.template-basic-info {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--el-border-color);
-}
-
+/* 表单样式 */
 .template-info-form {
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
-.template-config-fields {
-  margin-top: 20px;
+.form-section {
+  padding: 0;
 }
 
 .template-form {
-  padding: 0 20px 20px;
+  padding: 0;
 }
 
-.empty-tip {
-  text-align: center;
-  padding: 40px 0;
-  color: var(--el-text-color-placeholder);
+/* 左侧模板列表样式 */
+.template-list {
+  margin-bottom: 20px;
+  max-height: 650px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+}
+
+.template-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.template-list::-webkit-scrollbar-track {
+  background: var(--el-bg-color-light);
+  border-radius: 3px;
+}
+
+.template-list::-webkit-scrollbar-thumb {
+  background: var(--el-border-color);
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.template-list::-webkit-scrollbar-thumb:hover {
+  background: var(--el-color-primary-light-5);
+}
+
+/* 工序模板列表 */
+.process-template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 工序模板项 */
+.process-template-item {
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.process-template-item:hover {
+  background-color: #f5f7fa;
+  border-color: #c6e2ff;
+}
+
+.process-template-item.selected {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #2196f3;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.15);
+}
+
+/* 模板操作按钮 */
+.template-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--el-border-color-light);
+}
+
+.template-actions .el-button {
+  flex: 1;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 6px 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.template-actions .el-button--primary {
+  box-shadow: none;
+}
+
+.template-actions .el-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+}
+
+.template-actions .el-button--danger {
+  box-shadow: none;
+}
+
+.template-actions .el-button--danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 108, 108, 0.3);
+}
+
+/* 空状态提示 */
+.empty-tip-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* 自定义字段样式 */
+.custom-fields-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--el-border-color);
 }
 
 .custom-fields {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: var(--el-bg-color-light);
-  border-radius: 6px;
-}
-
-.custom-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: var(--el-text-color-primary);
+  margin-top: 16px;
+  padding: 16px;
+  background-color: var(--el-bg-color);
+  border-radius: 8px;
+  border: 1px solid var(--el-border-color-light);
 }
 
 .custom-field-item {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  gap: 10px;
+  margin-bottom: 16px;
+  gap: 12px;
+  padding: 12px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.custom-field-item:hover {
+  background-color: var(--el-color-primary-light-9);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.custom-field-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+/* 备料工序表格区域 */
+.prep-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: var(--el-bg-color);
+  border-radius: 8px;
+  border: 1px solid var(--el-border-color-light);
 }
 
 /* 表格样式 */
 .table-section {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   
   .table-container {
     width: 100%;
     overflow-x: auto;
-    border: 1px solid #000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--el-border-color-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin: 0;
+    border-radius: 8px;
   }
   
   /* 模具基本信息表格 */
   .basic-info-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 13px;
     background-color: #fff;
     
     th,
     td {
-      border: 1px solid #000;
-      padding: 10px 8px;
+      border: 1px solid var(--el-border-color-light);
+      padding: 12px 10px;
       text-align: left;
       vertical-align: middle;
       min-height: 36px;
     }
     
     th {
-      font-weight: bold;
-      background-color: #fafafa;
-      color: #333;
+      font-weight: 600;
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-text-color-primary);
+      font-size: 14px;
+      white-space: nowrap;
     }
     
     td {
       background-color: #fff;
+    }
+    
+    tr:hover td {
+      background-color: var(--el-bg-color-light);
     }
   }
   
@@ -783,22 +1300,24 @@ const handleBack = () => {
   .process-content-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 13px;
     background-color: #fff;
     
     th,
     td {
-      border: 1px solid #000;
-      padding: 10px 8px;
+      border: 1px solid var(--el-border-color-light);
+      padding: 12px 10px;
       text-align: left;
       vertical-align: middle;
       min-height: 36px;
     }
     
     th {
-      font-weight: bold;
-      background-color: #fafafa;
-      color: #333;
+      font-weight: 600;
+      background-color: var(--el-color-primary-light-9);
+      color: var(--el-text-color-primary);
+      font-size: 14px;
+      white-space: nowrap;
     }
     
     td {
@@ -807,39 +1326,249 @@ const handleBack = () => {
     
     th:nth-child(1),
     td:nth-child(1) {
-      width: 5%;
+      width: 6%;
       text-align: center;
     }
     
     th:nth-child(2),
     td:nth-child(2) {
-      width: 15%;
+      width: 16%;
     }
     
     th:nth-child(3),
     td:nth-child(3) {
-      width: 15%;
+      width: 16%;
     }
     
     th:nth-child(4),
     td:nth-child(4) {
-      width: 30%;
+      width: 28%;
     }
     
     th:nth-child(5),
     td:nth-child(5) {
-      width: 10%;
+      width: 12%;
     }
     
     th:nth-child(6),
     td:nth-child(6) {
-      width: 10%;
+      width: 12%;
     }
     
     th:nth-child(7),
     td:nth-child(7) {
-      width: 15%;
+      width: 16%;
     }
+    
+    tr:hover td {
+      background-color: var(--el-bg-color-light);
+    }
+    
+    :deep(.el-input) {
+      transition: all 0.2s ease;
+    }
+    
+    :deep(.el-input:hover) {
+      box-shadow: 0 0 0 2px var(--el-color-primary-light-5);
+    }
+  }
+}
+
+/* 输入框和按钮样式增强 */
+:deep(.el-input__wrapper) {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 2px var(--el-color-primary-light-5);
+}
+
+:deep(.el-button--primary) {
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-button--primary:hover) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+}
+
+/* 切换动画效果 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* 自定义字段过渡动画 */
+.custom-field-enter-active,
+.custom-field-leave-active {
+  transition: all 0.3s ease;
+}
+
+.custom-field-enter-from,
+.custom-field-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.custom-field-move {
+  transition: transform 0.3s ease;
+}
+
+/* 模板列表骨架屏样式 */
+.template-skeleton {
+  padding: 16px;
+  background-color: var(--el-bg-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 12px;
+}
+
+.template-skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.template-skeleton-title {
+  width: 60%;
+  height: 20px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+}
+
+.template-skeleton-status {
+  width: 50px;
+  height: 20px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 12px;
+}
+
+.template-skeleton-content {
+  width: 100%;
+  height: 40px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.template-skeleton-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-skeleton-category {
+  width: 80px;
+  height: 16px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+}
+
+.template-skeleton-code {
+  width: 120px;
+  height: 16px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+}
+
+/* 模板详情骨架屏样式 */
+.template-detail-skeleton {
+  padding: 0 20px;
+}
+
+.template-detail-skeleton-header {
+  margin-bottom: 20px;
+}
+
+.template-detail-skeleton-title {
+  width: 30%;
+  height: 24px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.template-detail-skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.template-detail-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.template-detail-skeleton-label {
+  width: 140px;
+  height: 20px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.template-detail-skeleton-input {
+  flex: 1;
+  height: 32px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+}
+
+.template-detail-skeleton-textarea {
+  flex: 1;
+  height: 80px;
+  background-color: var(--el-bg-color-light);
+  border-radius: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .el-col {
+    &:span-8 {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    &:span-16 {
+      width: 100%;
+    }
+  }
+  
+  .template-list {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .process-template-wrap {
+    padding: 10px;
+  }
+  
+  .template-info-form .el-col {
+    &:span-12 {
+      width: 100%;
+    }
+  }
+  
+  .custom-field-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .custom-field-item .el-input {
+    width: 100% !important;
+    margin-right: 0 !important;
   }
 }
 </style>

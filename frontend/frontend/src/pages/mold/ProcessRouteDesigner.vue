@@ -192,16 +192,7 @@ const stepsLeft = computed(() => {
   return allSteps.value.filter(step => !selectedKeys.value.has(step.key))
 })
 
-// 计算属性：已选工序的完整信息
-const selectedSteps = computed(() => {
-  return selected.value.map(item => {
-    const originalStep = allSteps.value.find(step => step.key === item.key)
-    return {
-      ...item,
-      ...originalStep
-    }
-  })
-})
+
 
 // 添加工序
 const addStep = (s: any) => {

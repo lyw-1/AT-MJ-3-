@@ -519,7 +519,7 @@ const formatDate = (dateString: string) => {
 }
 
 // 标签切换处理
-const handleTabChange = (tabName: string) => {
+const handleTabChange = (_tabName: string) => {
   // 重置筛选条件和分页
   handleReset()
   // 刷新数据

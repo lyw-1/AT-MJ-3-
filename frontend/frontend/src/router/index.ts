@@ -102,57 +102,17 @@ const routes: RouteRecordRaw[] = [
             path: 'non-mold-application',
             name: 'NonMoldApplication',
             component: () => import('@/pages/mold/Application.vue'),
-            meta: { title: '加工申请单（非模具）', roles: ['admin', 'manager', 'user'] }
+            meta: { title: '加工申请', roles: ['admin', 'manager', 'user'] }
           },
-          // 工序管理
+          // 工序模板管理 - 调整为直接在加工管理下，减少层级
           {
-            path: 'process',
-            name: 'Process',
+            path: 'process-templates',
+            name: 'ProcessTemplates',
+            component: () => import('@/pages/process/ProcessTemplatePage.vue'),
             meta: { 
-              title: '工序管理',
-              roles: ['admin', 'manager', 'user']
-            },
-            children: [
-              { 
-                path: 'process-detail',
-                name: 'ProcessDetail',
-                component: () => import('@/pages/process/ProcessDetail.vue'),
-                meta: { 
-                  title: '工序详细设置',
-                  hidden: true,
-                  roles: ['admin', 'manager', 'user'] 
-                }
-              },
-              { 
-                path: 'material-preparation',
-                name: 'MaterialPreparation',
-                component: () => import('@/pages/process/MaterialPreparation.vue'),
-                meta: { 
-                  title: '备料工序',
-                  hidden: true,
-                  roles: ['admin', 'manager', 'user'] 
-                }
-              },
-              { 
-                path: 'templates',
-                name: 'ProcessTemplates',
-                component: () => import('@/pages/process/ProcessTemplatePage.vue'),
-                meta: { 
-                  title: '工序模板管理',
-                  roles: ['admin', 'manager', 'user'] 
-                }
-              },
-              { 
-                path: 'template-config/:id?',
-                name: 'ProcessTemplateConfig',
-                component: () => import('@/pages/process/ProcessTemplatePage.vue'),
-                meta: { 
-                  title: '工序模板配置',
-                  hidden: true,
-                  roles: ['admin', 'manager', 'user'] 
-                }
-              }
-            ]
+              title: '工序模板管理',
+              roles: ['admin', 'manager', 'user'] 
+            }
           },
 
         ]
@@ -196,7 +156,7 @@ const routes: RouteRecordRaw[] = [
             path: 'measure-input',
             name: 'MeasureInput',
             component: () => import('@/pages/storage/MeasureInput.vue'),
-            meta: { title: '测量数据录入', roles: ['admin', 'manager', 'user', 'operator'] }
+            meta: { title: '测量录入', roles: ['admin', 'manager', 'user', 'operator'] }
           }
         ]
       },
@@ -227,7 +187,7 @@ const routes: RouteRecordRaw[] = [
             path: 'tuning-records',
             name: 'TuningRecords',
             component: () => import('@/pages/tuning/TuningRecords.vue'),
-            meta: { title: '调模记录', roles: ['admin', 'manager', 'user'] }
+            meta: { title: '调模录入', roles: ['admin', 'manager', 'user'] }
           },
           {
             path: 'acceptance-records',
@@ -332,7 +292,7 @@ const routes: RouteRecordRaw[] = [
             path: 'data-entry',
             name: 'ProductionDataEntry',
             component: () => import('@/pages/production/DataEntry.vue'),
-            meta: { title: '生产数据录入', roles: ['admin', 'manager', 'user', 'operator'] }
+            meta: { title: '成型录入', roles: ['admin', 'manager', 'user', 'operator'] }
           }
         ]
       },
@@ -384,6 +344,18 @@ const routes: RouteRecordRaw[] = [
             meta: { title: '个人中心', roles: ['admin', 'manager', 'user', 'operator'] }
           }
         ]
+      },
+      
+      // 配色技能工具
+      {
+        path: '/color-scheme-tool',
+        name: 'ColorSchemeTool',
+        component: () => import('@/views/ColorSchemeTool.vue'),
+        meta: { 
+          title: '配色技能工具',
+          icon: 'Palette',
+          roles: ['admin', 'manager', 'user', 'operator']
+        }
       }
     ]
   },

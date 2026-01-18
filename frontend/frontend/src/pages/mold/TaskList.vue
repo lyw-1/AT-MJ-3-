@@ -11,22 +11,12 @@ import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { type ScheduleTask } from '@/api/process'
 
-// 激活的标签页
-const activeTab = ref('mold')
-
 // 加载状态
 const loading = ref(false)
 const statsLoading = ref(false)
 
 // 调度任务数据
 const scheduleTasks = ref<ScheduleTask[]>([])
-
-// 分页信息
-const pagination = ref({
-  currentPage: 1,
-  pageSize: 20,
-  total: 0
-})
 
 // 筛选条件
 const filterState = ref({})
@@ -37,39 +27,10 @@ const selectedCategory = ref<string | null>(null)
 // 分类统计数据
 const categoryStats = ref<Array<{ category: string; count: number }>>([])
 
-// 状态筛选选项
-const statusFilters = [
-  { text: '待处理', value: 'pending' },
-  { text: '进行中', value: 'in_progress' },
-  { text: '已完成', value: 'completed' },
-  { text: '已延迟', value: 'delayed' },
-  { text: '已取消', value: 'canceled' }
-]
-
-// 优先级筛选选项
-const priorityFilters = [
-  { text: '低', value: 'low' },
-  { text: '中', value: 'medium' },
-  { text: '高', value: 'high' }
-]
-
-// 日期筛选选项（简单示例，实际项目中可根据需求扩展）
-const dateFilters = [
-  { text: '今天', value: 'today' },
-  { text: '本周', value: 'week' },
-  { text: '本月', value: 'month' }
-]
-
-// 导入图标
-
 // 导入API函数
 import {
   getScheduleTasks,
-  createScheduleTask,
-  updateScheduleTask,
-  deleteScheduleTask,
-  type ScheduleTaskQuery,
-  type ScheduleTaskForm
+  type ScheduleTaskQuery
 } from '@/api/process'
 
 // 计算分类统计数据
@@ -109,7 +70,7 @@ const fetchCategoryStats = async () => {
     const response = await getScheduleTasks(params)
     
     // 计算分类统计数据
-    categoryStats.value = calculateCategoryStats(response.records || []);
+    categoryStats.value = calculateCategoryStats(response.records || [])
   } catch (error) {
     console.error('获取分类统计数据失败:', error)
     categoryStats.value = []
@@ -124,8 +85,8 @@ const loadScheduleTasks = async () => {
   try {
     // 构造请求参数
     const params: ScheduleTaskQuery = {
-      page: pagination.value.currentPage,
-      pageSize: pagination.value.pageSize,
+      page: 1,
+      pageSize: 20,
       // 添加筛选条件
       ...filterState.value,
       // 添加状态筛选
@@ -135,9 +96,8 @@ const loadScheduleTasks = async () => {
     // 调用后端API获取任务数据
     const response = await getScheduleTasks(params)
     
-    // 更新任务列表和分页信息
+    // 更新任务列表
     scheduleTasks.value = response.records || []
-    pagination.value.total = response.total || 0
     
     ElMessage.success('加载调度任务成功')
   } catch (error) {
@@ -148,238 +108,6 @@ const loadScheduleTasks = async () => {
   }
 }
 
-// 处理类别点击
-const handleCategoryClick = (category: string) => {
-  // 如果点击的是已经选中的类别，则取消选中
-  if (selectedCategory.value === category) {
-    selectedCategory.value = null
-  } else {
-    selectedCategory.value = category
-  }
-  
-  // 重置页码为1
-  pagination.value.currentPage = 1
-  
-  // 重新获取任务列表
-  loadScheduleTasks()
-}
-
-// 处理筛选变化
-const handleFilterChange = (filters: any) => {
-  // 保存筛选状态
-  filterState.value = { ...filters }
-  
-  // 重置分页
-  pagination.value.currentPage = 1
-  
-  // 触发数据加载
-  loadScheduleTasks()
-}
-
-// 处理日期筛选
-const handleDateFilter = (value: string, row: ScheduleTask, column: any) => {
-  const dateProp = column.property
-  const rowDate = new Date(row[dateProp as keyof ScheduleTask] as string)
-  const now = new Date()
-  
-  // 根据筛选值判断日期范围
-  switch (value) {
-    case 'today':
-      return rowDate.toDateString() === now.toDateString()
-    case 'week':
-      const weekStart = new Date(now)
-      weekStart.setDate(now.getDate() - now.getDay())
-      weekStart.setHours(0, 0, 0, 0)
-      return rowDate >= weekStart && rowDate <= now
-    case 'month':
-      return rowDate.getFullYear() === now.getFullYear() && rowDate.getMonth() === now.getMonth()
-    default:
-      return true
-  }
-}
-
-// 处理分页大小变化
-const handleSizeChange = (size: number) => {
-  pagination.value.pageSize = size
-  pagination.value.currentPage = 1
-  loadScheduleTasks()
-}
-
-// 处理当前页变化
-const handleCurrentChange = (current: number) => {
-  pagination.value.currentPage = current
-  loadScheduleTasks()
-}
-
-// 弹窗相关变量
-const detailDialogVisible = ref(false)
-const editDialogVisible = ref(false)
-const deleteDialogVisible = ref(false)
-const createDialogVisible = ref(false)
-
-// 选中的任务
-const selectedTask = ref<ScheduleTask | null>(null)
-
-// 编辑的任务
-const editingTask = ref<ScheduleTask | null>(null)
-
-// 新建任务表单数据
-const createForm = ref<ScheduleTaskForm>({
-  moldId: 0,
-  currentProcessId: 0,
-  scheduledStartTime: '',
-  scheduledEndTime: '',
-  operatorId: undefined,
-  machineId: undefined,
-  priority: 'medium',
-  remark: ''
-})
-
-// 表单引用和验证规则
-const editFormRef = ref()
-const createFormRef = ref()
-
-const editRules = {
-  moldNumber: [{ required: true, message: '请输入模具编号', trigger: 'blur' }],
-  productName: [{ required: true, message: '请输入产品名称', trigger: 'blur' }],
-  currentProcessName: [{ required: true, message: '请输入当前工序', trigger: 'blur' }],
-  scheduledStartTime: [{ required: true, message: '请选择计划开始时间', trigger: 'blur' }],
-  scheduledEndTime: [{ required: true, message: '请选择计划结束时间', trigger: 'blur' }],
-  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-  priority: [{ required: true, message: '请选择优先级', trigger: 'change' }]
-}
-
-const createRules = {
-  moldId: [{ required: true, message: '请输入模具ID', trigger: 'blur', type: 'number' }],
-  currentProcessId: [{ required: true, message: '请输入当前工序ID', trigger: 'blur', type: 'number' }],
-  scheduledStartTime: [{ required: true, message: '请选择计划开始时间', trigger: 'blur' }],
-  scheduledEndTime: [{ required: true, message: '请选择计划结束时间', trigger: 'blur' }],
-  priority: [{ required: true, message: '请选择优先级', trigger: 'change' }]
-}
-
-// 处理查看详情
-const handleViewDetail = (row: ScheduleTask) => {
-  selectedTask.value = { ...row }
-  detailDialogVisible.value = true
-}
-
-// 处理详情弹窗关闭
-const handleDetailDialogClose = () => {
-  selectedTask.value = null
-  detailDialogVisible.value = false
-}
-
-// 处理编辑任务
-const handleEditTask = (row: ScheduleTask) => {
-  editingTask.value = { ...row }
-  editDialogVisible.value = true
-}
-
-// 处理编辑弹窗关闭
-const handleEditDialogClose = () => {
-  editingTask.value = null
-  editDialogVisible.value = false
-  // 重置表单
-  if (editFormRef.value) {
-    editFormRef.value.resetFields()
-  }
-}
-
-// 处理编辑提交
-const handleEditSubmit = async () => {
-  if (!editFormRef.value || !editingTask.value) return
-  
-  try {
-    await editFormRef.value.validate()
-    
-    // 调用API更新任务
-    await updateScheduleTask(editingTask.value.id, editingTask.value)
-    
-    ElMessage.success('任务编辑成功')
-    handleEditDialogClose()
-    // 重新加载数据
-    loadScheduleTasks()
-  } catch (error) {
-    ElMessage.error('表单验证失败，请检查输入')
-    console.error('编辑任务失败:', error)
-  }
-}
-
-// 处理删除任务
-const handleDeleteTask = (row: ScheduleTask) => {
-  selectedTask.value = { ...row }
-  deleteDialogVisible.value = true
-}
-
-// 处理删除弹窗关闭
-const handleDeleteDialogClose = () => {
-  selectedTask.value = null
-  deleteDialogVisible.value = false
-}
-
-// 处理删除确认
-const handleDeleteConfirm = async () => {
-  if (!selectedTask.value) return
-  
-  try {
-    // 调用API删除任务
-    await deleteScheduleTask(selectedTask.value.id)
-    
-    ElMessage.success('任务删除成功')
-    handleDeleteDialogClose()
-    // 重新加载数据
-    loadScheduleTasks()
-  } catch (error) {
-    ElMessage.error('任务删除失败')
-    console.error('删除任务失败:', error)
-  }
-}
-
-// 处理新建任务
-const handleCreateTask = () => {
-  // 重置表单
-  createForm.value = {
-    moldId: 0,
-    currentProcessId: 0,
-    scheduledStartTime: '',
-    scheduledEndTime: '',
-    operatorId: undefined,
-    machineId: undefined,
-    priority: 'medium',
-    remark: ''
-  }
-  createDialogVisible.value = true
-}
-
-// 处理新建任务弹窗关闭
-const handleCreateDialogClose = () => {
-  createDialogVisible.value = false
-  // 重置表单
-  if (createFormRef.value) {
-    createFormRef.value.resetFields()
-  }
-}
-
-// 处理新建任务提交
-const handleCreateSubmit = async () => {
-  if (!createFormRef.value) return
-  
-  try {
-    await createFormRef.value.validate()
-    
-    // 调用API创建任务
-    await createScheduleTask(createForm.value)
-    
-    ElMessage.success('任务创建成功')
-    handleCreateDialogClose()
-    // 重新加载数据
-    loadScheduleTasks()
-  } catch (error) {
-    ElMessage.error('表单验证失败，请检查输入')
-    console.error('创建任务失败:', error)
-  }
-}
-
 // 处理刷新
 const handleRefresh = async () => {
   // 并行获取分类统计数据和任务列表
@@ -387,52 +115,6 @@ const handleRefresh = async () => {
     fetchCategoryStats(),
     loadScheduleTasks()
   ])
-}
-
-// 获取状态标签类型
-const getStatusTagType = (status: string) => {
-  const typeMap: Record<string, string> = {
-    'pending': 'info',
-    'in_progress': 'primary',
-    'completed': 'success',
-    'delayed': 'warning',
-    'canceled': 'danger',
-    'unknown': 'info'
-  }
-  return typeMap[status] || 'info'
-}
-
-// 获取状态文本
-const getStatusText = (status: string) => {
-  const textMap: Record<string, string> = {
-    'pending': '待处理',
-    'in_progress': '进行中',
-    'completed': '已完成',
-    'delayed': '已延迟',
-    'canceled': '已取消',
-    'unknown': '未知状态'
-  }
-  return textMap[status] || status
-}
-
-// 获取优先级标签类型
-const getPriorityTagType = (priority: string) => {
-  const typeMap: Record<string, string> = {
-    'low': 'success',
-    'medium': 'warning',
-    'high': 'danger'
-  }
-  return typeMap[priority] || 'info'
-}
-
-// 获取优先级文本
-const getPriorityText = (priority: string) => {
-  const textMap: Record<string, string> = {
-    'low': '低',
-    'medium': '中',
-    'high': '高'
-  }
-  return textMap[priority] || priority
 }
 
 // 初始化加载数据

@@ -137,67 +137,67 @@ export interface ExceptionHandleTaskCreateForm {
 
 // 获取异常类型列表
 export const getExceptionTypes = (params: ExceptionTypeQuery): Promise<ApiResponse<PageData<ExceptionType>>> => {
-  return request.get('/exceptions/types', { params })
+  return request.get('/api/exceptions/types', { params })
 }
 
 // 获取所有异常类型（不分页）
 export const getAllExceptionTypes = (): Promise<ApiResponse<ExceptionType[]>> => {
-  return request.get('/exceptions/types/all')
+  return request.get('/api/exceptions/types/all')
 }
 
 // 获取异常类型详情
 export const getExceptionTypeDetail = (id: number): Promise<ApiResponse<ExceptionType>> => {
-  return request.get(`/exceptions/types/${id}`)
+  return request.get(`/api/exceptions/types/${id}`)
 }
 
 // 创建异常类型
 export const createExceptionType = (data: Omit<ExceptionType, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<ExceptionType>> => {
-  return request.post('/exceptions/types', data)
+  return request.post('/api/exceptions/types', data)
 }
 
 // 更新异常类型
 export const updateExceptionType = (id: number, data: Omit<ExceptionType, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<ExceptionType>> => {
-  return request.put(`/exceptions/types/${id}`, data)
+  return request.put(`/api/exceptions/types/${id}`, data)
 }
 
 // 删除异常类型
 export const deleteExceptionType = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/exceptions/types/${id}`)
+  return request.delete(`/api/exceptions/types/${id}`)
 }
 
 // 获取异常记录列表
 export const getExceptionRecords = (params: ExceptionRecordQuery): Promise<ApiResponse<PageData<ExceptionRecord>>> => {
-  return request.get('/exceptions/records', { params })
+  return request.get('/api/exceptions/records', { params })
 }
 
 // 获取异常记录详情
 export const getExceptionRecordDetail = (id: number): Promise<ApiResponse<ExceptionRecord>> => {
-  return request.get(`/exceptions/records/${id}`)
+  return request.get(`/api/exceptions/records/${id}`)
 }
 
 // 创建异常记录
 export const createExceptionRecord = (data: ExceptionRecordCreateForm): Promise<ApiResponse<ExceptionRecord>> => {
-  return request.post('/exceptions/records', data)
+  return request.post('/api/exceptions/records', data)
 }
 
 // 更新异常记录
 export const updateExceptionRecord = (id: number, data: ExceptionRecordUpdateForm): Promise<ApiResponse<ExceptionRecord>> => {
-  return request.put(`/exceptions/records/${id}`, data)
+  return request.put(`/api/exceptions/records/${id}`, data)
 }
 
 // 删除异常记录
 export const deleteExceptionRecord = (id: number): Promise<ApiResponse<void>> => {
-  return request.delete(`/exceptions/records/${id}`)
+  return request.delete(`/api/exceptions/records/${id}`)
 }
 
 // 批量删除异常记录
 export const batchDeleteExceptionRecords = (ids: number[]): Promise<ApiResponse<void>> => {
-  return request.delete('/exceptions/records/batch', { data: { ids } })
+  return request.delete('/api/exceptions/records/batch', { data: { ids } })
 }
 
 // 获取异常处理日志
 export const getExceptionHandleLogs = (params: ExceptionHandleLogQuery): Promise<ApiResponse<PageData<ExceptionHandleLog>>> => {
-  return request.get('/exceptions/handle-logs', { params })
+  return request.get('/api/exceptions/handle-logs', { params })
 }
 
 // 创建异常处理日志
@@ -206,22 +206,22 @@ export const createExceptionHandleLog = (data: {
   operation: string
   content: string
 }): Promise<ApiResponse<ExceptionHandleLog>> => {
-  return request.post('/exceptions/handle-logs', data)
+  return request.post('/api/exceptions/handle-logs', data)
 }
 
 // 获取异常处理任务列表
 export const getExceptionHandleTasks = (params: ExceptionHandleTaskQuery): Promise<ApiResponse<PageData<ExceptionHandleTask>>> => {
-  return request.get('/exceptions/handle-tasks', { params })
+  return request.get('/api/exceptions/handle-tasks', { params })
 }
 
 // 获取异常处理任务详情
 export const getExceptionHandleTaskDetail = (id: number): Promise<ApiResponse<ExceptionHandleTask>> => {
-  return request.get(`/exceptions/handle-tasks/${id}`)
+  return request.get(`/api/exceptions/handle-tasks/${id}`)
 }
 
 // 创建异常处理任务
 export const createExceptionHandleTask = (data: ExceptionHandleTaskCreateForm): Promise<ApiResponse<ExceptionHandleTask>> => {
-  return request.post('/exceptions/handle-tasks', data)
+  return request.post('/api/exceptions/handle-tasks', data)
 }
 
 // 更新异常处理任务
@@ -230,7 +230,7 @@ export const updateExceptionHandleTask = (id: number, data: {
   completedTime?: string
   remark?: string
 }): Promise<ApiResponse<ExceptionHandleTask>> => {
-  return request.put(`/exceptions/handle-tasks/${id}`, data)
+  return request.put(`/api/exceptions/handle-tasks/${id}`, data)
 }
 
 // 批量更新异常处理任务
@@ -238,7 +238,7 @@ export const batchUpdateExceptionHandleTasks = (data: {
   ids: number[]
   status: string
 }): Promise<ApiResponse<void>> => {
-  return request.put('/exceptions/handle-tasks/batch', data)
+  return request.put('/api/exceptions/handle-tasks/batch', data)
 }
 
 // 获取异常统计数据
@@ -249,17 +249,17 @@ export const getExceptionStatistics = (params: {
   exceptionTypeId?: number
   status?: string
 }): Promise<ApiResponse<any>> => {
-  return request.get('/exceptions/statistics', { params })
+  return request.get('/api/exceptions/statistics', { params })
 }
 
 // 获取模具异常历史
 export const getMoldExceptionHistory = (moldId: number): Promise<ApiResponse<ExceptionRecord[]>> => {
-  return request.get(`/exceptions/molds/${moldId}/history`)
+  return request.get(`/api/exceptions/molds/${moldId}/history`)
 }
 
 // 导出异常记录
 export const exportExceptionRecords = (params: ExceptionRecordQuery): Promise<Blob> => {
-  return request.get('/exceptions/records/export', {
+  return request.get('/api/exceptions/records/export', {
     params,
     responseType: 'blob'
   })

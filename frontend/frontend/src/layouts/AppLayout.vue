@@ -31,6 +31,7 @@
             circle
             :icon="Bell"
             class="header-btn notification-btn"
+            aria-label="新消息通知"
           >
             <div class="notification-badge"></div>
           </el-button>
@@ -42,6 +43,7 @@
           :icon="FullScreen"
           @click="toggleFullscreen"
           class="header-btn"
+          aria-label="切换全屏"
         />
         
         <!-- 主题切换 -->
@@ -50,6 +52,7 @@
           :icon="isDark ? Sunny : Moon"
           @click="toggleTheme"
           class="header-btn"
+          aria-label="切换主题"
         />
         
         <!-- 用户菜单 -->
@@ -208,7 +211,7 @@ import {
   Expand, Fold, FullScreen, Sunny, Moon, Bell,
   House, DataAnalysis, Tools, Monitor, Operation, TrendCharts, SetUp
 } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus'
 
 // 使用appStore
 const appStore = useAppStore()
@@ -307,8 +310,23 @@ const handleLogout = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
+    // 显示加载状态
+    const loading = ElLoading.service({
+      lock: true,
+      text: '正在退出登录...',
+      background: 'rgba(255, 255, 255, 0.8)'
+    })
+    
+    // 执行登出操作
     userStore.logout()
-    ElMessage.success('已退出登录')
+    
+    // 延迟关闭加载状态，提升用户体验
+    setTimeout(() => {
+      loading.close()
+      ElMessage.success('已退出登录')
+      // 跳转到登录页面
+      window.location.href = '/login'
+    }, 500)
   })
 }
 
@@ -322,15 +340,21 @@ const handleMenuClick = (route: any) => {
 const updateBreadcrumbs = (route: any) => {
   const breadcrumbs = []
   
-  // 添加首页
-  breadcrumbs.push({ title: '首页', path: '/home' })
+  // 从路由匹配中提取完整路径
+  const matched = route.matched
   
-  // 添加当前路由的面包屑
-  if (route.meta?.title) {
-    breadcrumbs.push({ 
-      title: route.meta.title, 
-      path: route.path 
-    })
+  matched.forEach(item => {
+    if (item.meta && item.meta.title && !item.path.includes('*')) {
+      breadcrumbs.push({
+        title: item.meta.title,
+        path: item.path
+      })
+    }
+  })
+  
+  // 如果没有匹配到面包屑，添加默认首页
+  if (breadcrumbs.length === 0) {
+    breadcrumbs.push({ title: '首页', path: '/home' })
   }
   
   appStore.setBreadcrumbs(breadcrumbs)

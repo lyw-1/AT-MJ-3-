@@ -169,12 +169,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatDateTime } from '@/utils/date'
 import { getOperationLogs } from '@/api/system'
-
-const router = useRouter()
 
 // 表格高度计算
 const tableHeight = computed(() => {

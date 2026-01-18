@@ -1185,39 +1185,7 @@ const handleSearch = async (showMessage = false) => {
   }
 }
 
-// 重置所有筛选条件
-const handleReset = () => {
-  // 重置筛选表单
-  Object.assign(filterForm, {
-    materialCode: '',
-    itemName: '',
-    itemCategory: '',
-    specification: '',
-    unit: '',
-    currentStock: '',
-    minStock: '',
-    maxStock: '',
-    stockStatus: '',
-    totalValue: '',
-    lastUpdate: ''
-  })
-  // 重置筛选条件
-  Object.assign(filterConditions, {
-    materialCode: '',
-    itemName: '',
-    itemCategory: '',
-    specification: '',
-    unit: '',
-    currentStock: '',
-    minStock: '',
-    maxStock: '',
-    stockStatus: '',
-    totalValue: '',
-    lastUpdate: ''
-  })
-  // 执行搜索并显示提示
-  handleSearch(true)
-}
+
 
 // 选择行变化处理
 const handleSelectionChange = (selection: ConsumableItem[]) => {

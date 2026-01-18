@@ -20,7 +20,7 @@
     <el-card class="canvas-card card-rounded-lg">
       <el-row :gutter="2" class="row">
         <el-col :xs="12" :md="4" v-for="item in statusCards" :key="item.key">
-          <el-card class="stat-card clickable" @click="goStatus(item.key)">
+          <el-card :class="['stat-card', 'clickable', `status-${item.key}`]" @click="goStatus(item.key)">
             <div class="stat">
               <div class="stat-title">{{ item.title }}</div>
               <div class="stat-value">{{ item.value }}</div>
@@ -452,76 +452,70 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/variables' as *;
+
 /* 主容器样式 - 符合边距规范 */
 .dashboard-container {
-  padding: 15px; /* 符合页面容器边距规范 */
+  padding: $spacing-4; /* 使用统一的间距规范 */
 }
 
-/* 自定义红色统计容器样式 - 符合设计规范 */
+/* 自定义统计容器样式 - 符合轻松素雅风格 */
 .red-stats-container {
   display: flex;
   width: 100%; /* 保持在容器内，不超出 */
-  margin: 0 0 10px 0; /* 符合卡片外边距规范：10px 0 */
+  margin: 0 0 $spacing-3 0; /* 使用统一的间距规范 */
   background-color: transparent; /* 透明背景，不影响卡片样式 */
   height: 120px; /* 保持与其他统计卡片相同的高度 */
   overflow: hidden;
   border-radius: 0; /* 容器不需要圆角，卡片本身有圆角 */
   box-shadow: none; /* 容器不需要阴影，卡片本身有阴影 */
   padding: 0;
-  gap: 2px; /* 卡片间横向间距2px */
+  gap: $spacing-2; /* 使用统一的间距规范 */
 }
 
-/* 红色统计项样式 - 符合卡片组件规范 */
+/* 统计项样式 - 警告作用，需要更醒目 */
 .red-stat-item {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EF4444;
-  color: #FFFFFF;
+  color: $white; /* 使用白色文字，提高对比度 */
   cursor: pointer;
-  transition: all 0.3s ease; /* 符合过渡动画规范 */
+  transition: all 0.2s ease; /* 使用统一的过渡动画规范 */
   height: 120px; /* 符合统计卡片固定高度规范 */
-  border: 1px solid #EF4444; /* 符合卡片边框规范 */
-  border-radius: 15px; /* 符合卡片边框半径规范 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 符合卡片阴影规范 */
+  border-radius: $card-radius; /* 使用统一的卡片圆角规范 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* 使用适当的阴影，增强视觉层次感 */
   padding: 0;
   margin: 0;
+  border: none;
 }
 
-/* 移除最后一个统计项的右侧间距 */
-.red-stat-item:last-child {
-  margin-right: 0;
+/* 容重超标统计样式 */
+.red-stat-item:nth-child(1) {
+  background: linear-gradient(135deg, #EF4444 0%, #F97316 100%);
 }
 
-/* 为第一个统计项添加左侧圆角 */
-.red-stat-item:first-child {
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-}
-
-/* 为最后一个统计项添加右侧圆角 */
-.red-stat-item:last-child {
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+/* 槽宽超标统计样式 */
+.red-stat-item:nth-child(2) {
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
 }
 
 /* 统计内容样式 */
 .red-stat-item .stat {
   text-align: center;
-  padding: 20px;
+  padding: $spacing-3;
 }
 
-/* 悬停效果 - 与home页面悬停效果一致 */
+/* 悬停效果 - 增强交互反馈 */
 .red-stat-item:hover {
-  background-color: #DC2626; /* 红色加深 */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 与home页面悬停效果一致 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* 增强悬停阴影 */
+  transform: translateY(-2px);
 }
 
-/* 确保统计标题和数值为白色 */
+/* 确保统计标题和数值颜色统一为白色 */
 .red-stat-item .stat-title-small,
 .red-stat-item .stat-value-large {
-  color: #FFFFFF !important;
+  color: $white !important;
 }
 
 /* 移除卡片的默认样式影响 */
@@ -537,25 +531,27 @@ onUnmounted(() => {
 
 /* 行间距 - 符合模块间距规范 */
 .row {
-  margin-bottom: 10px; /* 纵向间距调整为10px，符合设计规范 */
+  margin-bottom: $spacing-3; /* 使用统一的间距规范 */
 }
 
-/* 卡片通用样式 - 符合卡片组件规范 */
+/* 卡片通用样式 - 符合轻松素雅风格 */
 .el-card {
-  border-radius: 15px; /* 符合卡片边框半径规范 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 符合卡片阴影规范 */
-  transition: all 0.3s ease; /* 符合过渡动画规范 */
+  border-radius: $card-radius; /* 使用统一的卡片圆角规范 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* 使用更浅的阴影，符合轻松素雅风格 */
+  transition: all 0.2s ease; /* 使用统一的过渡动画规范 */
   overflow: hidden;
-  margin: 0 0 10px 0; /* 符合卡片外边距规范：10px 0 */
+  margin: 0 0 $spacing-3 0; /* 使用统一的间距规范 */
   padding: 0;
+  border: 1px solid $gray-200; /* 使用统一的边框颜色 */
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 与home页面悬停效果一致 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* 使用更柔和的悬停阴影 */
+    transform: translateY(-1px);
   }
 
-  /* 调整卡片内边距 - 符合卡片内边距规范 */
+  /* 调整卡片内边距 - 使用统一的内边距规范 */
   .el-card__body {
-    padding: 24px; /* 符合卡片内部边距规范 */
+    padding: $spacing-4; /* 使用统一的卡片内部边距规范 */
   }
 }
 
@@ -566,143 +562,89 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease; /* 符合过渡动画规范 */
+  transition: all 0.3s ease; /* 使用统一的过渡动画规范 */
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border-radius: $card-radius !important;
+  overflow: hidden;
 }
 
-/* 重置所有卡片的默认样式 - 确保所有卡片都是白色背景 */
-.stat-card {
-  background-color: #FFFFFF !important;
-  color: inherit !important;
-  border-color: var(--el-border-color-light) !important;
-  
-  /* 确保卡片内部元素使用默认白色背景和文字颜色 */
-  .el-card__body,
-  .stat,
-  .stat-title,
-  .stat-value {
-    background-color: #FFFFFF !important;
-    color: inherit !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-  
-  /* 标题文字颜色 */
-  .stat-title {
-    color: #6b7280 !important;
-  }
-  
-  /* 数值文字颜色 */
-  .stat-value {
-    color: #374151 !important;
-  }
-}
-
-/* 修复红色卡片的白色边框问题 */
-/* 确保第一行的整个列都使用红色背景 */
-.dashboard-container > .el-row:first-of-type > .el-col {
-  background-color: #EF4444 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* 只对dashboard-container的第一个直接子元素el-row中的两个超标统计卡片应用红色背景 */
-.dashboard-container > .el-row:first-of-type > .el-col > .stat-card {
-  background-color: #EF4444 !important;
-  color: #FFFFFF !important;
-  border-color: #EF4444 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  
-  /* 确保卡片内部所有元素都使用红色背景和白色文字 */
-  /* 使用更广泛的选择器确保所有子元素都继承红色背景 */
-  &,
-  .el-card__body,
-  .el-card__body *,
-  .stat,
-  .stat *,
-  .stat-title-small,
-  .stat-value-large {
-    background-color: #EF4444 !important;
-    background: #EF4444 !important;
-    color: #FFFFFF !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  
-  /* 标题文字颜色 */
-  .stat-title-small {
-    color: #FFFFFF !important;
-    opacity: 0.9;
-  }
-  
-  /* 数值文字颜色 */
-  .stat-value-large {
-    color: #FFFFFF !important;
-  }
-}
-
-/* 移除卡片的默认边距和内边距 */
-.dashboard-container > .el-row:first-of-type > .el-col > .stat-card > .el-card__body {
-  padding: 0 !important;
-  margin: 0 !important;
+/* 卡片背景透明，允许渐变背景生效 */
+.stat-card .el-card__body,
+.stat-card .stat {
+  background-color: transparent !important;
   box-shadow: none !important;
   border: none !important;
+  padding: 0 !important;
 }
 
-/* 移除统计区域的内边距 */
-.dashboard-container > .el-row:first-of-type > .el-col > .stat-card > .el-card__body > .stat {
-  padding: 20px !important;
-  margin: 0 !important;
+/* 统计卡片状态样式 */
+/* 待加工模具 */
+.stat-card.status-待加工 {
+  background: linear-gradient(135deg, #64748B 0%, #94A3B8 100%) !important;
 }
 
-/* 确保容器卡片和内部的小卡片保持白色背景 */
-.canvas-card > .el-row > .el-col > .stat-card {
-  background-color: #FFFFFF !important;
-  color: inherit !important;
-  border-color: var(--el-border-color-light) !important;
-  
-  /* 确保卡片内部元素使用默认白色背景和文字颜色 */
-  .el-card__body,
-  .stat,
-  .stat-title,
-  .stat-value {
-    background-color: #FFFFFF !important;
-    color: inherit !important;
-  }
-  
-  /* 标题文字颜色 */
-  .stat-title {
-    color: #6b7280 !important;
-  }
-  
-  /* 数值文字颜色 */
-  .stat-value {
-    color: #374151 !important;
-  }
+/* 加工中模具 */
+.stat-card.status-加工中 {
+  background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%) !important;
+}
+
+/* 委外加工 */
+.stat-card.status-委外加工 {
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%) !important;
+}
+
+/* 待调试模具 */
+.stat-card.status-待调试 {
+  background: linear-gradient(135deg, #F59E0B 0%, #FCD34D 100%) !important;
+}
+
+/* 调试中模具 */
+.stat-card.status-调试中 {
+  background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%) !important;
+}
+
+/* 待验收模具 */
+.stat-card.status-待验收 {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 100%) !important;
+}
+
+/* 统计标题和数值的样式 */
+.stat-title {
+  font-size: $font-size-base;
+  color: $white !important;
+  opacity: 0.9;
+  margin-bottom: $spacing-1;
+}
+
+.stat-value {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $white !important;
+}
+
+/* 卡片悬停效果 */
+.stat-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px);
 }
 
 .clickable { cursor: pointer; }
-.stat { text-align: center; }
-
-/* 统计标题和数值的默认样式 */
-.stat-title { font-size: 16px; color: #6b7280; }
-.stat-value { font-size: 28px; font-weight: 700; color: #374151; }
+.stat { text-align: center; padding: $spacing-3; }
 
 /* 超标统计卡片 - 大数值样式 */
 .stat-value-large {
-  font-size: 48px !important;
-  font-weight: 700 !important;
-  color: #FFFFFF !important;
-  margin-bottom: 4px !important;
+  font-size: $font-size-3xl !important;
+  font-weight: $font-weight-semibold !important;
+  color: $error-dark !important;
+  margin-bottom: $spacing-1 !important;
 }
 
 /* 超标统计卡片 - 小标题样式 */
 .stat-title-small {
-  font-size: 14px !important;
-  color: #FFFFFF !important;
-  font-weight: 500 !important;
+  font-size: $font-size-sm !important;
+  color: $error-dark !important;
+  font-weight: $font-weight-medium !important;
   opacity: 0.9 !important;
 }
 
@@ -716,41 +658,43 @@ onUnmounted(() => {
 
 /* 图表容器样式 */
 .charts-container {
-  padding: 24px; /* 符合卡片内部边距规范 */
+  padding: $spacing-4; /* 使用统一的卡片内部边距规范 */
 }
 
 .charts-title {
-  font-size: 16px; 
-  font-weight: 600;
-  margin-bottom: 16px; /* 符合组件内部间距规范 */
+  font-size: $font-size-lg; 
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-3; /* 使用统一的组件内部间距规范 */
   text-align: center;
+  color: $gray-900;
 }
 
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2px; /* 横向间距调整为2 */
+  gap: $spacing-3; /* 使用统一的间距规范 */
 }
 
 .chart-module {
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 15px; /* 符合卡片边框半径规范 */
-  padding: 24px; /* 符合卡片内边距规范 */
-  background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 符合卡片阴影规范 */
-  transition: all 0.3s ease; /* 符合过渡动画规范 */
+  border: 1px solid $gray-200;
+  border-radius: $card-radius; /* 使用统一的卡片圆角规范 */
+  padding: $spacing-4; /* 使用统一的卡片内边距规范 */
+  background-color: $white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* 使用更浅的阴影，符合轻松素雅风格 */
+  transition: all 0.2s ease; /* 使用统一的过渡动画规范 */
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 与home页面悬停效果一致 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* 使用更柔和的悬停阴影 */
+    transform: translateY(-1px);
   }
 }
 
 .chart-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 16px; /* 符合组件内部间距规范 */
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-3; /* 使用统一的组件内部间距规范 */
   text-align: center;
-  color: #374151;
+  color: $gray-800;
 }
 
 .chart-container {
@@ -771,123 +715,127 @@ onUnmounted(() => {
 
 /* 重点模具供需情况样式 */
 .supply {
-  padding: 24px; /* 符合卡片内部边距规范 */
+  padding: $spacing-4; /* 使用统一的卡片内部边距规范 */
 }
 
 .supply-title {
-  font-size: 16px; 
-  font-weight: 600;
-  margin-bottom: 16px; /* 符合组件内部间距规范 */
+  font-size: $font-size-lg; 
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-3; /* 使用统一的组件内部间距规范 */
+  color: $gray-900;
 }
 
 .supply-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 2px; /* 横向间距调整为2 */
+  gap: $spacing-3; /* 使用统一的间距规范 */
 }
 
 .supply-item {
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 15px; /* 符合卡片边框半径规范 */
-  padding: 24px; /* 符合卡片内边距规范 */
-  background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 符合卡片阴影规范 */
-  transition: all 0.3s ease; /* 符合过渡动画规范 */
+  border: 1px solid $gray-200;
+  border-radius: $card-radius; /* 使用统一的卡片圆角规范 */
+  padding: $spacing-4; /* 使用统一的卡片内边距规范 */
+  background-color: $white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* 使用更浅的阴影，符合轻松素雅风格 */
+  transition: all 0.2s ease; /* 使用统一的过渡动画规范 */
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 与home页面悬停效果一致 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* 使用更柔和的悬停阴影 */
+    transform: translateY(-1px);
   }
 }
 
 .supply-name {
-  font-weight: 600;
-  margin-bottom: 8px; /* 符合组件内部间距规范 */
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-1; /* 使用统一的组件内部间距规范 */
+  color: $gray-800;
 }
 
 .supply-bars {
   display: flex;
-  gap: 6px; /* 符合组件内部间距规范 */
+  gap: $spacing-1; /* 使用统一的组件内部间距规范 */
   height: 8px;
-  margin: 8px 0; /* 符合组件内部间距规范 */
+  margin: $spacing-1 0; /* 使用统一的组件内部间距规范 */
 }
 
 .bar {
   height: 8px;
-  border-radius: 4px; /* 符合功能条边框半径规范 */
+  border-radius: $border-radius-sm; /* 使用统一的边框半径规范 */
 }
 
-.bar.need { background: #fca5a5; }
-.bar.supply { background: #93c5fd; }
+.bar.need { background: $error-color; } /* 使用统一的错误色 */
+.bar.supply { background: $success-color; } /* 使用统一的成功色 */
 
 .supply-meta {
-  font-size: 12px; 
-  color: #6b7280;
-  margin-top: 8px; /* 符合组件内部间距规范 */
+  font-size: $font-size-xs; 
+  color: $gray-600;
+  margin-top: $spacing-1; /* 使用统一的组件内部间距规范 */
 }
 
 /* 耗材库预警模块样式 */
 .consumables-warnings {
-  padding: 24px; /* 符合卡片内部边距规范 */
+  padding: $spacing-4; /* 使用统一的卡片内部边距规范 */
 }
 
 .consumables-item {
-  padding: 20px;
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 15px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  padding: $spacing-3;
+  border: 1px solid $gray-200;
+  border-radius: $card-radius;
+  background-color: $white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
 }
 
 .consumables-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 .consumables-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: $spacing-2;
 }
 
 .consumables-name {
-  font-weight: 600;
-  font-size: 16px;
-  color: #374151;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-base;
+  color: $gray-800;
 }
 
 .consumables-stock {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: #6b7280;
+  margin-bottom: $spacing-2;
+  font-size: $font-size-sm;
+  color: $gray-600;
 }
 
 .stock-current {
-  color: #374151;
+  color: $gray-800;
 }
 
 .stock-min {
-  color: #6b7280;
+  color: $gray-600;
 }
 
 .consumables-progress {
-  margin-top: 12px;
+  margin-top: $spacing-2;
 }
 
 /* 自定义进度条样式 */
 .progress-container {
   width: 100%;
   height: 8px;
-  background-color: #f3f4f6;
-  border-radius: 4px;
+  background-color: $gray-100;
+  border-radius: $border-radius-sm;
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  border-radius: 4px;
+  border-radius: $border-radius-sm;
   transition: width 0.3s ease;
 }
 </style>

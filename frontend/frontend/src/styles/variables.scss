@@ -1,34 +1,83 @@
-// Clarity Design Aone 基础组件库 - 设计变量
+// 轻松素雅风格 - 设计变量
 
-// 主色调 - 紫色系，与Clarity Design完全一致
-$primary-color: #6150BF;
-$primary-light: #EEF2FF;
-$primary-dark: #4F46E5;
+// 主色调 - 蓝色系，与微信小程序端统一
+$primary-color: #0066cc; // 深蓝，代表专业和稳重
+$primary-light: #E0F2FE; // 浅蓝，用于背景和悬停效果
+$primary-dark: #004D99; // 更深蓝，用于激活状态
 
-// 辅助色
-$success-color: #10B981;
-$warning-color: #F59E0B;
-$error-color: #EF4444;
-$info-color: #6B7280;
+// 辅助色 - 与微信小程序端统一配色
+$success-color: #0099ff; // 浅蓝，代表安全和成功
+$success-light: #E0F2FE; // 浅蓝，用于背景和悬停效果
+$success-dark: #0073e6; // 更深蓝，用于激活状态
+$warning-color: #008080; // 深青，代表警告和注意
+$warning-light: #E0F7FA; // 浅青，用于背景和悬停效果
+$warning-dark: #006666; // 更深青，用于激活状态
+$error-color: #6b6b6b; // 深灰，代表危险和错误
+$error-light: #F3F4F6; // 浅灰，用于背景和悬停效果
+$error-dark: #4a4a4a; // 更深灰，用于激活状态
+$info-color: #006699; // 深蓝青，代表专业和稳重
+$info-light: #E0F2FE; // 浅蓝，用于背景和悬停效果
+$info-dark: #004D73; // 更深蓝青，用于激活状态
+
+// 快捷操作图标颜色变量 - 柔和专业版
+$quick-apply-bg: linear-gradient(135deg, #93C5FD 0%, #BFDBFE 100%);
+$quick-apply-color: #3B82F6;
+$quick-apply-hover: #2563EB;
+
+$quick-initial-bg: linear-gradient(135deg, #86EFAC 0%, #BBF7D0 100%);
+$quick-initial-color: #10B981;
+$quick-initial-hover: #059669;
+
+$quick-new-mold-bg: linear-gradient(135deg, #C4B5FD 0%, #DDD6FE 100%);
+$quick-new-mold-color: #8B5CF6;
+$quick-new-mold-hover: #6D28D9;
+
+$quick-use-bg: linear-gradient(135deg, #FBBF24 0%, #FDE68A 100%);
+$quick-use-color: #D97706;
+$quick-use-hover: #B45309;
+
+$quick-return-bg: linear-gradient(135deg, #67E8F9 0%, #A5F3FC 100%);
+$quick-return-color: #06B6D4;
+$quick-return-hover: #0891B2;
+
+$quick-consumable-bg: linear-gradient(135deg, #F9A8D4 0%, #FBCFE8 100%);
+$quick-consumable-color: #EC4899;
+$quick-consumable-hover: #DB2777;
+
+$quick-production-bg: linear-gradient(135deg, #FDE68A 0%, #FEF3C7 100%);
+$quick-production-color: #CA8A04;
+$quick-production-hover: #A16207;
+
+$quick-measure-bg: linear-gradient(135deg, #5EEAD4 0%, #A7F3D0 100%);
+$quick-measure-color: #0D9488;
+$quick-measure-hover: #0F766E;
+
+$quick-tuning-bg: linear-gradient(135deg, #FCA5A5 0%, #FECACA 100%);
+$quick-tuning-color: #EF4444;
+$quick-tuning-hover: #DC2626;
+
+$quick-acceptance-bg: linear-gradient(135deg, #FCD34D 0%, #FDE68A 100%);
+$quick-acceptance-color: #CA8A04;
+$quick-acceptance-hover: #A16207;
 
 // 中性色
 $white: #FFFFFF;
-$gray-50: #F9FAFB;
-$gray-100: #F3F4F6;
-$gray-200: #E5E7EB;
-$gray-300: #D1D5DB;
-$gray-400: #9CA3AF;
-$gray-500: #6B7280;
-$gray-600: #4B5563;
-$gray-700: #374151;
-$gray-800: #1F2937;
-$gray-900: #111827;
+$bg-color: #F8FAFC; // 米白背景，温暖舒适
+$gray-50: #F8FAFC;
+$gray-100: #F1F5F9;
+$gray-200: #E2E8F0;
+$gray-300: #CBD5E1;
+$gray-400: #94A3B8;
+$gray-500: #64748B;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1E293B;
+$gray-900: #0F172A;
 
-// 背景色
-$bg-color: $gray-50;
+// 卡片背景色
 $card-bg: $white;
 
-// 间距系统 - Clarity Design规范
+// 间距系统 - 轻松素雅风格，更宽松的间距
 $spacing-1: 8px;
 $spacing-2: 16px;
 $spacing-3: 24px;
@@ -36,36 +85,46 @@ $spacing-4: 32px;
 $spacing-5: 40px;
 $spacing-6: 48px;
 
-// 圆角系统 - Clarity Design规范
-$border-radius-sm: 4px;
-$border-radius-md: 8px;
-$border-radius-lg: 12px;
-$border-radius-xl: 16px;
-$border-radius-2xl: 20px;
-$border-radius-3xl: 24px;
+// 圆角系统 - 轻松素雅风格，更大的圆角
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 20px;
+$border-radius-2xl: 24px;
+$border-radius-3xl: 28px;
 
-// 组件圆角配置 - Clarity Design规范
+// 组件圆角配置 - 轻松素雅风格
 $button-radius: 12px;
-$input-radius: 8px;
-$card-radius: 20px;
-$modal-radius: 16px;
+$input-radius: 12px;
+$card-radius: 16px;
+$modal-radius: 20px;
 
-// 排版系统 - Clarity Design规范
+// 排版系统 - 轻松素雅风格
 $font-size-xs: 12px;
 $font-size-sm: 14px;
 $font-size-base: 14px;
 $font-size-lg: 16px;
 $font-size-xl: 18px;
 $font-size-2xl: 20px;
+$font-size-3xl: 24px;
+$font-size-4xl: 30px;
 
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
+$font-weight-bold: 700;
 
-// 字体家族 - Clarity Design规范
+// 行高 - 轻松素雅风格，更高的行高提高可读性
+$line-height-xs: 1.4;
+$line-height-sm: 1.5;
+$line-height-base: 1.6;
+$line-height-lg: 1.7;
+$line-height-xl: 1.8;
+
+// 字体家族 - 轻松素雅风格，Inter字体保持不变
 $font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
 // 遮罩层样式变量
-$mask-color: rgba(0, 0, 0, 0.5); // 遮罩层背景色和透明度
+$mask-color: rgba(0, 0, 0, 0.3); // 更淡的遮罩，符合轻松风格
 $mask-z-index: 2000; // 遮罩层z-index
 $mask-transition: opacity 0.3s ease; // 遮罩层过渡效果
 $mask-position: fixed; // 遮罩层定位方式
