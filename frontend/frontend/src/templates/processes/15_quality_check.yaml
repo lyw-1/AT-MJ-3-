@@ -1,0 +1,33 @@
+# 工序模板基础信息
+basic_info:
+  name: "品质检测"
+  code: "TEMPLATE_QUALITY_CHECK"
+  category: "QUALITY_CHECK"
+  description: "品质检测工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 品质检测参数字段定义
+  inspection_type: ""
+  inspection_items: []
+  measuring_tools: []
+  inspection_method: ""
+  sampling_plan: ""
+  inspection_frequency: ""
+
+# 质量检验标准
+quality_standards:
+  # 品质检测标准定义
+  acceptance_criteria: ""
+  rejection_criteria: ""
+  record_required: true
+  approval_required: true
+  inspection_report_required: true
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "检测设备"
+  operator_role: "质检员"
+  estimated_duration: 60  # 标准工时（分钟）
+  quality_check_required: true

@@ -64,3 +64,44 @@ backend/node_modules/
 backend/dist/
 backend/target/
 backend/logs/
+# AI IDE 配置目录
+.agent/
+.claude/
+.codebuddy/
+.codex/
+.gemini/
+.kiro/
+.roo/
+.shared/
+.trae/
+.windsurf/
+
+# 备份文件
+*.bak
+*.backup
+*~
+.#*
+\#*#
+
+# 编译文件
+*.class
+*.pyc
+*.pyo
+*.pyd
+
+# 前端相关
+frontend/.vscode/
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+
+# 部署相关
+deployments/.vscode/
+deployments/*.log
+
+# 其他
+*.log.*
+query
+stop
+ter
+nul

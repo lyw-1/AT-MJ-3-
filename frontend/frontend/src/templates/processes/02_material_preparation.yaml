@@ -1,0 +1,31 @@
+# 工序模板基础信息
+basic_info:
+  name: "备料"
+  code: "TEMPLATE_MATERIAL_PREP"
+  category: "PREP"
+  description: "备料工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  material_type: ""
+  material_size: ""
+  hardness_requirement: ""
+  cutting_method: ""
+  tolerance: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  material_check: ""
+  dimension_check: ""
+  hardness_check: ""
+  surface_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "锯床"
+  operator_role: "操作工"
+  estimated_duration: 60  # 标准工时（分钟）
+  quality_check_required: true

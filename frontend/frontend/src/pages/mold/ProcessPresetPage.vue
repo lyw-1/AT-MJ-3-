@@ -39,115 +39,155 @@
       
       <!-- 右侧预设置表单或表格 -->
       <el-col :span="16">
-        <!-- 备料工序 - 表格形式（适合A4打印） -->
-        <el-card v-if="selectedProcess && selectedProcess.code === 'PREP'" class="preset-card">
+        <!-- 备料工序和加工工序汇总 - 表格形式（适合A4打印） -->
+        <el-card v-if="selectedProcess && (selectedProcess.code === 'PREP' || selectedProcess.code === 'SUMMARY')" class="preset-card">
           <div class="card-title">
             {{ selectedProcess.name }} - 预设置
             <div class="card-actions">
+              <el-button type="success" size="small" @click="handlePrintPreview" icon="Printer">
+                打印预览
+              </el-button>
               <el-button type="primary" size="small" @click="openTemplateDialog">
-                选择模板
+                {{ selectedProcess.templateId ? '更换模板' : '选择模板' }}
               </el-button>
             </div>
           </div>
           
-          <!-- 模具基本信息表格 -->
-      <div class="print-section">
-        <div class="section-header">
-          <h3 class="print-section-title">模具基本信息</h3>
-          <div class="qrcode-container-bottom">
-            <qrcode-vue
-              :value="qrcodeValue"
-              :size="120"
-              level="H"
-            />
-          </div>
-        </div>
-        <div class="mold-info-wrapper">
-          <table class="print-table info-table">
-            <colgroup>
-              <col style="width: 10%">
-              <col style="width: 15%">
-              <col style="width: 10%">
-              <col style="width: 65%">
-            </colgroup>
-            <tbody>
-              <tr>
-                <th>负责人</th>
-                <td><el-input v-model="moldInfo.responsiblePerson" placeholder="请输入" /></td>
-                <th>模具刻字</th>
-                <td><el-input v-model="moldInfo.moldEngraving" placeholder="请输入" /></td>
-              </tr>
-              <tr>
-                <th>模具编号</th>
-                <td><el-input v-model="moldInfo.moldNumber" placeholder="请输入" /></td>
-                <th>成品规格</th>
-                <td>
-                  <el-input v-model="moldInfo.productSpec" placeholder="请输入" style="flex: 2" />
-                  <span class="cell-label">材料</span>
-                  <el-input v-model="moldInfo.material" placeholder="请输入" style="flex: 1" />
-                  <span class="cell-label">硬度</span>
-                  <el-input v-model="moldInfo.hardness" placeholder="请输入" style="flex: 1" />
-                </td>
-              </tr>
-              <tr>
-                <th>定位孔中心距</th>
-                <td><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入" /></td>
-                <th>模具厚度</th>
-                <td><el-input v-model="moldInfo.moldThickness" placeholder="请输入" /></td>
-              </tr>
-              <tr>
-                <th>进泥孔直径</th>
-                <td>
-                  <el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入" style="flex: 2" />
-                  <span class="cell-label">槽宽</span>
-                  <el-input v-model="moldInfo.slotWidth" placeholder="请输入" style="flex: 1" />
-                  <span class="cell-label">槽间距</span>
-                  <el-input v-model="moldInfo.slotSpacing" placeholder="请输入" style="flex: 1" />
-                </td>
-                <th></th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-          
-          <!-- 工序内容表格 -->
-          <div class="print-section">
-            <h3 class="print-section-title">工序内容</h3>
-            <table class="print-table process-table">
-              <colgroup>
-                <col style="width: 5%">
-                <col style="width: 14%">
-                <col style="width: 14%">
-                <col style="width: 27%">
-                <col style="width: 10%">
-                <col style="width: 12%">
-                <col style="width: 18%">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>序号</th>
-                  <th>工艺名称</th>
-                  <th>设备</th>
-                  <th>详细内容</th>
-                  <th>责任人</th>
-                  <th>日期</th>
-                  <th>备注</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(row, index) in processList" :key="index">
-                  <td class="center">{{ index + 1 }}</td>
-                  <td><el-input v-model="row.processName" placeholder="请输入" /></td>
-                  <td><el-input v-model="row.equipment" placeholder="请输入" /></td>
-                  <td><el-input v-model="row.details" placeholder="请输入" /></td>
-                  <td><el-input v-model="row.responsiblePerson" placeholder="请输入" /></td>
-                  <td><el-date-picker v-model="row.date" type="date" placeholder="选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD" /></td>
-                  <td><el-input v-model="row.remark" placeholder="请输入" /></td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- 流转卡布局容器 -->
+          <div class="flow-card-container">
+            <!-- 标题栏 -->
+            <div class="flow-card-header">
+              <h2 class="flow-card-title">模具加工工艺流转卡</h2>
+              <span class="flow-card-version">V2.0</span>
+            </div>
+            
+            <!-- 模具基本信息表格 -->
+            <div class="flow-card-section">
+              <div class="section-label">模具基本信息</div>
+              <table class="flow-card-table info-table">
+                <tbody>
+                  <!-- 第一行 -->
+                  <tr>
+                    <td class="label-cell">成品规格：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.productSpec" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">模具规格：</td>
+                    <td colspan="10"><el-input v-model="moldInfo.moldSpec" placeholder="请输入" size="small" /></td>
+                    <td rowspan="4" class="qrcode-cell">
+                      <div class="qrcode-wrapper">
+                        <qrcode-vue :value="qrcodeValue" :size="100" level="H" />
+                        <div class="qrcode-text">二维码</div>
+                      </div>
+                    </td>
+                  </tr>
+                  
+                  <!-- 第二行 -->
+                  <tr>
+                    <td class="label-cell">模具编号：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.moldNumber" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">模具刻字：</td>
+                    <td colspan="10"><el-input v-model="moldInfo.moldEngraving" placeholder="请输入" size="small" /></td>
+                  </tr>
+                  
+                  <!-- 第三行 -->
+                  <tr>
+                    <td class="label-cell">模具外形</td>
+                    <td colspan="2"><el-input v-model="moldInfo.moldShape" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">模具厚度：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.moldThickness" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">定位孔中心距：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.positioningHoleDistance" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">材料：</td>
+                    <td colspan="4"><el-input v-model="moldInfo.material" placeholder="请输入" size="small" /></td>
+                  </tr>
+                  
+                  <!-- 第四行 -->
+                  <tr>
+                    <td class="label-cell">进泥孔径：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.mudInletDiameter" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">槽宽：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.slotWidth" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">槽间距：</td>
+                    <td colspan="2"><el-input v-model="moldInfo.slotSpacing" placeholder="请输入" size="small" /></td>
+                    <td class="label-cell">硬度：</td>
+                    <td colspan="3"><el-input v-model="moldInfo.hardness" placeholder="请输入" size="small" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- 工序路线图 -->
+            <div v-if="selectedProcess.code === 'SUMMARY'" class="flow-card-section">
+              <div class="section-label">工序路线图</div>
+              <div class="flow-diagram-area">
+                <svg width="100%" height="150" viewBox="0 0 900 150" preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <marker id="arrowhead-flow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#2563eb" />
+                    </marker>
+                  </defs>
+                  <g stroke="#2563eb" stroke-width="1.5" fill="none">
+                    <!-- 动态生成节点 -->
+                    <rect 
+                      v-for="node in flowChartNodes" 
+                      :key="node.index"
+                      :x="node.x" 
+                      :y="node.y" 
+                      :width="node.width" 
+                      :height="node.height" 
+                      rx="8" 
+                      ry="8" 
+                      fill="white" 
+                    />
+                    
+                    <!-- 动态生成箭头 -->
+                    <line 
+                      v-for="(arrow, idx) in flowChartArrows" 
+                      :key="'arrow-flow-' + idx"
+                      :x1="arrow.x1" 
+                      :y1="arrow.y1" 
+                      :x2="arrow.x2" 
+                      :y2="arrow.y2" 
+                      marker-end="url(#arrowhead-flow)" 
+                    />
+                  </g>
+                  
+                  <!-- 动态生成文字 -->
+                  <text 
+                    v-for="node in flowChartNodes" 
+                    :key="'text-' + node.index"
+                    :x="node.x + node.width / 2" 
+                    :y="node.y + node.height / 2 + 5" 
+                    text-anchor="middle" 
+                    font-size="12" 
+                    fill="#333"
+                    font-weight="500"
+                  >
+                    {{ processList[node.index]?.processName || '' }}
+                  </text>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- 工序内容表格 -->
+            <div class="flow-card-section no-label">
+              <table class="flow-card-table process-list-table">
+                <tbody>
+                  <tr v-for="(row, index) in processList" :key="index" class="process-row">
+                    <td class="seq-cell">{{ index + 1 }}</td>
+                    <td class="content-cell">
+                      <el-input 
+                        v-model="row.processName" 
+                        type="textarea" 
+                        :rows="1" 
+                        placeholder="" 
+                        size="small"
+                        class="borderless-input"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </el-card>
         
@@ -267,7 +307,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getProcessPresets, batchSaveProcessPresets, getMoldInitialParamDetail, updateMoldInitialParam } from '@/api/mold'
@@ -297,10 +337,14 @@ const getProcessesFromRoute = () => {
     const processesParam = route.query.processes as string
     if (processesParam) {
       const parsedProcesses = JSON.parse(processesParam)
-      // 确保工序名称格式正确
+      // 确保工序名称格式正确，并包含模板信息
       return parsedProcesses.map((process: any) => ({
         ...process,
-        name: process.name
+        name: process.name,
+        templateId: process.templateId,
+        category: process.category,
+        equipment: process.equipment || '',
+        operator: process.operator || ''
       }))
     }
   } catch (error) {
@@ -331,6 +375,8 @@ const moldInfo = ref({
   moldEngraving: '',
   moldNumber: '',
   productSpec: '',
+  moldSpec: '',
+  moldShape: '',
   material: '',
   hardness: '',
   positioningHoleDistance: '',
@@ -340,13 +386,123 @@ const moldInfo = ref({
   slotSpacing: ''
 })
 
-// 工序内容列表（用于备料工序表格）
+// 工序内容列表（用于备料工序和加工工序汇总表格）
 const processList = ref([
-  { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-  { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-  { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-  { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
+  { processName: '', details: '' },
+  { processName: '', details: '' },
+  { processName: '', details: '' },
+  { processName: '', details: '' }
 ])
+
+// 动态生成流程图节点
+const flowChartNodes = computed(() => {
+  const validProcesses = processList.value.filter(p => p.processName && p.processName.trim() !== '')
+  if (validProcesses.length === 0) return []
+  
+  const nodes: any[] = []
+  const minNodeWidth = 80   // 最小宽度
+  const maxNodeWidth = 150  // 最大宽度
+  const nodeHeight = 50
+  const nodeGap = 25        // 从20增加到25，进一步加宽间距
+  const startX = 10
+  const firstRowY = 15
+  const secondRowY = 80
+  const charWidth = 14  // 每个字符的估算宽度（中文）
+  const padding = 20    // 左右内边距
+  
+  // 计算每个节点的宽度
+  const nodeWidths = validProcesses.map(process => {
+    const textLength = process.processName.length
+    const calculatedWidth = textLength * charWidth + padding
+    // 限制在最小和最大宽度之间
+    return Math.max(minNodeWidth, Math.min(maxNodeWidth, calculatedWidth))
+  })
+  
+  const maxNodes = Math.min(validProcesses.length, 9)
+  const firstRowCount = Math.min(maxNodes, 7)
+  const secondRowCount = maxNodes > 7 ? Math.min(maxNodes - 7, 2) : 0
+  
+  // 生成第一行节点
+  let currentX = startX
+  for (let i = 0; i < firstRowCount; i++) {
+    const width = nodeWidths[i]
+    nodes.push({ 
+      index: i, 
+      x: currentX, 
+      y: firstRowY, 
+      width: width, 
+      height: nodeHeight, 
+      row: 1 
+    })
+    currentX += width + nodeGap
+  }
+  
+  // 生成第二行节点（从右到左）
+  if (secondRowCount > 0) {
+    // 计算第二行起始位置（与第一行最后一个节点对齐）
+    const lastFirstRowNode = nodes[firstRowCount - 1]
+    currentX = lastFirstRowNode.x
+    
+    for (let i = 0; i < secondRowCount; i++) {
+      const width = nodeWidths[firstRowCount + i]
+      nodes.push({ 
+        index: firstRowCount + i, 
+        x: currentX, 
+        y: secondRowY, 
+        width: width, 
+        height: nodeHeight, 
+        row: 2 
+      })
+      currentX -= (width + nodeGap)
+    }
+  }
+  
+  return nodes
+})
+
+// 动态生成流程图箭头
+const flowChartArrows = computed(() => {
+  const nodes = flowChartNodes.value
+  if (nodes.length === 0) return []
+  
+  const arrows: any[] = []
+  const firstRowNodes = nodes.filter(n => n.row === 1)
+  
+  for (let i = 0; i < firstRowNodes.length - 1; i++) {
+    const from = firstRowNodes[i]
+    const to = firstRowNodes[i + 1]
+    arrows.push({
+      x1: from.x + from.width,
+      y1: from.y + from.height / 2,
+      x2: to.x,
+      y2: to.y + to.height / 2
+    })
+  }
+  
+  const secondRowNodes = nodes.filter(n => n.row === 2)
+  if (secondRowNodes.length > 0) {
+    const lastFirstRowNode = firstRowNodes[firstRowNodes.length - 1]
+    const firstSecondRowNode = secondRowNodes[0]
+    
+    arrows.push({
+      x1: lastFirstRowNode.x + lastFirstRowNode.width / 2,
+      y1: lastFirstRowNode.y + lastFirstRowNode.height,
+      x2: firstSecondRowNode.x + firstSecondRowNode.width / 2,
+      y2: firstSecondRowNode.y
+    })
+    
+    if (secondRowNodes.length > 1) {
+      arrows.push({
+        x1: secondRowNodes[0].x,
+        y1: secondRowNodes[0].y + secondRowNodes[0].height / 2,
+        x2: secondRowNodes[1].x + secondRowNodes[1].width,
+        y2: secondRowNodes[1].y + secondRowNodes[1].height / 2
+      })
+    }
+  }
+  
+  return arrows
+})
 
 // 初始化页面
 onMounted(() => {
@@ -509,13 +665,40 @@ const loadPresets = async () => {
       slotSpacing: ''
     }
     
-    // 工序内容列表重置
+    // 工序内容列表重置 - 备料工序4行
     processList.value = [
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
+      { processName: '', details: '' },
+      { processName: '', details: '' },
+      { processName: '', details: '' },
+      { processName: '', details: '' }
     ]
+ } else if (selectedProcess.value.code === 'SUMMARY') {
+    // 加工工序汇总 - 初始化表格数据（14行）
+    const responsiblePerson = moldInfo.value.responsiblePerson
+    moldInfo.value = {
+      responsiblePerson,
+      moldEngraving: '',
+      moldNumber: '',
+      productSpec: '',
+      material: '',
+      hardness: '',
+      moldSpec: '',
+      positioningHoleDistance: '',
+      moldThickness: '',
+      mudInletDiameter: '',
+      slotWidth: '',
+      slotSpacing: ''
+    }
+    
+    // 工序内容列表重置 - 加工工序汇总：从路由参数中的已选工序自动填充
+    // 过滤掉"加工工序汇总"自身，因为它是汇总页面不是实际工序
+    const selectedProcesses = processes.value.filter(p => p.code !== 'SUMMARY')
+    
+    // 根据已选工序数量动态生成列表，有几个工序就有几行
+    processList.value = selectedProcesses.map(process => ({
+      processName: process.name || '',
+      details: ''
+    }))
   } else {
     // 其他工序 - 初始化表单数据
     presetFields.value = getFieldsByProcess(selectedProcess.value.code)
@@ -527,8 +710,8 @@ const loadPresets = async () => {
     // 这里应该调用API获取预设置数据，暂时使用模拟数据
     const presets = await getProcessPresets(moldId.value, selectedProcess.value.code)
     
-    if (selectedProcess.value.code === 'PREP') {
-      // 备料工序 - 填充表格数据
+    if (selectedProcess.value.code === 'PREP' || selectedProcess.value.code === 'SUMMARY') {
+      // 备料工序和加工工序汇总 - 填充表格数据
       presets.forEach((preset: any) => {
         const key = preset.presetKey
         const value = preset.presetValue
@@ -564,6 +747,12 @@ const loadPresets = async () => {
     
     // 处理自定义字段
     // 这里可以根据实际需求处理自定义字段
+
+    // 如果当前工序有预设的模板ID，自动应用该模板
+    if (selectedProcess.value.templateId) {
+      console.log('检测到预设模板ID:', selectedProcess.value.templateId)
+      loadTemplateData(selectedProcess.value.templateId, 'replace')
+    }
   } catch (error) {
     ElMessage.error('加载预设置失败')
     console.error('加载预设置失败:', error)
@@ -591,8 +780,8 @@ const savePresets = async () => {
   try {
     let presets = []
     
-    if (selectedProcess.value.code === 'PREP') {
-      // 备料工序 - 处理表格数据
+    if (selectedProcess.value.code === 'PREP' || selectedProcess.value.code === 'SUMMARY') {
+      // 备料工序和加工工序汇总 - 处理表格数据
       // 模具基本信息
       Object.entries(moldInfo.value).forEach(([key, value]) => {
         if (value !== null && value !== undefined && value !== '') {
@@ -665,6 +854,258 @@ const openTemplateDialog = () => {
   } else {
     ElMessage.warning('请先选择一个工序')
   }
+}
+
+// 打印预览功能
+const handlePrintPreview = () => {
+  const printContent = document.querySelector('.flow-card-container')
+  if (!printContent) {
+    ElMessage.warning('没有可打印的内容')
+    return
+  }
+  
+  // 创建新窗口用于打印
+  // 克隆内容以便处理
+  const clonedContent = printContent.cloneNode(true) as HTMLElement
+  
+  // 处理所有El-Input组件，提取value值
+  clonedContent.querySelectorAll('.el-input, .el-textarea').forEach(inputWrapper => {
+    const input = inputWrapper.querySelector('input, textarea') as HTMLInputElement | HTMLTextAreaElement
+    if (input) {
+      const value = input.value || ''
+      // 创建一个简单的span替换
+      const span = document.createElement('span')
+      span.textContent = value
+      span.style.cssText = 'display: block; padding: 4px 8px; min-height: 24px; font-size: 13px; line-height: 1.4;'
+      inputWrapper.replaceWith(span)
+    }
+  })
+  
+  // 创建新窗口用于打印
+  const printWindow = window.open('', '_blank', 'width=900,height=1000')
+  if (!printWindow) {
+    ElMessage.error('无法打开打印窗口，请检查浏览器弹窗设置')
+    return
+  }
+  
+  // 写入打印内容
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>模具加工工艺流转卡</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        @page {
+          size: A4 portrait;
+          margin: 15mm 10mm;
+        }
+        
+        body {
+          font-family: Arial, 'Microsoft YaHei', 'SimSun', sans-serif;
+          padding: 5mm;
+          background: white;
+        }
+        
+        /* 流转卡样式 */
+        .flow-card-container {
+          border: 2px solid #000;
+          padding: 15px;
+          background: white;
+          page-break-inside: avoid;
+        }
+        
+        .flow-card-header {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          margin-bottom: 15px;
+          padding-bottom: 8px;
+          border-bottom: 2px solid #000;
+        }
+        
+        .flow-card-title {
+          font-size: 22px;
+          font-weight: bold;
+          margin: 0;
+          text-align: center;
+        }
+        
+        .flow-card-version {
+          position: absolute;
+          right: 0;
+          top: 0;
+          font-size: 12px;
+        }
+        
+        .flow-card-section {
+          margin-bottom: 15px;
+        }
+        
+        .section-label {
+          font-size: 13px;
+          font-weight: 600;
+          margin-bottom: 6px;
+          margin-left: -15px;
+          padding: 3px 6px;
+          background: #f5f5f5;
+          border-left: 4px solid #2563eb;
+        }
+        
+        .flow-card-table {
+          width: 100%;
+          border-collapse: collapse;
+          border: 1.5px solid #000;
+        }
+        
+        .flow-card-table td,
+        .flow-card-table th {
+          border: 1px solid #000;
+          padding: 4px 6px;
+          vertical-align: middle;
+          font-size: 12px;
+          line-height: 1.4;
+        }
+        
+        .label-cell {
+          background: #f5f5f5;
+          font-weight: 600;
+          font-size: 11px;
+          white-space: nowrap;
+          text-align: center;
+          width: 80px;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
+        .qrcode-cell {
+          text-align: center;
+          vertical-align: middle;
+          padding: 6px;
+          width: 120px;
+        }
+        
+        .qrcode-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .qrcode-text {
+          font-size: 12px;
+          font-weight: 600;
+          text-align: center;
+          letter-spacing: 4px;
+          margin-top: 4px;
+        }
+        
+        .flow-diagram-area {
+          background: #f8f9fa;
+          padding: 10px;
+          border: 1px solid #ddd;
+          min-height: 160px;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
+        svg {
+          display: block;
+          width: 100%;
+          height: auto;
+          max-height: 160px;
+        }
+        
+        .process-list-table .seq-cell {
+          width: 50px;
+          text-align: center;
+          font-weight: 600;
+          font-size: 12px;
+          background: #f5f5f5;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
+        .process-list-table .content-cell {
+          padding: 3px 8px;
+          font-size: 11px;
+          line-height: 1.4;
+        }
+        
+        .process-row {
+          height: auto;
+          min-height: 28px;
+        }
+        
+        span {
+          display: block;
+          word-wrap: break-word;
+          word-break: break-all;
+        }
+        
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 10mm 8mm;
+          }
+          
+          body {
+            padding: 0;
+            margin: 0;
+          }
+          
+          .flow-card-container {
+            border: 1.5pt solid #000;
+            padding: 8mm;
+          }
+          
+          .flow-card-title {
+            font-size: 16pt;
+          }
+          
+          .flow-card-table td,
+          .flow-card-table th {
+            border: 0.5pt solid #000;
+            padding: 2pt 4pt;
+            font-size: 8pt;
+          }
+          
+          .label-cell {
+            font-size: 7pt !important;
+          }
+          
+          svg {
+            max-height: 140px;
+          }
+        }
+      <\/style>
+    <\/head>
+    <body>
+      <div class="flow-card-container">
+        ${printHtml}
+      </div>
+      <script>
+        window.onload = function() {
+          setTimeout(function() {
+            window.print();
+          }, 500);
+          window.onafterprint = function() {
+            window.close();
+          };
+        };
+      <\/script>
+    <\/body>
+    <\/html>
+  `)
+  
+  printWindow.document.close()
 }
 
 // 处理模板选择
@@ -1043,7 +1484,7 @@ const handleBack = () => {
   background: #fff;
   
   th, td {
-    border: 1px solid #d9d9d9;
+    border: 0.5pt solid #000;
     padding: 8px 10px;
     text-align: left;
     vertical-align: middle;
@@ -1120,25 +1561,39 @@ const handleBack = () => {
     display: none !important;
   }
   
-  /* 设置A4纸大小 */
+  /* 设置A4纸大小 - 窄边距 */
   @page {
-    size: A4;
-    margin: 15mm;
+    size: A4 portrait;
+    margin: 12.7mm;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    width: 210mm;
+    height: 297mm;
   }
   
   .process-preset-wrap {
     padding: 0;
     background: #fff;
+    width: 184.6mm;
+    max-width: 184.6mm;
+    margin: 0 auto;
   }
   
   .el-row {
     display: block !important;
+    margin: 0 !important;
   }
   
   .el-col {
     width: 100% !important;
     max-width: 100% !important;
     flex: none !important;
+    padding: 0 !important;
   }
   
   :deep(.el-card) {
@@ -1146,10 +1601,16 @@ const handleBack = () => {
     box-shadow: none;
   }
   
+  :deep(.el-card__body) {
+    padding: 0 !important;
+  }
+  
   .card-title {
-    font-size: 18px;
+    font-size: 14px;
+    font-weight: bold;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 3px;
+    padding: 0;
     
     &::before {
       display: none;
@@ -1157,12 +1618,132 @@ const handleBack = () => {
   }
   
   .print-section {
-    padding: 0 0 15px;
+    padding: 0;
+    margin-bottom: 4px;
   }
   
   .print-section-title {
-    font-size: 14px;
-    border-bottom: 1px solid #333;
+    font-size: 10px;
+    font-weight: 600;
+    border-bottom: 0.5pt solid #000;
+    margin-bottom: 3px;
+    padding-bottom: 1px;
+  }
+  
+  .print-table {
+    width: 100%;
+    max-width: 100%;
+    font-size: 8px;
+    table-layout: fixed;
+    
+    th, td {
+      border: 0.5pt solid #000;
+      padding: 2px 3px;
+      word-wrap: break-word;
+      word-break: break-all;
+      overflow: hidden;
+      line-height: 1.2;
+      vertical-align: middle;
+    }
+    
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    
+    .center {
+      text-align: center;
+    }
+  }
+  
+  /* 基本信息表格 - 精确列宽控制 */
+  .info-table {
+    colgroup col:nth-child(1) {
+      width: 11%;
+    }
+    colgroup col:nth-child(2) {
+      width: 17%;
+    }
+    colgroup col:nth-child(3) {
+      width: 11%;
+    }
+    colgroup col:nth-child(4) {
+      width: 61%;
+    }
+  }
+  
+  /* 工序内容表格 - 精确列宽控制 */
+  .process-table {
+    colgroup col:nth-child(1) {
+      width: 5%;
+    }
+    colgroup col:nth-child(2) {
+      width: 13%;
+    }
+    colgroup col:nth-child(3) {
+      width: 13%;
+    }
+    colgroup col:nth-child(4) {
+      width: 28%;
+    }
+    colgroup col:nth-child(5) {
+      width: 10%;
+    }
+    colgroup col:nth-child(6) {
+      width: 11%;
+    }
+    colgroup col:nth-child(7) {
+      width: 20%;
+    }
+  }
+  
+  .cell-row {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  
+  .cell-label {
+    font-size: 8px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  /* 输入框在打印时显示为纯文本 */
+  .print-table :deep(.el-input__wrapper),
+  .print-table :deep(.el-date-editor .el-input__wrapper) {
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  
+  .print-table :deep(.el-input__inner) {
+    font-size: 8px !important;
+    padding: 0 !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+  }
+  
+  .print-table :deep(.el-input__suffix),
+  .print-table :deep(.el-input__prefix) {
+    display: none;
+  }
+  
+  /* 防止表格跨页断开 */
+  .print-section {
+    page-break-inside: avoid;
+  }
+  
+  .print-table {
+    page-break-inside: auto;
+  }
+  
+  tbody tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
   
   /* 模具信息和二维码打印布局 */
@@ -1170,7 +1751,7 @@ const handleBack = () => {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 3px;
   }
   
   .mold-info-wrapper {
@@ -1181,53 +1762,342 @@ const handleBack = () => {
   
   .qrcode-container-bottom {
     display: flex !important;
-    padding: 8px;
-    border: 1px solid #333;
+    padding: 3px;
+    border: 0.5pt solid #000;
     margin-top: 0;
   }
-  
-  .print-table {
-    font-size: 11px;
-    width: 100%;
-    
-    th, td {
-      border: 1px solid #333;
-      padding: 6px 8px;
-    }
-    
-    th {
-      background: #fff;
-    }
+}
+
+/* 流转卡布局样式 */
+.flow-card-container {
+  border: 2px solid #000;
+  padding: 20px;
+  background: white;
+}
+
+.flow-card-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #000;
+}
+
+.flow-card-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+.flow-card-version {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.flow-card-section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-left: -20px;
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border-left: 4px solid #2563eb;
+}
+
+.flow-card-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+
+.flow-card-table td,
+.flow-card-table th {
+  border: 1px solid #000;
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.flow-card-table .label-cell {
+  background: #f9f9f9;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: center;
+  width: 100px;
+}
+
+.flow-card-table .qrcode-cell {
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px;
+  width: 120px;
+}
+
+.qrcode-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.qrcode-text {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+  letter-spacing: 5px;
+  margin-top: 6px;
+}
+
+.flow-card-table .qrcode-label {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+}
+
+.flow-card-table :deep(.el-input) {
+  font-size: 13px;
+}
+
+.flow-card-table :deep(.el-input__wrapper) {
+  padding: 2px 8px;
+  box-shadow: none;
+  border: 1px solid #dcdfe6;
+}
+
+.flow-diagram-area {
+  padding: 20px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  min-height: 140px;
+}
+
+/* 工序列表表格 */
+.process-list-table {
+  border: 1px solid #000;
+}
+
+.process-list-table .seq-cell {
+  width: 60px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  background: #f9f9f9;
+}
+
+.process-list-table .content-cell {
+  padding: 4px 12px;  /* 垂直内边距从12px减小到4px */
+}
+
+.process-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.process-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  padding: 4px 0;
+}
+
+.process-details :deep(.el-textarea__inner) {
+  font-size: 13px;
+  border: 1px solid #dcdfe6;
+  padding: 8px;
+}
+
+.process-row {
+  min-height: 32px;  /* 从80px大幅减小到32px */
+}
+
+/* 无边框输入框 */
+.borderless-input :deep(.el-textarea__inner) {
+  border: none !important;
+  padding: 4px 8px !important;  /* 从8px减小到4px，减少垂直内边距 */
+  font-size: 13px;
+  resize: none;
+  background: transparent;
+  box-shadow: none !important;
+  line-height: 1.3 !important;  /* 设置行高为1.3，压缩高度 */
+  min-height: 24px !important;  /* 设置最小高度 */
+}
+
+.borderless-input :deep(.el-textarea__inner):focus {
+  border: 1px solid #dcdfe6 !important;
+  background: #fff;
+}
+
+/* 去掉section-label */
+.flow-card-section.no-label .section-label {
+  display: none;
+}
+
+/* 打印优化 */
+@media print {
+  /* 隐藏整个页面的所有元素 */
+  * {
+    visibility: hidden !important;
   }
   
-  /* 输入框在打印时显示为纯文本 */
-  .print-table :deep(.el-input__wrapper),
-  .print-table :deep(.el-date-editor .el-input__wrapper) {
+  /* 只显示流转卡及其子元素 */
+  .flow-card-container,
+  .flow-card-container * {
+    visibility: visible !important;
+  }
+  
+  /* 隐藏所有导航、菜单、头部等 */
+  nav,
+  header,
+  aside,
+  .el-aside,
+  .el-header,
+  .el-menu,
+  .sidebar,
+  .navbar,
+  .layout-header,
+  .layout-sidebar,
+  .main-sidebar,
+  .preset-header,
+  .process-list,
+  .card-title,
+  .card-actions,
+  .header-buttons,
+  .el-card,
+  .el-row,
+  .el-col,
+  .el-card__body {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* 将流转卡定位到页面顶部 */
+  .flow-card-container {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    border: 1.5pt solid #000;
+    padding: 10mm;
+    page-break-after: always;
+    margin: 0 !important;
+    background: white !important;
+    z-index: 9999 !important;
+  }
+  
+  /* 页面设置 */
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  
+  .flow-card-title {
+    font-size: 18pt;
+  }
+  
+  .flow-card-version {
+    font-size: 10pt;
+  }
+  
+  .section-label {
+    font-size: 10pt;
+    page-break-after: avoid;
+  }
+  
+  .flow-card-table {
+    border: 1pt solid #000;
+    page-break-inside: avoid;
+  }
+  
+  .flow-card-table td,
+  .flow-card-table th {
+    border: 0.5pt solid #000;
+    padding: 2pt 4pt;
+    font-size: 9pt;
+  }
+  
+  .label-cell {
+    font-size: 8pt !important;
+    background: #f9f9f9 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* 输入框打印优化 */
+  .flow-card-table :deep(.el-input__wrapper),
+  .flow-card-table :deep(.el-textarea__inner) {
     box-shadow: none !important;
     background: transparent !important;
     border: none !important;
+    padding: 0 !important;
   }
   
-  .print-table :deep(.el-input__suffix),
-  .print-table :deep(.el-input__prefix) {
-    display: none;
+  .flow-card-table :deep(.el-input__inner) {
+    font-size: 8pt !important;
+    padding: 0 !important;
   }
   
-  .cell-row {
-    gap: 4px;
+  .flow-card-table :deep(.el-textarea__inner) {
+    font-size: 8pt !important;
+    padding: 2pt !important;
+    line-height: 1.3 !important;
   }
   
-  .cell-label {
-    font-size: 11px;
+  /* 二维码打印优化 */
+  .qrcode-wrapper {
+    gap: 8pt;
   }
   
-  /* 防止表格跨页断开 */
-  .print-table {
+  .qrcode-text {
+    font-size: 10pt;
+    letter-spacing: 3pt;
+  }
+  
+  /* 流程图打印优化 */
+  .flow-diagram-area svg {
+    max-height: 100pt;
+  }
+  
+  /* 工序表格打印优化 */
+  .process-list-table {
+    page-break-inside: auto;
+  }
+  
+  .process-list-table tr {
     page-break-inside: avoid;
+    page-break-after: auto;
   }
   
-  tr {
-    page-break-inside: avoid;
+  .seq-cell {
+    width: 30pt;
+    text-align: center;
+    font-size: 9pt;
+  }
+  
+  /* 隐藏所有输入框的后缀和前缀图标 */
+  :deep(.el-input__suffix),
+  :deep(.el-input__prefix),
+  :deep(.el-textarea__suffix) {
+    display: none !important;
   }
 }
 </style>

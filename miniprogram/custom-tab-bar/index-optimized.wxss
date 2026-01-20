@@ -1,0 +1,143 @@
+/* 自定义tabBar样式 - 优化高度和布局 */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 109rpx;
+  background: var(--bg-card);
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 2rpx solid var(--border-light);
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 var(--space-3);
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.tab-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  width: 80rpx;
+  transition: all var(--transition-normal);
+}
+
+.tab-bar-item:active {
+  transform: scale(0.95);
+}
+
+.tab-bar-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: var(--space-1);
+  transition: all var(--transition-normal);
+}
+
+/* 未选中状态 */
+.tab-bar-icon {
+  opacity: 0.6;
+  filter: brightness(0) invert(0.7) sepia(1) saturate(0) hue-rotate(0deg) brightness(0.7);
+}
+
+/* 选中状态 */
+.tab-bar-item .tab-bar-icon.active {
+  opacity: 1 !important;
+  filter: brightness(0) invert(0.35) sepia(1) saturate(10) hue-rotate(60deg) brightness(1);
+}
+
+.tab-bar-text {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  transition: all var(--transition-normal);
+}
+
+/* 选中状态 - 文字绿色 */
+.tab-bar-item .tab-bar-text.active {
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* 中间扫描按钮 - 优化尺寸 */
+.scan-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: -20rpx;
+  flex-shrink: 0;
+  width: 144rpx;
+}
+
+.scan-button {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4rpx 12rpx rgba(116, 202, 0, 0.3);
+  border: none;
+}
+
+.scan-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2rpx 6rpx rgba(116, 202, 0, 0.2);
+}
+
+.scan-icon {
+  width: 40rpx;
+  height: 40rpx;
+  filter: brightness(0) invert(1);
+}
+
+.scan-text {
+  margin-top: var(--space-2);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family);
+  text-align: center;
+}
+
+/* 添加涟漪效果 */
+.tab-bar-item::after,
+.scan-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(116, 202, 0, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+
+.tab-bar-item:active::after,
+.scan-button:active::after {
+  width: 160rpx;
+  height: 160rpx;
+  opacity: 1;
+}
+
+/* 适配刘海屏 */
+@media (min-height: 812rpx) {
+  .tab-bar {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+  }
+}

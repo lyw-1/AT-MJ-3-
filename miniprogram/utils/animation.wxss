@@ -1,0 +1,396 @@
+/* 动画效果优化 - 使用cubic-bezier缓动函数和微交互动画 */
+
+/* 缓动函数优化 */
+:root {
+  /* 标准缓动 */
+  --transition-fast: 0.15s var(--ease-out);
+  --transition-normal: 0.2s var(--ease-out);
+  --transition-slow: 0.3s var(--ease-out);
+  
+  /* 高级缓动函数 */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 微交互动画 - 按钮涟漪效果 */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.3;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s var(--ease-out), 
+              height 0.6s var(--ease-out), 
+              opacity 0.6s var(--ease-out);
+}
+
+.btn:active::after {
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+}
+
+/* 卡片悬停动画 */
+.card {
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2rpx);
+  box-shadow: var(--shadow-md);
+}
+
+/* 列表项悬停动画 */
+.task-item,
+.mold-item,
+.data-item {
+  transition: background-color var(--transition-fast);
+}
+
+.task-item:hover,
+.mold-item:hover,
+.data-item:hover {
+  background-color: var(--bg-secondary);
+  transform: translateX(4rpx);
+}
+
+/* 图标缩放动画 */
+.tab-bar-icon,
+.action-icon,
+.menu-icon {
+  transition: transform var(--transition-normal);
+}
+
+.tab-bar-item:active .tab-bar-icon,
+.action-item:active .action-icon,
+.menu-item:active .menu-icon {
+  transform: scale(1.1);
+}
+
+/* 模态框动画 */
+.modal-content {
+  animation: modal-in 0.3s var(--ease-out);
+}
+
+@keyframes modal-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-mask {
+  animation: mask-fade-in 0.3s var(--ease-out);
+}
+
+@keyframes mask-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Toast动画 */
+.toast {
+  animation: toast-in 0.3s var(--ease-out);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 筛选面板动画 */
+.filter-panel {
+  transition: max-height 0.3s var(--ease-out);
+}
+
+.filter-panel.show {
+  transition: max-height 0.3s var(--ease-out);
+}
+
+/* 筛选选项动画 */
+.filter-option {
+  transition: all var(--transition-fast);
+}
+
+.filter-option.selected {
+  transform: scale(1.05);
+}
+
+/* 骨架屏动画 */
+.skeleton {
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 进度条动画 */
+.progress-fill {
+  transition: width 0.3s var(--ease-out);
+}
+
+/* 加载动画 */
+.loading-spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 面包屑动画 */
+.breadcrumb-item {
+  transition: all var(--transition-fast);
+}
+
+.breadcrumb-item:active {
+  transform: scale(1.05);
+}
+
+.breadcrumb.show {
+  animation: breadcrumb-in 0.3s var(--ease-out);
+}
+
+@keyframes breadcrumb-in {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 扫描按钮动画 */
+.scan-button {
+  transition: all var(--transition-normal);
+}
+
+.scan-button:active {
+  transform: scale(0.95);
+}
+
+/* 滑动删除动画 */
+.swipe-delete {
+  animation: swipe-delete 0.3s var(--ease-out);
+}
+
+@keyframes swipe-delete {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* 成功动画 */
+.success-check {
+  animation: check-mark 0.4s var(--ease-bounce);
+}
+
+@keyframes check-mark {
+  0% {
+    transform: scale(0) rotate(-45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 错误抖动动画 */
+.error-shake {
+  animation: shake 0.5s var(--ease-in-out);
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4rpx);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4rpx);
+  }
+}
+
+/* 加载更多动画 */
+.loading-more {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 新内容提示动画 */
+.new-content-badge {
+  animation: badge-pop 0.4s var(--ease-bounce);
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 长按反馈动画 */
+.long-press {
+  animation: long-press 0.3s var(--ease-out);
+}
+
+@keyframes long-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 减少动画模式 - 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card:hover {
+    transform: translateY(-2rpx);
+  }
+  
+  .btn::after {
+    transition: none;
+  }
+  
+  .task-item:hover,
+  .mold-item:hover,
+  .data-item:hover {
+    transform: none;
+  }
+  
+  .skeleton {
+    animation: none;
+  }
+  
+  .loading-spinner {
+    animation: spin 2s linear infinite;
+  }
+}
+
+/* 性能优化 - 使用transform代替position */
+.transform-fade-in {
+  animation: transform-fade 0.3s var(--ease-out);
+}
+
+@keyframes transform-fade-in {
+  from {
+    transform: translateY(20rpx);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.transform-slide-up {
+  animation: slide-up 0.3s var(--ease-out);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* 弹性动画 - 使用弹性缓动 */
+.bounce-in {
+  animation: bounce-in 0.5s var(--ease-bounce);
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

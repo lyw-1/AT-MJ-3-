@@ -1,0 +1,296 @@
+/* Toast提示样式 */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-gray-900);
+  color: var(--color-white);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  z-index: var(--z-tooltip);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  animation: toast-in 0.3s var(--ease-out);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.toast.show {
+  animation: toast-in 0.3s var(--ease-out);
+}
+
+.toast-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  color: var(--color-white);
+  flex-shrink: 0;
+}
+
+.toast-message {
+  font-size: var(--font-size-base);
+  color: var(--color-white);
+  line-height: var(--line-height-normal);
+}
+
+/* 加载状态样式 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.2s var(--ease-out);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background-color: var(--bg-card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.loading-spinner {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid var(--border-default);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+/* 骨架屏样式 */
+.skeleton {
+  padding: var(--space-4);
+}
+
+.skeleton.show {
+  animation: skeleton-fade-in 0.3s var(--ease-out);
+}
+
+@keyframes skeleton-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.skeleton-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) 0;
+  margin-bottom: var(--space-3);
+}
+
+.skeleton-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.skeleton-content {
+  flex: 1;
+  margin-left: var(--space-3);
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 32rpx;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  margin-bottom: var(--space-2);
+}
+
+.skeleton-text {
+  width: 80%;
+  height: 24rpx;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+}
+
+.empty-state.show {
+  animation: empty-fade-in 0.3s var(--ease-out);
+}
+
+@keyframes empty-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+  line-height: 1;
+}
+
+.empty-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-normal);
+}
+
+.empty-action {
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+}
+
+.empty-action:active {
+  background-color: var(--color-primary-dark);
+  transform: scale(0.95);
+}
+
+/* 进度条样式 */
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: var(--z-tooltip);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: progress-in 0.3s var(--ease-out);
+}
+
+@keyframes progress-in {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.progress-container.show {
+  animation: progress-in 0.3s var(--ease-out);
+}
+
+.progress-bar {
+  width: 80%;
+  height: 8rpx;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-2);
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s var(--ease-out);
+  animation: progress-fill 0.3s var(--ease-out);
+}
+
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--progress-percent, 0%);
+  }
+}
+
+.progress-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  font-weight: var(--font-weight-medium);
+}

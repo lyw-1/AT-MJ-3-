@@ -1,0 +1,28 @@
+<!-- 增强统计卡片组件 -->
+<view class="enhanced-stat-card {{cardType}}" bindtap="onCardTap" data-type="{{cardType}}">
+  <!-- 卡片背景渐变 -->
+  <view class="stat-background" style="background: {{gradient}}"></view>
+  
+  <!-- 趋势指示器 -->
+  <view class="stat-trend {{trendDirection}}">
+    <text class="trend-icon">{{trendIcon}}</text>
+    <text class="trend-value">{{trendValue}}</text>
+  </view>
+  
+  <!-- 主要数值 -->
+  <view class="stat-content">
+    <text class="stat-value-large">{{value}}</text>
+    <text class="stat-unit">{{unit}}</text>
+  </view>
+  
+  <!-- 标签 -->
+  <text class="stat-label">{{label}}</text>
+  
+  <!-- 附加信息 -->
+  <view class="stat-meta">
+    <view class="meta-item" wx:if="{{metaItems.length > 0}}" wx:for="{{metaItems}}" wx:key="index">
+      <text class="meta-icon">{{item.icon}}</text>
+      <text class="meta-text">{{item.text}}</text>
+    </view>
+  </view>
+</view>

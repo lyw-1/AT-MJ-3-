@@ -1,0 +1,33 @@
+# 工序模板基础信息
+basic_info:
+  name: "热处理"
+  code: "TEMPLATE_HEAT_TREATMENT"
+  category: "HEAT_TREATMENT"
+  description: "热处理工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  temperature: 0
+  duration: 0
+  cooling_method: ""
+  expected_hardness: ""
+  heating_rate: 0.0
+  cooling_rate: 0.0
+  furnace_type: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  hardness_check: ""
+  microstructure_check: ""
+  distortion_check: ""
+  surface_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "热处理炉"
+  operator_role: "热处理工"
+  estimated_duration: 180  # 标准工时（分钟）
+  quality_check_required: true

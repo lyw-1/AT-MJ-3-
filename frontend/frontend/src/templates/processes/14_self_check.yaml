@@ -1,0 +1,30 @@
+# 工序模板基础信息
+basic_info:
+  name: "自检"
+  code: "TEMPLATE_SELF_CHECK"
+  category: "SELF_CHECK"
+  description: "自检工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 自检参数字段定义
+  check_items: []
+  inspection_method: ""
+  measuring_tools: []
+  inspection_frequency: ""
+
+# 质量检验标准
+quality_standards:
+  # 自检质量标准定义
+  pass_criteria: ""
+  reject_criteria: ""
+  record_required: true
+  approval_required: false
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "无"
+  operator_role: "操作工"
+  estimated_duration: 30  # 标准工时（分钟）
+  quality_check_required: true

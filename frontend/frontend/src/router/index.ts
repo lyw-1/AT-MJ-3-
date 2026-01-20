@@ -109,9 +109,9 @@ const routes: RouteRecordRaw[] = [
             path: 'process-templates',
             name: 'ProcessTemplates',
             component: () => import('@/pages/process/ProcessTemplatePage.vue'),
-            meta: { 
+            meta: {
               title: '工序模板管理',
-              roles: ['admin', 'manager', 'user'] 
+              roles: ['admin', 'manager', 'user']
             }
           },
 

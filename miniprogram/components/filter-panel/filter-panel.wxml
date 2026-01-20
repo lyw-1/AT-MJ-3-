@@ -1,0 +1,38 @@
+<!-- 优化筛选组件 -->
+<view class="filter-container {{expanded ? 'expanded' : ''}}">
+  <!-- 筛选触发按钮 -->
+  <view class="filter-trigger" bindtap="toggleFilter">
+    <text class="filter-label">筛选</text>
+    <view class="filter-badge" wx:if="{{activeCount > 0}}">{{activeCount}}</view>
+    <text class="filter-arrow {{expanded ? 'up' : 'down'}}">▼</text>
+  </view>
+  
+  <!-- 筛选面板 -->
+  <view class="filter-panel {{expanded ? 'show' : ''}}" catchtap="preventClose">
+    <view class="filter-section" wx:for="{{filterGroups}}" wx:key="title">
+      <view class="filter-section-title">{{item.title}}</view>
+      <view class="filter-options">
+        <view 
+          class="filter-option {{option.selected ? 'selected' : ''}}" 
+          wx:for="{{item.options}}" 
+          wx:for-item="option" 
+          wx:key="option.value"
+          bindtap="selectOption"
+          data-group="{{item.title}}"
+          data-value="{{option.value}}"
+        >
+          <view class="filter-checkbox">
+            <view class="checkbox-inner {{option.selected ? 'checked' : ''}}"></view>
+          </view>
+          <text class="filter-option-text">{{option.label}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 筛选操作 -->
+    <view class="filter-actions">
+      <button class="filter-action-btn filter-reset" bindtap="resetFilter">重置</button>
+      <button class="filter-action-btn filter-confirm" bindtap="confirmFilter">确定 ({{activeCount}})</button>
+    </view>
+  </view>
+</view>

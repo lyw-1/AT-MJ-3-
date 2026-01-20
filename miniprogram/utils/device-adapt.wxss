@@ -1,0 +1,221 @@
+/* 设备适配基础样式 - 刘海屏适配 */
+
+/* 安全区域适配 - 刘海屏 */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 状态栏适配 */
+.status-bar {
+  height: env(safe-area-inset-top);
+  background-color: var(--bg-card);
+  transition: all var(--transition-normal);
+}
+
+/* 底部导航栏适配 */
+.tab-bar {
+  padding-bottom: calc(env(safe-area-inset-bottom) + var(--space-2));
+}
+
+/* 固定头部适配 */
+.fixed-header {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* 模态框适配 */
+.modal-content {
+  padding-bottom: calc(env(safe-area-inset-bottom) + var(--space-4));
+}
+
+/* Toast提示适配 */
+.toast {
+  top: calc(50% + env(safe-area-inset-top) / 2);
+}
+
+/* 进度条适配 */
+.progress-container {
+  top: env(safe-area-inset-top);
+}
+
+/* 空状态适配 */
+.empty-state {
+  padding-top: calc(env(safe-area-inset-top) + var(--space-8));
+}
+
+/* 触摸目标优化 - 最小点击区域 */
+.touch-target {
+  min-width: 88rpx;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 按钮触摸区域 */
+.btn {
+  min-height: 88rpx;
+  min-width: 88rpx;
+  padding: var(--space-2) var(--space-4);
+}
+
+/* 输入框触摸区域 */
+.input {
+  min-height: 88rpx;
+  padding: var(--space-2) var(--space-3);
+}
+
+/* 图标触摸区域 */
+.tab-bar-item {
+  min-width: 88rpx;
+  min-height: 88rpx;
+  padding: var(--space-2);
+}
+
+.action-item {
+  min-width: 88rpx;
+  min-height: 88rpx;
+  padding: var(--space-2);
+}
+
+/* 列表项触摸区域 */
+.task-item,
+.mold-item,
+.data-item {
+  min-height: 88rpx;
+  padding: var(--space-3) 0;
+}
+
+/* 筛选选项触摸区域 */
+.filter-option {
+  min-width: 88rpx;
+  min-height: 88rpx;
+  padding: var(--space-2);
+}
+
+/* 菜单项触摸区域 */
+.menu-item {
+  min-width: 88rpx;
+  min-height: 88rpx;
+  padding: var(--space-3);
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) {
+  .fixed-header {
+    padding-top: 0;
+  }
+  
+  .tab-bar {
+    padding-bottom: var(--space-2);
+  }
+  
+  .modal-content {
+    padding-bottom: var(--space-4);
+  }
+  
+  .toast {
+    top: 50%;
+  }
+  
+  .progress-container {
+    top: 0;
+  }
+  
+  .empty-state {
+    padding-top: var(--space-8);
+  }
+}
+
+/* 小屏适配 - iPhone SE */
+@media (max-width: 375px) {
+  .touch-target {
+    min-width: 80rpx;
+    min-height: 80rpx;
+  }
+  
+  .btn {
+    min-height: 80rpx;
+    min-width: 80rpx;
+  }
+  
+  .input {
+    min-height: 80rpx;
+  }
+}
+
+/* 大屏适配 - iPhone Plus/Max */
+@media (min-width: 414px) {
+  .touch-target {
+    min-width: 96rpx;
+    min-height: 96rpx;
+  }
+  
+  .btn {
+    min-height: 96rpx;
+    min-width: 96rpx;
+  }
+  
+  .input {
+    min-height: 96rpx;
+  }
+}
+
+/* 暗黑模式适配 */
+@media (prefers-color-scheme: dark) {
+  .status-bar {
+    background-color: var(--bg-card);
+  }
+  
+  .fixed-header {
+    background-color: var(--bg-card);
+  }
+}
+
+/* 高对比度模式适配 */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    border-width: 2rpx;
+  }
+  
+  .tab-bar-icon.active {
+    filter: brightness(1.2);
+  }
+}
+
+/* 减少动画模式 - 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 打印适配 */
+@media print {
+  .fixed-header,
+  .tab-bar,
+  .modal-mask,
+  .loading-overlay,
+  .progress-container {
+    display: none !important;
+  }
+  
+  .page-content {
+    margin-top: 0 !important;
+  }
+}

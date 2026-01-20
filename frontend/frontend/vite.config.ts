@@ -3,10 +3,13 @@ import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   resolve: {
-    alias: { '@': new URL('./src', import.meta.url).pathname }
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
   },
   plugins: [
     vue(),
@@ -22,6 +25,7 @@ export default defineConfig({
   ],
   server: {
     host: true,
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:8082',

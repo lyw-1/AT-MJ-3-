@@ -1,0 +1,35 @@
+# 工序模板基础信息
+basic_info:
+  name: "导料槽加工-中丝"
+  code: "TEMPLATE_GUIDE_SLOT_WIRE_CUT"
+  category: "GUIDE_SLOT"
+  description: "导料槽加工-中丝工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  slot_width: 0.0
+  slot_depth: 0.0
+  slot_length: 0.0
+  wire_type: ""
+  wire_diameter: 0.0
+  cutting_speed: 0
+  tolerance: 0.005
+  surface_roughness_requirement: ""
+  cooling_method: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+  straightness_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "中走丝线切割机"
+  operator_role: "线切割工"
+  estimated_duration: 120  # 标准工时（分钟）
+  quality_check_required: true

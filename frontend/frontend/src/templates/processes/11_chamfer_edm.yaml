@@ -1,0 +1,38 @@
+# 工序模板基础信息
+basic_info:
+  name: "斜边放电"
+  code: "TEMPLATE_CHAMFER_EDM"
+  category: "EDM"
+  description: "斜边放电工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  chamfer_angle: 0.0
+  chamfer_depth: 0.0
+  electrode_type: ""
+  electrode_angle: 0.0
+  spark_gap: 0.0
+  roughing_current: 0
+  finishing_current: 0
+  roughing_voltage: 0
+  finishing_voltage: 0
+  tolerance: 0.005
+  surface_roughness_requirement: ""
+  cooling_method: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  angle_check: ""
+  depth_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "电火花成型机"
+  operator_role: "放电工"
+  estimated_duration: 150  # 标准工时（分钟）
+  quality_check_required: true

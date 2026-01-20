@@ -1,0 +1,575 @@
+/* 深色模式支持 */
+
+/* 深色模式色彩变量 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 主色调 - 深色模式调整 */
+    --color-primary: #8CD622;
+    --color-primary-light: rgba(140, 214, 34, 0.15);
+    --color-primary-dark: #6CB01A;
+    
+    /* 状态色 - 深色模式调整 */
+    --color-success: #34D399;
+    --color-success-light: rgba(52, 211, 153, 0.15);
+    --color-warning: #FBBF24;
+    --color-warning-light: rgba(251, 191, 36, 0.15);
+    --color-error: #FC8181;
+    --color-error-light: rgba(252, 129, 129, 0.15);
+    --color-info: #9CA3AF;
+    --color-info-light: rgba(156, 163, 175, 0.15);
+    
+    /* 任务状态色 - 深色模式调整 */
+    --status-processing: #8CD622;
+    --status-processing-light: rgba(140, 214, 34, 0.15);
+    --status-pending: #FBBF24;
+    --status-pending-light: rgba(251, 191, 36, 0.15);
+    --status-completed: #34D399;
+    --status-completed-light: rgba(52, 211, 153, 0.15);
+    
+    /* 文本色 - 深色模式调整 */
+    --text-primary: #F9FAFB;
+    --text-secondary: #D1D5DB;
+    --text-tertiary: #9CA3AF;
+    --text-disabled: #6B7280;
+    
+    /* 边框色 - 深色模式调整 */
+    --border-primary: #8CD622;
+    --border-default: #4B5563;
+    --border-light: #374151;
+    
+    /* 背景色 - 深色模式调整 */
+    --bg-page: #111827;
+    --bg-card: #1F2937;
+    --bg-secondary: #374151;
+    --bg-tertiary: #4B5563;
+    
+    /* 阴影 - 深色模式增强 */
+    --shadow-xs: 0 1rpx 2rpx rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4rpx 8rpx rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8rpx 16rpx rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 12rpx 24rpx rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* 深色模式组件样式覆盖 */
+
+/* 卡片深色模式 */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
+  }
+  
+  .card-header {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .module-header {
+    border-bottom-color: var(--border-light);
+  }
+}
+
+/* 按钮深色模式 */
+@media (prefers-color-scheme: dark) {
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+  
+  .btn-primary:active {
+    background-color: var(--color-primary-dark);
+  }
+  
+  .btn-secondary {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+  
+  .btn-secondary:active {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+  }
+  
+  .btn-success {
+    background-color: var(--color-success);
+    color: var(--color-white);
+  }
+  
+  .btn-warning {
+    background-color: var(--color-warning);
+    color: var(--color-white);
+  }
+  
+  .btn-error {
+    background-color: var(--color-error);
+    color: var(--color-white);
+  }
+}
+
+/* 输入框深色模式 */
+@media (prefers-color-scheme: dark) {
+  .input {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+  
+  .input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3rpx var(--color-primary-light);
+  }
+  
+  .input::placeholder {
+    color: var(--text-disabled);
+  }
+  
+  .input:disabled {
+    background-color: var(--bg-secondary);
+    color: var(--text-disabled);
+    border-color: var(--border-light);
+  }
+}
+
+/* 标签深色模式 */
+@media (prefers-color-scheme: dark) {
+  .tag-primary {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-color: rgba(140, 214, 34, 0.2);
+  }
+  
+  .tag-success {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+  
+  .tag-warning {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning);
+    border-color: rgba(251, 191, 36, 0.2);
+  }
+  
+  .tag-error {
+    background-color: var(--color-error-light);
+    color: var(--color-error);
+    border-color: rgba(252, 129, 129, 0.2);
+  }
+  
+  .tag-info {
+    background-color: var(--color-info-light);
+    color: var(--color-info);
+    border-color: rgba(156, 163, 175, 0.2);
+  }
+  
+  .tag-processing {
+    background-color: var(--status-processing-light);
+    color: var(--status-processing);
+    border-color: rgba(140, 214, 34, 0.2);
+  }
+  
+  .tag-pending {
+    background-color: var(--status-pending-light);
+    color: var(--status-pending);
+    border-color: rgba(251, 191, 36, 0.2);
+  }
+  
+  .tag-completed {
+    background-color: var(--status-completed-light);
+    color: var(--status-completed);
+    border-color: rgba(52, 211, 153, 0.2);
+  }
+}
+
+/* 文本深色模式 */
+@media (prefers-color-scheme: dark) {
+  .text-primary {
+    color: var(--text-primary);
+  }
+  
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+  
+  .text-tertiary {
+    color: var(--text-tertiary);
+  }
+  
+  .text-success {
+    color: var(--color-success);
+  }
+  
+  .text-warning {
+    color: var(--color-warning);
+  }
+  
+  .text-error {
+    color: var(--color-error);
+  }
+  
+  .text-info {
+    color: var(--color-info);
+  }
+}
+
+/* 导航栏深色模式 */
+@media (prefers-color-scheme: dark) {
+  .tab-bar {
+    background-color: var(--bg-card);
+    border-top-color: var(--border-light);
+  }
+  
+  .tab-bar-text {
+    color: var(--text-tertiary);
+  }
+  
+  .tab-bar-text.active {
+    color: var(--color-primary);
+  }
+  
+  .scan-text {
+    color: var(--color-primary);
+  }
+}
+
+/* 模态框深色模式 */
+@media (prefers-color-scheme: dark) {
+  .modal-content {
+    background-color: var(--bg-card);
+  }
+  
+  .modal-header {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .modal-title {
+    color: var(--text-primary);
+  }
+  
+  .modal-close {
+    color: var(--text-tertiary);
+  }
+  
+  .modal-close:active {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+  
+  .modal-tab {
+    color: var(--text-secondary);
+  }
+  
+  .modal-tab.active {
+    color: var(--color-primary);
+  }
+}
+
+/* 空状态深色模式 */
+@media (prefers-color-scheme: dark) {
+  .empty-icon {
+    opacity: 0.6;
+  }
+  
+  .empty-title {
+    color: var(--text-primary);
+  }
+  
+  .empty-desc {
+    color: var(--text-secondary);
+  }
+}
+
+/* Toast深色模式 */
+@media (prefers-color-scheme: dark) {
+  .toast {
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
+  }
+}
+
+/* 加载状态深色模式 */
+@media (prefers-color-scheme: dark) {
+  .loading-content {
+    background-color: var(--bg-card);
+  }
+  
+  .loading-text {
+    color: var(--text-primary);
+  }
+}
+
+/* 骨架屏深色模式 */
+@media (prefers-color-scheme: dark) {
+  .skeleton-avatar,
+  .skeleton-title,
+  .skeleton-text {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+  }
+}
+
+/* 进度条深色模式 */
+@media (prefers-color-scheme: dark) {
+  .progress-bar {
+    background-color: var(--bg-secondary);
+  }
+  
+  .progress-fill {
+    background-color: var(--color-primary);
+  }
+}
+
+/* 筛选面板深色模式 */
+@media (prefers-color-scheme: dark) {
+  .filter-container {
+    background-color: var(--bg-card);
+    border-bottom-color: var(--border-light);
+  }
+  
+  .filter-panel {
+    background-color: var(--bg-card);
+  }
+  
+  .filter-section-title {
+    color: var(--text-primary);
+  }
+  
+  .filter-option {
+    background-color: var(--bg-card);
+  }
+  
+  .filter-option.selected {
+    background-color: var(--color-primary-light);
+  }
+  
+  .filter-option-text {
+    color: var(--text-primary);
+  }
+  
+  .filter-option.selected .filter-option-text {
+    color: var(--color-primary);
+  }
+  
+  .filter-action-btn {
+    color: var(--text-primary);
+  }
+  
+  .filter-reset {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-default);
+  }
+  
+  .filter-reset:active {
+    background-color: var(--bg-tertiary);
+  }
+}
+
+/* 面包屑深色模式 */
+@media (prefers-color-scheme: dark) {
+  .breadcrumb {
+    background-color: var(--bg-card);
+    border-bottom-color: var(--border-light);
+  }
+  
+  .breadcrumb-text {
+    color: var(--text-secondary);
+  }
+  
+  .breadcrumb-text.active {
+    color: var(--color-primary);
+  }
+  
+  .breadcrumb-separator {
+    color: var(--text-tertiary);
+  }
+}
+
+/* 用户卡片深色模式 */
+@media (prefers-color-scheme: dark) {
+  .user-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
+  }
+  
+  .user-name {
+    color: var(--text-primary);
+  }
+  
+  .user-role {
+    color: var(--text-secondary);
+    background-color: var(--bg-secondary);
+  }
+  
+  .meta-item {
+    color: var(--text-secondary);
+  }
+}
+
+/* 快捷操作深色模式 */
+@media (prefers-color-scheme: dark) {
+  .quick-actions-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
+  }
+  
+  .quick-action-item {
+    background-color: var(--bg-card);
+  }
+  
+  .quick-action-item:active {
+    background-color: var(--bg-secondary);
+  }
+  
+  .quick-action-name {
+    color: var(--text-primary);
+  }
+}
+
+/* 菜单深色模式 */
+@media (prefers-color-scheme: dark) {
+  .menu-section {
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
+  }
+  
+  .section-title {
+    color: var(--text-primary);
+  }
+  
+  .menu-item {
+    background-color: var(--bg-card);
+  }
+  
+  .menu-item:active {
+    background-color: var(--bg-secondary);
+  }
+  
+  .menu-text {
+    color: var(--text-primary);
+  }
+  
+  .menu-arrow {
+    color: var(--text-tertiary);
+  }
+}
+
+/* 任务列表深色模式 */
+@media (prefers-color-scheme: dark) {
+  .task-item {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .task-item:active {
+    background-color: var(--bg-secondary);
+  }
+  
+  .task-title {
+    color: var(--text-primary);
+  }
+  
+  .task-desc {
+    color: var(--text-secondary);
+  }
+  
+  .task-time,
+  .task-assignee {
+    color: var(--text-tertiary);
+  }
+}
+
+/* 模具列表深色模式 */
+@media (prefers-color-scheme: dark) {
+  .mold-item {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .mold-item:active {
+    background-color: var(--bg-secondary);
+  }
+  
+  .mold-name {
+    color: var(--text-primary);
+  }
+  
+  .mold-desc {
+    color: var(--text-secondary);
+  }
+  
+  .mold-type,
+  .mold-date {
+    color: var(--text-tertiary);
+  }
+}
+
+/* 数据项深色模式 */
+@media (prefers-color-scheme: dark) {
+  .data-item {
+    border-bottom-color: var(--border-light);
+  }
+  
+  .data-item:active {
+    background-color: var(--bg-secondary);
+  }
+  
+  .data-item-name {
+    color: var(--text-primary);
+  }
+  
+  .data-item-operator,
+  .data-item-time {
+    color: var(--text-secondary);
+  }
+}
+
+/* 搜索栏深色模式 */
+@media (prefers-color-scheme: dark) {
+  .search-bar {
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
+  }
+  
+  .search-text {
+    color: var(--text-secondary);
+  }
+}
+
+/* 统计卡片深色模式 */
+@media (prefers-color-scheme: dark) {
+  .stat-card {
+    background-color: var(--bg-card);
+    border-color: var(--border-light);
+  }
+  
+  .stat-card:active {
+    background-color: var(--bg-secondary);
+  }
+}
+
+/* 高对比度模式适配 */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    border-width: 2rpx;
+  }
+  
+  .tab-bar-icon.active {
+    filter: brightness(1.2);
+  }
+  
+  .tag-processing,
+  .tag-pending,
+  .tag-completed {
+    border-width: 2rpx;
+  }
+}
+
+/* 减少动画模式适配 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

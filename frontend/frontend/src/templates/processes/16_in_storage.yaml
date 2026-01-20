@@ -1,0 +1,32 @@
+# 工序模板基础信息
+basic_info:
+  name: "入库"
+  code: "TEMPLATE_IN_STORAGE"
+  category: "IN_STORAGE"
+  description: "入库工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 入库参数字段定义
+  storage_location: ""
+  storage_condition: ""
+  packaging_requirement: ""
+  labeling_requirement: ""
+  inventory_system: ""
+
+# 质量检验标准
+quality_standards:
+  # 入库质量标准定义
+  inspection_required: true
+  acceptance_criteria: ""
+  rejection_criteria: ""
+  record_required: true
+  approval_required: true
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "仓储设备"
+  operator_role: "仓管员"
+  estimated_duration: 30  # 标准工时（分钟）
+  quality_check_required: true

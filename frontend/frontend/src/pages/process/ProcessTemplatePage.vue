@@ -1,5 +1,147 @@
 <template>
   <div class="process-template-wrap">
+    <!-- 打印预览模态框 -->
+    <el-dialog
+      v-model="printPreviewVisible"
+      title="加工工序汇总预览"
+      width="90%"
+      top="5vh"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <div class="print-preview-container">
+        <div class="print-preview-header">
+          <el-button type="primary" @click="handlePrint">
+            <el-icon><Printer /></el-icon> 打印
+          </el-button>
+          <el-button @click="printPreviewVisible = false">
+            <el-icon><Close /></el-icon> 关闭
+          </el-button>
+        </div>
+        <div class="print-preview-content">
+          <div class="a4-paper" ref="printContent">
+            <div class="preview-title">
+              <h1>模具加工工艺流转卡</h1>
+              <div class="preview-subtitle">V2.0</div>
+            </div>
+            
+            <!-- 模具基本信息表格 -->
+            <div class="preview-section">
+              <table class="preview-table flow-card-table">
+                <tbody>
+                  <!-- 模具基本信息标题行 -->
+                  <tr>
+                    <td colspan="8" class="section-header">模具基本信息</td>
+                  </tr>
+                  
+                  <!-- 第一行：负责人和模具刻字 -->
+                  <tr>
+                    <td class="field-name">负责人:</td>
+                    <td class="field-value fillable">{{ moldInfo.responsiblePerson }}</td>
+                    <td class="field-name">模具刻字:</td>
+                    <td class="field-value fillable" colspan="5">{{ moldInfo.moldEngraving }}</td>
+                  </tr>
+                  
+                  <!-- 第二行：模具编号、成品规格、材料、硬度 -->
+                  <tr>
+                    <td class="field-name">模具编号:</td>
+                    <td class="field-value fillable">{{ moldInfo.moldNumber }}</td>
+                    <td class="field-name">成品规格:</td>
+                    <td class="field-value fillable">{{ moldInfo.productSpec }}</td>
+                    <td class="field-name">材料:</td>
+                    <td class="field-value fillable">{{ moldInfo.material }}</td>
+                    <td class="field-name">硬度:</td>
+                    <td class="field-value fillable">{{ moldInfo.hardness }}</td>
+                  </tr>
+                  
+                  <!-- 第三行：模具规格和定位孔中心距 -->
+                  <tr>
+                    <td class="field-name">模具规格:</td>
+                    <td class="field-value fillable" colspan="5">{{ moldInfo.moldSpec }}</td>
+                    <td class="field-name">定位孔中心距:</td>
+                    <td class="field-value fillable">{{ moldInfo.positioningHoleDistance }}</td>
+                  </tr>
+                  
+                  <!-- 第四行：模具厚度、进泥孔直径、槽宽、槽间距 -->
+                  <tr>
+                    <td class="field-name">模具厚度:</td>
+                    <td class="field-value fillable">{{ moldInfo.moldThickness }}</td>
+                    <td class="field-name">进泥孔直径:</td>
+                    <td class="field-value fillable">{{ moldInfo.mudInletDiameter }}</td>
+                    <td class="field-name">槽宽:</td>
+                    <td class="field-value fillable">{{ moldInfo.slotWidth }}</td>
+                    <td class="field-name">槽间距:</td>
+                    <td class="field-value fillable">{{ moldInfo.slotSpacing }}</td>
+                  </tr>
+                  
+                  <!-- 工序路线图标题 -->
+                  <tr>
+                    <td colspan="8" class="section-header">工序路线图</td>
+                  </tr>
+                  
+                  <!-- 工序路线图 -->
+                  <tr>
+                    <td colspan="8" class="process-flow-section">
+                      <div class="process-flow-diagram">
+                        <svg width="100%" height="100" viewBox="0 0 840 100" preserveAspectRatio="xMidYMid meet">
+                          <defs>
+                            <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                              <polygon points="0 0, 8 3, 0 6" fill="#1971c2" />
+                            </marker>
+                          </defs>
+                          <g stroke="#1971c2" stroke-width="1.5" fill="none">
+                            <!-- 动态生成节点 -->
+                            <rect 
+                              v-for="node in flowChartNodes" 
+                              :key="node.index"
+                              :x="node.x" 
+                              :y="node.y" 
+                              :width="node.width" 
+                              :height="node.height" 
+                              rx="6" 
+                              ry="6" 
+                              fill="white" 
+                            />
+                            
+                            <!-- 动态生成箭头 -->
+                            <line 
+                              v-for="(arrow, idx) in flowChartArrows" 
+                              :key="'arrow-' + idx"
+                              :x1="arrow.x1" 
+                              :y1="arrow.y1" 
+                              :x2="arrow.x2" 
+                              :y2="arrow.y2" 
+                              marker-end="url(#arrowhead)" 
+                            />
+                          </g>
+                        </svg>
+                      </div>
+                    </td>
+                  </tr>
+                  
+                  <!-- 工序列表行 (1-14) -->
+                  <tr v-for="i in 14" :key="i">
+                    <td class="process-number">{{ i }}</td>
+                    <td class="process-content fillable" colspan="7">
+                      <template v-if="processList[i - 1]">
+                        {{ processList[i - 1].processName }}
+                        <span v-if="processList[i - 1].equipment" class="process-equipment">
+                          （设备: {{ processList[i - 1].equipment }}）
+                        </span>
+                        <span v-if="processList[i - 1].responsiblePerson" class="process-person">
+                          - 负责人: {{ processList[i - 1].responsiblePerson }}
+                        </span>
+                      </template>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
     <div class="template-header">
       <div class="header-buttons">
         <el-button type="primary" @click="saveTemplate" :loading="saving">保存模板</el-button>
@@ -26,9 +168,20 @@
                 :key="template.id"
                 class="process-template-item"
                 :class="{ 'selected': selectedTemplate?.id === template.id }"
-                @click="selectTemplate(template)"
               >
-                {{ template.name }}
+                <div class="template-item-content" @click="selectTemplate(template)">
+                  {{ template.name }}
+                </div>
+                <!-- 只为加工工序汇总添加预览按钮 -->
+                <div v-if="template.code === 'TEMPLATE_PROCESS_SUMMARY'" class="template-item-actions">
+                  <el-button 
+                    type="primary" 
+                    size="small" 
+                    @click.stop="openPrintPreview"
+                  >
+                    预览
+                  </el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -127,8 +280,8 @@
                   <h3 class="section-title">工序配置</h3>
                 </div>
                 
-                <!-- 备料工序 - 表格形式 -->
-                <div v-if="selectedTemplate.processCode === 'PREP'">
+                <!-- 备料工序和加工工序汇总 - 表格形式 -->
+                <div v-if="selectedTemplate.processCode === 'PREP' || selectedTemplate.category === 'SUMMARY'">
                   <!-- 模具基本信息模板 -->
                   <div class="table-section prep-section">
                     <div class="subsection-header">
@@ -170,6 +323,50 @@
                           <td><el-input v-model="moldInfo.slotSpacing" placeholder="请输入槽间距" size="small" /></td>
                         </tr>
                       </table>
+                    </div>
+                  </div>
+                  
+                  <!-- 加工工序汇总特有：工序路线图 -->
+                  <div v-if="selectedTemplate.category === 'SUMMARY'" class="table-section prep-section">
+                    <div class="subsection-header">
+                      <el-icon class="subsection-icon"><Connection /></el-icon>
+                      <h4 class="subsection-title">工序路线图</h4>
+                    </div>
+                    <div class="table-container">
+                      <div class="process-flow-diagram" style="padding: 20px; background: white;">
+                        <svg width="100%" height="100" viewBox="0 0 840 100" preserveAspectRatio="xMidYMid meet">
+                          <defs>
+                            <marker id="arrowhead-edit" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+                              <polygon points="0 0, 8 3, 0 6" fill="#1971c2" />
+                            </marker>
+                          </defs>
+                          <g stroke="#1971c2" stroke-width="1.5" fill="none">
+                            <!-- 动态生成节点 -->
+                            <rect 
+                              v-for="node in flowChartNodes" 
+                              :key="node.index"
+                              :x="node.x" 
+                              :y="node.y" 
+                              :width="node.width" 
+                              :height="node.height" 
+                              rx="6" 
+                              ry="6" 
+                              fill="white" 
+                            />
+                            
+                            <!-- 动态生成箭头 -->
+                            <line 
+                              v-for="(arrow, idx) in flowChartArrows" 
+                              :key="'arrow-edit-' + idx"
+                              :x1="arrow.x1" 
+                              :y1="arrow.y1" 
+                              :x2="arrow.x2" 
+                              :y2="arrow.y2" 
+                              marker-end="url(#arrowhead-edit)" 
+                            />
+                          </g>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                   
@@ -335,6 +532,10 @@ const route = useRoute()
 const saving = ref(false)
 const loadingTemplates = ref(false)
 const loadingTemplateDetail = ref(false)
+
+// 打印预览相关
+const printPreviewVisible = ref(false)
+const printContent = ref<HTMLElement | null>(null)
 
 // 是否从模具初始参数页面跳转过来
 const isFromMoldParam = computed(() => {
@@ -732,8 +933,8 @@ const getFieldsByProcess = (processCode: string) => {
     loadingTemplateDetail.value = true
     
     // 初始化数据
-    if (selectedTemplate.value.processCode === 'PREP') {
-      // 备料工序 - 初始化表格数据
+    if (selectedTemplate.value.processCode === 'PREP' || selectedTemplate.value.category === 'SUMMARY') {
+      // 备料工序和加工工序汇总 - 初始化表格数据
       moldInfo.value = {
         responsiblePerson: '',
         moldEngraving: '',
@@ -749,13 +950,16 @@ const getFieldsByProcess = (processCode: string) => {
         slotSpacing: ''
       }
       
-      // 工序内容列表重置
-      processList.value = [
-        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
-        { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
-      ]
+      // 工序内容列表重置 - 加工工序汇总需要14行，备料只需4行
+      const rowCount = selectedTemplate.value.category === 'SUMMARY' ? 14 : 4
+      processList.value = Array.from({ length: rowCount }, () => ({
+        processName: '',
+        equipment: '',
+        details: '',
+        responsiblePerson: '',
+        date: '',
+        remark: ''
+      }))
       
       // 如果有接收到模具数据，自动填充
       if (receivedMoldData.value) {
@@ -777,8 +981,8 @@ const getFieldsByProcess = (processCode: string) => {
         const response = await getProcessTemplateDetail(selectedTemplate.value.id)
         if (response && response.data) {
           const templateData = response.data
-          if (selectedTemplate.value.processCode === 'PREP') {
-            // 备料工序 - 填充表格数据
+          if (selectedTemplate.value.processCode === 'PREP' || selectedTemplate.value.category === 'SUMMARY') {
+            // 备料工序和加工工序汇总 - 填充表格数据
             Object.entries(templateData.config || {}).forEach(([key, value]) => {
               if (key.startsWith('mold_')) {
                 // 模具基本信息
@@ -848,8 +1052,8 @@ const saveTemplate = async () => {
       fields: []
     }
     
-    if (selectedTemplate.value.processCode === 'PREP') {
-      // 备料工序 - 处理表格数据
+    if (selectedTemplate.value.processCode === 'PREP' || selectedTemplate.value.category === 'SUMMARY') {
+      // 备料工序和加工工序汇总 - 处理表格数据
       const prepData: any = {}
       
       // 模具基本信息
@@ -928,12 +1132,394 @@ const handleBack = () => {
     router.push('/mold/process/templates')
   }
 }
+
+// 打印预览相关方法
+const handlePrint = () => {
+  window.print()
+}
+
+// 动态生成流程图节点
+const flowChartNodes = computed(() => {
+  // 过滤出有工序名称的项
+  const validProcesses = processList.value.filter(p => p.processName && p.processName.trim() !== '')
+  
+  if (validProcesses.length === 0) {
+    return []
+  }
+  
+  const nodes: any[] = []
+  const nodeWidth = 85
+  const nodeHeight = 35
+  const nodeGap = 20
+  const startX = 10
+  const firstRowY = 15
+  const secondRowY = 60
+  
+  // 最多显示9个节点：第一行7个，第二行2个
+  const maxNodes = Math.min(validProcesses.length, 9)
+  const firstRowCount = Math.min(maxNodes, 7)
+  const secondRowCount = maxNodes > 7 ? Math.min(maxNodes - 7, 2) : 0
+  
+  // 生成第一行节点
+  for (let i = 0; i < firstRowCount; i++) {
+    const x = startX + i * (nodeWidth + nodeGap)
+    nodes.push({
+      index: i,
+      x,
+      y: firstRowY,
+      width: nodeWidth,
+      height: nodeHeight,
+      row: 1,
+      name: validProcesses[i].processName
+    })
+  }
+  
+  // 生成第二行节点（从右到左）
+  for (let i = 0; i < secondRowCount; i++) {
+    // 第二行第一个节点位于第一行最后一个节点下方
+    // 第二行第二个节点在其左侧
+    const x = startX + (firstRowCount - 1 - i) * (nodeWidth + nodeGap)
+    nodes.push({
+      index: firstRowCount + i,
+      x,
+      y: secondRowY,
+      width: nodeWidth,
+      height: nodeHeight,
+      row: 2,
+      name: validProcesses[firstRowCount + i].processName
+    })
+  }
+  
+  return nodes
+})
+
+// 动态生成流程图箭头
+const flowChartArrows = computed(() => {
+  const nodes = flowChartNodes.value
+  if (nodes.length === 0) return []
+  
+  const arrows: any[] = []
+  
+  // 第一行的箭头（从左到右）
+  const firstRowNodes = nodes.filter(n => n.row === 1)
+  for (let i = 0; i < firstRowNodes.length - 1; i++) {
+    const from = firstRowNodes[i]
+    const to = firstRowNodes[i + 1]
+    arrows.push({
+      x1: from.x + from.width,
+      y1: from.y + from.height / 2,
+      x2: to.x,
+      y2: to.y + to.height / 2,
+      type: 'horizontal'
+    })
+  }
+  
+  // 如果有第二行，添加向下的箭头
+  const secondRowNodes = nodes.filter(n => n.row === 2)
+  if (secondRowNodes.length > 0) {
+    const lastFirstRowNode = firstRowNodes[firstRowNodes.length - 1]
+    const firstSecondRowNode = secondRowNodes[0]
+    
+    // 向下的箭头
+    arrows.push({
+      x1: lastFirstRowNode.x + lastFirstRowNode.width / 2,
+      y1: lastFirstRowNode.y + lastFirstRowNode.height,
+      x2: firstSecondRowNode.x + firstSecondRowNode.width / 2,
+      y2: firstSecondRowNode.y,
+      type: 'vertical'
+    })
+    
+    // 第二行的箭头（从右到左）
+    if (secondRowNodes.length > 1) {
+      arrows.push({
+        x1: secondRowNodes[0].x,
+        y1: secondRowNodes[0].y + secondRowNodes[0].height / 2,
+        x2: secondRowNodes[1].x + secondRowNodes[1].width,
+        y2: secondRowNodes[1].y + secondRowNodes[1].height / 2,
+        type: 'horizontal'
+      })
+    }
+  }
+  
+  return arrows
+})
+
+// 打开打印预览
+const openPrintPreview = () => {
+  // 如果当前工序数据为空,填充示例数据
+  if (!processList.value || processList.value.length === 0 || !processList.value.some(p => p.processName)) {
+    // 初始化14行工序数据
+    processList.value = [
+      { processName: '备料', equipment: '磨床', details: '材料准备和检查', responsiblePerson: '', date: '', remark: '' },
+      { processName: '进泥孔粗加工', equipment: '深孔钻1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '进泥孔精加工', equipment: '深孔钻2号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '热处理', equipment: '热处理设备1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '精磨', equipment: '磨床1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '导料槽加工-中丝', equipment: '中走丝1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '外形加工', equipment: '铣床1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '外形精加工', equipment: '线切割机1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '模芯台阶加工', equipment: '铣床2号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '裸模自检', equipment: '无需设备', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '品质检测', equipment: '检测设备1号', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '入库', equipment: '无需设备', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' },
+      { processName: '', equipment: '', details: '', responsiblePerson: '', date: '', remark: '' }
+    ]
+  }
+  
+  // 如果模具基本信息为空,填充示例数据
+  if (!moldInfo.value || Object.values(moldInfo.value).every(v => !v)) {
+    moldInfo.value = {
+      responsiblePerson: '',
+      moldEngraving: '',
+      moldNumber: '',
+      productSpec: '',
+      material: '',
+      hardness: '',
+      moldSpec: '',
+      positioningHoleDistance: '',
+      moldThickness: '',
+      mudInletDiameter: '',
+      slotWidth: '',
+      slotSpacing: ''
+    }
+  }
+  
+  printPreviewVisible.value = true
+}
 </script>
 
 <style scoped lang="scss">
 .process-template-wrap {
   padding: 20px;
   background-color: var(--el-bg-color-page);
+}
+
+/* 打印预览样式 */
+.print-preview-container {
+  background-color: #f5f7fa;
+  min-height: 600px;
+}
+
+.print-preview-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.print-preview-content {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  max-height: calc(90vh - 120px);
+}
+
+.a4-paper {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm 10mm;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.preview-title {
+  text-align: center;
+  margin: 0 0 10px 0;
+  padding: 8px 0;
+  background-color: white;
+  border-bottom: 1px solid #000;
+}
+
+.preview-title h1 {
+  font-size: 20px;
+  margin: 0;
+  color: #000;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.preview-subtitle {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.preview-section {
+  margin: 0;
+  padding: 0;
+}
+
+/* 流程卡表格样式 */
+.flow-card-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+  font-size: 11px;
+  font-family: "SimSun", "宋体", "Microsoft YaHei", "微软雅黑", sans-serif;
+}
+
+.flow-card-table td {
+  border: 1px solid #000;
+  padding: 4px 6px;
+  vertical-align: middle;
+}
+
+.section-header {
+  text-align: left;
+  background-color: #e9ecef;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 8px !important;
+  border: 1px solid #000 !important;
+}
+
+.field-name {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f5f7fa;
+  width: 80px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.field-value {
+  text-align: left;
+  padding-left: 8px;
+  min-width: 80px;
+  min-height: 24px;
+  font-size: 11px;
+}
+
+.field-value.fillable {
+  position: relative;
+  padding-bottom: 2px;
+  background: linear-gradient(to bottom, transparent 0%, transparent calc(100% - 1px), #1971c2 calc(100% - 1px), #1971c2 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0 0;
+  min-height: 24px;
+  font-weight: 500;
+  color: #000;
+  font-size: 11px;
+}
+
+.process-flow-section {
+  padding: 10px;
+  text-align: center;
+}
+
+.process-flow-diagram {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.process-number {
+  text-align: center;
+  font-weight: bold;
+  background-color: #f5f7fa;
+  width: 30px;
+  font-size: 11px;
+}
+
+.process-content {
+  text-align: left;
+  padding-left: 8px;
+  min-height: 24px;
+  font-size: 11px;
+}
+
+.process-equipment,
+.process-person {
+  font-size: 10px;
+  color: #666;
+  margin-left: 6px;
+}
+
+.process-equipment {
+  color: #1971c2;
+}
+
+.process-person {
+  color: #2d3748;
+}
+
+/* 打印专用样式 */
+@media print {
+  /* 隐藏不需要打印的元素 */
+  .print-preview-header {
+    display: none !important;
+  }
+  
+  /* 调整打印样式 */
+  .print-preview-content {
+    overflow: visible !important;
+    background-color: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .a4-paper {
+    box-shadow: none !important;
+    margin: 0 !important;
+    background: white !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 10mm 8mm !important;
+  }
+  
+  /* 优化打印边距和分页 */
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  
+  /* 确保表格在一页内显示 */
+  table {
+    page-break-inside: avoid !important;
+  }
+  
+  /* 确保填空下划线在打印时显示清晰 */
+  .field-value.fillable {
+    background: linear-gradient(to bottom, transparent 0%, transparent calc(100% - 0.4mm), #1971c2 calc(100% - 0.4mm), #1971c2 100%) !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* 打印时调整字体大小 */
+  .preview-title h1 {
+    font-size: 18px !important;
+  }
+  
+  .flow-card-table {
+    font-size: 10px !important;
+  }
+  
+  .field-name,
+  .field-value,
+  .process-number,
+  .process-content {
+    font-size: 10px !important;
+  }
+  
+  .process-equipment,
+  .process-person {
+    font-size: 9px !important;
+  }
 }
 
 .template-header {
@@ -1142,6 +1728,18 @@ const handleBack = () => {
   color: #333333;
   text-align: left;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-item-content {
+  flex: 1;
+}
+
+.template-item-actions {
+  margin-left: 12px;
+  flex-shrink: 0;
 }
 
 .process-template-item:hover {

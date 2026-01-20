@@ -65,7 +65,7 @@
   --el-bg-color: #{$gray-50};
   --el-bg-color-page: #{$gray-50};
   --el-bg-color-overlay: #{$white};
-  --el-bg-color-hover: #{$primary-light};
+  --el-bg-color-hover: #{$gray-100};
   
   // 边框圆角 - Clarity Design规范
   --el-border-radius-base: #{$border-radius-md};
@@ -210,51 +210,51 @@
 .el-input {
   // Clarity Design风格输入框 - 简洁设计，清晰边框，流畅交互
   font-family: $font-family;
-  
+   
   .el-input__wrapper {
     border-radius: $input-radius;
     height: 40px;
     box-shadow: none;
-    background-color: $white;
+    background-color: $neutral-100;
     border: 1px solid $gray-300;
     transition: all 0.2s ease;
-    
+     
     &:hover {
       border-color: $gray-400;
     }
-    
+     
     &.is-focus {
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      border-color: $neutral-600;
+      box-shadow: 0 0 0 3px rgba($neutral-500, 0.2);
     }
-    
+     
     &.is-disabled {
       border-color: $gray-200;
-      background-color: $gray-50;
+      background-color: $neutral-100;
     }
   }
-  
+   
   .el-input__inner {
     height: 38px;
     line-height: 38px;
     font-size: $font-size-base;
-    color: $gray-800;
+    color: $neutral-800;
     font-weight: $font-weight-medium;
   }
-  
+   
   // 输入框前缀样式优化
   .el-input__prefix {
     left: 12px;
     color: $gray-400;
   }
-  
+   
   // 输入框后缀样式优化
   .el-input__suffix {
     right: 12px;
     color: $gray-400;
-    
+     
     &:hover {
-      color: $primary-color;
+      color: $neutral-600;
     }
   }
 }
@@ -264,68 +264,68 @@
   border-radius: $card-radius;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   border: 1px solid $gray-200;
-  background-color: $white;
+  background-color: $neutral-100;
   transition: all 0.2s ease;
   overflow: hidden;
   font-family: $font-family;
-  
+   
   // 卡片悬停效果 - 轻微上浮，增强阴影
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
-  
+   
   // 卡片头部样式优化 - Clarity Design规范
   .el-card__header {
     padding: $spacing-3;
     border-bottom: 1px solid $gray-200;
-    background-color: $white;
+    background-color: $neutral-100;
     font-weight: $font-weight-semibold;
     font-size: $font-size-lg;
-    color: $gray-800;
+    color: $neutral-800;
   }
-  
+   
   // 卡片主体样式优化 - Clarity Design规范，适当内边距
   .el-card__body {
     padding: $spacing-3;
-    background-color: $white;
+    background-color: $neutral-100;
   }
-  
+   
   // 数据统计卡片变体 - Clarity Design规范
   &.stat-card {
     border: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    
+     
     .el-card__body {
       padding: $spacing-3;
     }
-    
+     
     // 统计数值样式
     .stat-value {
       font-size: $font-size-2xl;
       font-weight: $font-weight-semibold;
-      color: $gray-900;
+      color: $neutral-900;
       margin-bottom: $spacing-1;
     }
-    
+     
     // 统计标签样式
     .stat-label {
       font-size: $font-size-sm;
-      color: $gray-500;
+      color: $neutral-500;
       margin-bottom: $spacing-2;
     }
-    
+     
     // 统计变化样式
     .stat-change {
       font-size: $font-size-xs;
       font-weight: $font-weight-medium;
-      
+       
       &.positive {
-        color: $success-color;
+        color: $neutral-600;
       }
-      
+       
       &.negative {
-        color: $error-color;
+        color: $neutral-500;
       }
     }
   }
@@ -337,68 +337,68 @@
   overflow: hidden;
   border: 1px solid $gray-200;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  background-color: $white;
+  background-color: $neutral-100;
   font-family: $font-family;
-  
+   
   // 表格头部样式优化 - Clarity Design规范
   &__header-wrapper {
     .el-table__header {
       th {
-          background-color: $white;
-          color: $gray-700;
+          background-color: $neutral-100;
+          color: $neutral-700;
           font-weight: $font-weight-semibold;
           height: 48px;
           border-bottom: 1px solid $gray-200;
           font-size: $font-size-sm;
           text-align: left;
           vertical-align: middle;
-          
+           
           // 表头内边距 - Clarity Design规范
           &:first-child {
             padding-left: $spacing-3;
           }
-          
+           
           &:last-child {
             padding-right: $spacing-3;
           }
         }
     }
   }
-  
+   
   // 表格主体样式优化 - Clarity Design规范
   &__body-wrapper {
     .el-table__body {
       td {
           height: 44px;
           border-bottom: 1px solid $gray-100;
-          color: $gray-700;
+          color: $neutral-700;
           font-weight: $font-weight-medium;
           font-size: $font-size-sm;
           text-align: left;
           vertical-align: middle;
-          
+           
           // 单元格内边距优化 - Clarity Design规范
           &:first-child {
             padding-left: $spacing-3;
           }
-          
+           
           &:last-child {
             padding-right: $spacing-3;
           }
         }
-      
+       
       // 行样式优化 - Clarity Design规范
       tr {
         transition: background-color 0.2s ease;
-        
+         
         // 行悬停效果 - Clarity Design规范
         &:hover {
-          background-color: $gray-50;
+          background-color: $neutral-200;
         }
       }
     }
   }
-  
+   
   // 表格空状态样式优化 - Clarity Design规范
   &--empty {
     .el-table__empty-block {
@@ -409,9 +409,9 @@
 }
 
 .el-menu {
-  // Clarity Design风格菜单 - 简洁白色背景，左侧紫色指示器
+  // Clarity Design风格菜单 - 简洁白色背景，左侧指示器
   border-right: 1px solid $gray-200;
-  background-color: $white;
+  background-color: $neutral-50;
   box-shadow: none;
   width: 240px;
   font-family: $font-family;
@@ -431,15 +431,15 @@
     
     // 菜单项悬停效果 - Clarity Design规范
     &:hover {
-      background-color: $primary-light;
-      color: $primary-color;
+      background-color: $neutral-200;
+      color: $neutral-700;
     }
     
-    // 菜单项激活状态 - Clarity Design规范，左侧紫色指示器
+    // 菜单项激活状态 - Clarity Design规范，左侧指示器
     &.is-active {
-      background-color: $primary-light;
-      color: $primary-color;
-      border-left: 4px solid $primary-color;
+      background-color: $neutral-200;
+      color: $neutral-700;
+      border-left: 4px solid $neutral-500;
       font-weight: $font-weight-semibold;
       padding-left: $spacing-3;
     }
@@ -459,15 +459,15 @@
       
       // 子菜单标题悬停效果
       &:hover {
-        background-color: $primary-light;
-        color: $primary-color;
+        background-color: $neutral-200;
+        color: $neutral-700;
       }
       
       // 子菜单激活状态
       &.is-active {
-        background-color: $primary-light;
-        color: $primary-color;
-        border-left: 4px solid $primary-color;
+        background-color: $neutral-200;
+        color: $neutral-700;
+        border-left: 4px solid $neutral-500;
         padding-left: $spacing-3;
       }
     }
@@ -478,11 +478,11 @@
       margin-left: 0;
       
       &:hover {
-        background-color: $primary-light;
+        background-color: $neutral-200;
       }
       
       &.is-active {
-        border-left: 4px solid $primary-color;
+        border-left: 4px solid $neutral-500;
         padding: 0 $spacing-3 0 $spacing-4;
       }
     }
@@ -491,7 +491,7 @@
   // 水平菜单样式（如果使用）- Clarity Design规范
   &.el-menu--horizontal {
     border-bottom: 1px solid $gray-200;
-    background-color: $white;
+    background-color: $neutral-50;
     
     .el-menu-item {
       margin: 0;
@@ -500,14 +500,14 @@
       border-left: none;
       
       &:hover {
-        background-color: $primary-light;
+        background-color: $neutral-200;
       }
       
       &.is-active {
-        background-color: $primary-light;
-        color: $primary-color;
+        background-color: $neutral-200;
+        color: $neutral-700;
         border-left: none;
-        border-bottom: 3px solid $primary-color;
+        border-bottom: 3px solid $neutral-500;
       }
     }
     
@@ -518,7 +518,7 @@
         border-radius: 0;
         
         &:hover {
-          background-color: $primary-light;
+          background-color: $neutral-200;
         }
       }
     }
@@ -608,12 +608,12 @@
       transition: all 0.2s ease;
       
       &:hover {
-        background-color: $primary-light;
-        color: $primary-color;
+        background-color: $neutral-200;
+        color: $neutral-700;
       }
       
       &.active {
-        background-color: $primary-color;
+        background-color: $neutral-600;
         color: $white;
         border-radius: $border-radius-lg;
       }
@@ -630,8 +630,8 @@
     transition: all 0.2s ease;
     
     &:hover {
-      background-color: $primary-light;
-      color: $primary-color;
+      background-color: $neutral-200;
+      color: $neutral-700;
     }
   }
 }

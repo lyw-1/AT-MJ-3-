@@ -1,0 +1,36 @@
+# 工序模板基础信息
+basic_info:
+  name: "进泥孔精加工"
+  code: "TEMPLATE_MUD_HOLE_FINISH"
+  category: "DRILL_LAYER"
+  description: "进泥孔精加工工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  hole_diameter: 0.0
+  hole_depth: 0.0
+  hole_count: 0
+  drill_speed: 0
+  feed_rate: 0.0
+  tolerance: 0.001
+  surface_roughness_requirement: ""
+  cooling_method: ""
+  layer_count: 1
+  layer_depth: 0.0
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+  roundness_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "精密钻机"
+  operator_role: "操作工"
+  estimated_duration: 150  # 标准工时（分钟）
+  quality_check_required: true

@@ -1,0 +1,33 @@
+<view class="tab-bar">
+  <!-- 首页 -->
+  <view class="tab-bar-item" bindtap="switchTab" data-path="/pages/index/index" data-index="0">
+    <image class="tab-bar-icon {{selected === 0 ? 'active' : ''}}" src="/assets/icons/home-new.svg"></image>
+    <text class="tab-bar-text {{selected === 0 ? 'active' : ''}}">首页</text>
+  </view>
+  
+  <!-- 模库 -->
+  <view class="tab-bar-item" bindtap="switchTab" data-path="/pages/mold/list/index" data-index="1">
+    <image class="tab-bar-icon {{selected === 1 ? 'active' : ''}}" src="/assets/icons/mold-new.svg"></image>
+    <text class="tab-bar-text {{selected === 1 ? 'active' : ''}}">模库</text>
+  </view>
+  
+  <!-- 中间扫描按钮 -->
+  <view class="scan-button-wrapper">
+    <view class="scan-button" bindtap="switchTab" data-path="/pages/scan/index" data-index="2">
+      <image class="scan-icon" src="/assets/icons/scan-large.svg"></image>
+    </view>
+    <text class="scan-text">扫描</text>
+  </view>
+  
+  <!-- 任务 -->
+  <view class="tab-bar-item" bindtap="switchTab" data-path="/pages/tasks/index" data-index="3">
+    <image class="tab-bar-icon {{selected === 3 ? 'active' : ''}}" src="/assets/icons/tasks-new.svg"></image>
+    <text class="tab-bar-text {{selected === 3 ? 'active' : ''}}">任务</text>
+  </view>
+  
+  <!-- 我的 -->
+  <view class="tab-bar-item" bindtap="switchTab" data-path="/pages/profile/index" data-index="4">
+    <image class="tab-bar-icon {{selected === 4 ? 'active' : ''}}" src="/assets/icons/profile-new.svg"></image>
+    <text class="tab-bar-text {{selected === 4 ? 'active' : ''}}">我的</text>
+  </view>
+</view>

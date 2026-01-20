@@ -1,0 +1,201 @@
+/* 增强统计卡片样式 */
+.enhanced-stat-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-md);
+  border: 1rpx solid var(--border-light);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-stat-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 卡片背景渐变 */
+.stat-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  border-radius: var(--radius-2xl);
+}
+
+/* 趋势指示器 */
+.stat-trend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  transition: all var(--transition-fast);
+}
+
+.stat-trend.up {
+  color: var(--color-success);
+  background-color: var(--color-success-light);
+}
+
+.stat-trend.down {
+  color: var(--color-error);
+  background-color: var(--color-error-light);
+}
+
+.stat-trend.flat {
+  color: var(--color-info);
+  background-color: var(--color-info-light);
+}
+
+.trend-icon {
+  font-size: var(--font-size-base);
+}
+
+.trend-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* 主要数值 */
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  position: relative;
+  z-index: 1;
+}
+
+.stat-value-large {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.15);
+  margin-bottom: var(--space-2);
+  animation: value-pop 0.4s var(--ease-bounce);
+}
+
+@keyframes value-pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.stat-unit {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: var(--space-1);
+}
+
+/* 标签 */
+.stat-label {
+  font-size: var(--font-size-base);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-top: var(--space-2);
+  position: relative;
+  z-index: 1;
+}
+
+/* 附加信息 */
+.stat-meta {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.meta-item:active {
+  background-color: var(--bg-tertiary);
+  transform: scale(1.05);
+}
+
+.meta-icon {
+  font-size: var(--font-size-base);
+}
+
+.meta-text {
+  font-weight: var(--font-weight-medium);
+}
+
+/* 响应式 */
+@media (min-width: 600rpx) {
+  .enhanced-stat-card {
+    padding: var(--space-5);
+  }
+  
+  .stat-content {
+    flex-direction: row;
+    gap: var(--space-3);
+  }
+  
+  .stat-meta {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 375px) {
+  .enhanced-stat-card {
+    padding: var(--space-3);
+  }
+  
+  .stat-trend {
+    padding: var(--space-1) var(--space-1);
+  }
+  
+  .meta-item {
+    padding: var(--space-1) var(--space-1);
+  }
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  .stat-value-large {
+    color: var(--text-primary);
+    text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  }
+  
+  .stat-label {
+    color: var(--text-secondary);
+  }
+  
+  .stat-unit {
+    color: var(--text-tertiary);
+  }
+  
+  .meta-item {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+}

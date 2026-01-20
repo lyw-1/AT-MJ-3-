@@ -1,0 +1,9 @@
+<!-- 面包屑导航组件 -->
+<view class="breadcrumb {{show ? 'show' : ''}}" wx:if="{{show}}">
+  <view class="breadcrumb-container">
+    <view class="breadcrumb-item" wx:for="{{items}}" wx:key="index" bindtap="onBreadcrumbTap" data-index="{{index}}">
+      <text class="breadcrumb-text {{index === items.length - 1 ? 'active' : ''}}">{{item.name}}</text>
+      <view class="breadcrumb-separator" wx:if="{{index < items.length - 1}}">/</view>
+    </view>
+  </view>
+</view>

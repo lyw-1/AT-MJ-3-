@@ -1,0 +1,48 @@
+<!-- Toast提示组件 -->
+<view class="toast {{toast.show ? 'show' : ''}}" wx:if="{{toast.show}}">
+  <view class="toast-icon" style="background-color: {{toast.color}}">{{toast.icon}}</view>
+  <text class="toast-message">{{toast.message}}</text>
+</view>
+
+<!-- 加载状态组件 -->
+<view class="loading-overlay {{loading.show ? 'show' : ''}}" wx:if="{{loading.show && loading.overlay}}">
+  <view class="loading-content">
+    <view class="loading-spinner"></view>
+    <text class="loading-text" wx:if="{{loading.message}}">{{loading.message}}</text>
+  </view>
+</view>
+
+<!-- 页面内加载 -->
+<view class="page-loading {{loading.show ? 'show' : ''}}" wx:if="{{loading.show && !loading.overlay}}">
+  <view class="loading-spinner"></view>
+  <text class="loading-text" wx:if="{{loading.message}}">{{loading.message}}</text>
+</view>
+
+<!-- 骨架屏组件 -->
+<view class="skeleton {{skeleton.show ? 'show' : ''}}" wx:if="{{skeleton.show}}">
+  <view class="skeleton-item" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+    <view class="skeleton-avatar"></view>
+    <view class="skeleton-content">
+      <view class="skeleton-title"></view>
+      <view class="skeleton-text"></view>
+    </view>
+  </view>
+</view>
+
+<!-- 空状态组件 -->
+<view class="empty-state {{emptyState.show ? 'show' : ''}}" wx:if="{{emptyState.show}}">
+  <view class="empty-icon">{{emptyState.icon}}</view>
+  <text class="empty-title">{{emptyState.title}}</text>
+  <text class="empty-desc">{{emptyState.description}}</text>
+  <button class="empty-action" wx:if="{{emptyState.actionText}}" bindtap="emptyState.action">
+    {{emptyState.actionText}}
+  </button>
+</view>
+
+<!-- 进度条组件 -->
+<view class="progress-container {{progress.show ? 'show' : ''}}" wx:if="{{progress.show}}">
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progress.percent}}%"></view>
+  </view>
+  <text class="progress-text">{{progress.percent}}%</text>
+</view>

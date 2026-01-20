@@ -53,6 +53,17 @@ public class ResponseDTO<T> implements Serializable {
     }
     
     /**
+     * 错误鍝嶅簲（携带额外数据）
+     */
+    public static <T> ResponseDTO<T> error(int code, String message, T data) {
+        ResponseDTO<T> response = new ResponseDTO<>();
+        response.setCode(code);
+        response.setMessage(message);
+        response.setData(data);
+        return response;
+    }
+    
+    /**
      * 错误鍝嶅簲锛堥粯璁ょ姸鎬佺爜锛?     */
     public static <T> ResponseDTO<T> error(String message) {
         ResponseDTO<T> response = new ResponseDTO<>();

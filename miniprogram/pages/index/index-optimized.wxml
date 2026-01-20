@@ -1,0 +1,162 @@
+<view class="page">
+  <!-- 固定顶部容器 - 优化高度 -->
+  <view class="fixed-header">
+    <!-- 搜索栏 -->
+    <view class="search-bar">
+      <image class="search-icon" src="/assets/icons/search.svg"></image>
+      <text class="search-text">搜索</text>
+    </view>
+    
+    <!-- 快捷操作按钮 -->
+    <view class="quick-actions-section">
+      <view class="quick-actions-header">
+        <text class="quick-actions-title">快捷操作</text>
+        <view class="quick-actions-manage" bindtap="toggleManageMode">
+          <image src="/assets/icons/settings.svg" style="width: 32rpx; height: 32rpx; filter: brightness(0) invert(0.6);"></image>
+        </view>
+      </view>
+      
+      <scroll-view class="quick-actions-scroll" scroll-x="true" enable-flex="true" show-scrollbar="false">
+        <view class="quick-actions">
+          <view class="action-item" wx:for="{{currentQuickActions}}" wx:key="id" data-id="{{item.id}}" bindtap="onActionTap">
+            <image class="action-icon" src="{{item.icon}}" style="background-color: {{item.color}}"></image>
+            <text class="action-text">{{item.name}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 页面内容 -->
+  <view class="page-content">
+    <!-- 统计卡片 -->
+    <view class="stats-grid">
+      <view class="stat-card" bindtap="viewMoldPassRate" style="background-color: {{stats.moldPassRate.color}}">
+        <text class="stat-value">{{stats.moldPassRate.value}}%</text>
+        <text class="stat-label">{{stats.moldPassRate.label}}</text>
+      </view>
+      <view class="stat-card" bindtap="viewBareMoldCount" style="background-color: {{stats.bareMoldCount.color}}">
+        <text class="stat-value">{{stats.bareMoldCount.value}}</text>
+        <text class="stat-label">{{stats.bareMoldCount.label}}</text>
+      </view>
+      <view class="stat-card" bindtap="viewAvailableCount" style="background-color: {{stats.availableCount.color}}">
+        <text class="stat-value">{{stats.availableCount.value}}</text>
+        <text class="stat-label">{{stats.availableCount.label}}</text>
+      </view>
+      <view class="stat-card" bindtap="viewLockedCount" style="background-color: {{stats.lockedCount.color}}">
+        <text class="stat-value">{{stats.lockedCount.value}}</text>
+        <text class="stat-label">{{stats.lockedCount.label}}</text>
+      </view>
+    </view>
+
+    <!-- 模具加工任务列表 -->
+    <view class="function-module">
+      <view class="module-header">
+        <text class="module-title">模具加工任务</text>
+        <text class="module-more" bindtap="viewMoreMoldTasks">全部</text>
+      </view>
+      <view class="module-content">
+        <view class="task-item" wx:for="{{moldProcessTasks}}" wx:key="id" data-id="{{item.id}}" bindtap="viewMoldTaskDetail">
+          <view class="task-item-left">
+            <text class="task-item-name">{{item.moldName}}</text>
+            <view class="task-item-status {{item.status === '进行中' ? 'status-processing' : item.status === '待处理' ? 'status-pending' : 'status-completed'}}">{{item.status}}</view>
+          </view>
+          <text class="task-item-date">{{item.dueDate}}</text>
+        </view>
+        <view wx:if="{{moldProcessTasks.length === 0}}" class="empty-state">
+          <view class="empty-icon">📋</view>
+          <text class="empty-title">暂无任务</text>
+          <text class="empty-desc">当前没有模具加工任务</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 非模具加工任务列表 -->
+    <view class="function-module">
+      <view class="module-header">
+        <text class="module-title">非模具加工任务</text>
+        <text class="module-more" bindtap="viewMoreNonMoldTasks">全部</text>
+      </view>
+      <view class="module-content">
+        <view class="task-item" wx:for="{{nonMoldProcessTasks}}" wx:key="id" data-id="{{item.id}}" bindtap="viewNonMoldTaskDetail">
+          <view class="task-item-left">
+            <text class="task-item-name">{{item.taskName}}</text>
+            <view class="task-item-status {{item.status === '进行中' ? 'status-processing' : item.status === '待处理' ? 'status-pending' : 'status-completed'}}">{{item.status}}</view>
+          </view>
+          <text class="task-item-date">{{item.dueDate}}</text>
+        </view>
+        <view wx:if="{{nonMoldProcessTasks.length === 0}}" class="empty-state">
+          <view class="empty-icon">📋</view>
+          <text class="empty-title">暂无任务</text>
+          <text class="empty-desc">当前没有非模具加工任务</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近成型记录 -->
+    <view class="function-module">
+      <view class="module-header">
+        <text class="module-title">最近成型记录</text>
+        <text class="module-more" bindtap="viewMoreProductionData">全部</text>
+      </view>
+      <view class="module-content">
+        <view class="data-item" wx:for="{{recentProductionData}}" wx:key="id" data-id="{{item.id}}" bindtap="viewProductionDataDetail">
+          <view class="data-item-left">
+            <text class="data-item-name">{{item.productName}}</text>
+            <text class="data-item-operator">{{item.operator}}</text>
+          </view>
+          <text class="data-item-time">{{item.time}}</text>
+        </view>
+        <view wx:if="{{recentProductionData.length === 0}}" class="empty-state">
+          <view class="empty-icon">📊</view>
+          <text class="empty-title">暂无记录</text>
+          <text class="empty-desc">当前没有成型记录</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 自定义显示功能模态框 -->
+  <view class="modal-mask" wx:if="{{isManageMode}}" bindtap="toggleManageMode"></view>
+  <view class="modal-content" wx:if="{{isManageMode}}">
+    <view class="modal-header">
+      <text class="modal-title">自定义快捷功能</text>
+      <view class="modal-close" bindtap="toggleManageMode">×</view>
+    </view>
+    <view class="modal-tabs">
+      <text class="modal-tab {{!isSortMode ? 'active' : ''}}" bindtap="toggleSortMode">显示/隐藏</text>
+      <text class="modal-tab {{isSortMode ? 'active' : ''}}" bindtap="toggleSortMode">排序</text>
+    </view>
+    <view class="modal-body">
+      <!-- 显示/隐藏模式 -->
+      <view class="action-manage-list" wx:if="{{!isSortMode}}">
+        <view class="action-manage-item" wx:for="{{allQuickActions}}" wx:key="id" data-id="{{item.id}}" bindtap="toggleActionShow">
+          <view class="action-manage-info">
+            <image class="action-manage-icon" src="{{item.icon}}" style="background-color: {{item.color}}"></image>
+            <text class="action-manage-name">{{item.name}}</text>
+          </view>
+          <view class="action-manage-switch {{item.show ? 'active' : ''}}">
+            <view class="switch-button"></view>
+          </view>
+        </view>
+      </view>
+      <!-- 排序模式 -->
+      <view class="action-sort-list" wx:if="{{isSortMode}}">
+        <view class="action-sort-item" wx:for="{{allQuickActions}}" wx:key="id" wx:for-index="index" data-index="{{index}}"
+              bindlongpress="onLongPressItem" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd"
+              style="opacity: {{draggedIndex === index ? 0.5 : 1}};">
+          <view class="sort-handle">☰</view>
+          <view class="action-manage-info">
+            <image class="action-manage-icon" src="{{item.icon}}" style="background-color: {{item.color}}"></image>
+            <text class="action-manage-name">{{item.name}}</text>
+          </view>
+          <view class="sort-indicator">{{draggedIndex === index ? '拖动中' : ''}}</view>
+        </view>
+      </view>
+      <view class="sort-tip" wx:if="{{isSortMode}}">
+        <text>长按并拖动项目来排序</text>
+      </view>
+    </view>
+  </view>
+</view>

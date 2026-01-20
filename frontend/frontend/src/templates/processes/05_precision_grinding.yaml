@@ -1,0 +1,33 @@
+# 工序模板基础信息
+basic_info:
+  name: "精磨"
+  code: "TEMPLATE_PRECISION_GRINDING"
+  category: "GRINDING"
+  description: "精磨工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  grinding_type: ""
+  grinding_wheel_type: ""
+  wheel_speed: 0
+  feed_rate: 0.0
+  tolerance: 0.001
+  surface_roughness_requirement: ""
+  cooling_method: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  flatness_check: ""
+  parallelism_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "磨床"
+  operator_role: "磨床工"
+  estimated_duration: 90  # 标准工时（分钟）
+  quality_check_required: true

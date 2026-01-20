@@ -1,0 +1,33 @@
+# 工序模板基础信息
+basic_info:
+  name: "进泥孔粗加工"
+  code: "TEMPLATE_MUD_HOLE_ROUGH"
+  category: "DRILL_NON_LAYER"
+  description: "进泥孔粗加工工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  hole_diameter: 0.0
+  hole_depth: 0.0
+  hole_count: 0
+  drill_speed: 0
+  feed_rate: 0
+  tolerance: 0.0
+  cooling_method: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+  burr_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "钻机"
+  operator_role: "操作工"
+  estimated_duration: 120  # 标准工时（分钟）
+  quality_check_required: true

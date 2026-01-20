@@ -1,0 +1,35 @@
+# 工序模板基础信息
+basic_info:
+  name: "加工工序汇总"
+  code: "TEMPLATE_PROCESS_SUMMARY"
+  category: "SUMMARY"
+  description: "用于汇总和管理模具加工的所有工序，提供完整的工艺路线视图，包含工序顺序、总工时、质量控制点等关键信息"
+  status: "active"
+
+# 加工参数
+processing_params:
+  process_sequence: []  # 工序顺序列表，包含工序ID和名称
+  total_process_count: 0  # 总工序数
+  total_estimated_duration: 0  # 总预计工时（分钟）
+  process_flow_chart: ""  # 工序流程图URL或路径
+  material_summary: ""  # 材料汇总
+  equipment_summary: ""  # 设备汇总
+  personnel_summary: ""  # 人员汇总
+  quality_control_points: []  # 质量控制点列表
+  safety_requirements: []  # 安全要求列表
+  special_instructions: ""  # 特殊说明
+
+# 质量检验标准
+quality_standards:
+  overall_acceptance_criteria: "所有工序完成后，模具应符合设计图纸要求，尺寸公差在允许范围内，表面质量符合规定标准"
+  final_inspection_requirements: "最终检验应包含尺寸检查、外观检查、性能测试等，由专业质检员执行"
+  documentation_requirements: ["工序记录卡", "质量检验报告", "设备使用记录", "材料追溯记录"]  # 文档要求列表
+  approval_authority: "工艺工程师"  # 审批权限
+  certification_requirements: "模具加工完成后需获得质量部门的合格证书"
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "无"
+  operator_role: "工艺工程师"
+  estimated_duration: 30  # 标准工时（分钟）
+  quality_check_required: true

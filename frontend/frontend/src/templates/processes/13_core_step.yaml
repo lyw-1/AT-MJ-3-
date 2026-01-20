@@ -1,0 +1,37 @@
+# 工序模板基础信息
+basic_info:
+  name: "模芯台阶加工"
+  code: "TEMPLATE_CORE_STEP"
+  category: "CORE_STEP"
+  description: "模芯台阶加工工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  step_count: 1
+  step_details: []
+  machine_type: ""
+  tool_type: ""
+  spindle_speed: 0
+  feed_rate: 0.0
+  tolerance: 0.001
+  surface_roughness_requirement: ""
+  cooling_method: ""
+  processing_strategy: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+  step_height_check: ""
+  step_angle_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "精雕机"
+  operator_role: "操作工"
+  estimated_duration: 240  # 标准工时（分钟）
+  quality_check_required: true

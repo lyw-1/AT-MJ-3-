@@ -1,0 +1,240 @@
+/* 页面基础样式 - 响应式优化 */
+.container {
+  padding: var(--space-4);
+  min-height: 100vh;
+}
+
+/* 搜索栏 - 响应式 */
+.search-section {
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-4);
+}
+
+/* 筛选标签 - 响应式 */
+.filter-section {
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-4);
+}
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* 添加按钮 - 响应式 */
+.add-button-container {
+  padding: var(--space-3) var(--space-4);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--bg-page);
+  padding-bottom: var(--space-2);
+}
+
+/* 卡片 - 响应式 */
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  border: 1rpx solid var(--border-light);
+  transition: all var(--transition-normal);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-2);
+  border-bottom: 1rpx solid var(--border-light);
+  margin-bottom: var(--space-3);
+}
+
+.total {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+/* 任务列表 - 响应式 */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) 0;
+  border-bottom: 1rpx solid var(--border-light);
+  transition: background-color var(--transition-fast);
+}
+
+.task-item:active {
+  background-color: var(--bg-secondary);
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.task-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.task-info {
+  margin-bottom: var(--space-2);
+}
+
+.task-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
+}
+
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-time {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.task-assignee {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* 加载更多 */
+.loading-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.no-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.no-more-text {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+/* 响应式断点 - 小屏 */
+@media (max-width: 375px) {
+  .container {
+    padding: var(--space-3);
+  }
+  
+  .card {
+    padding: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  
+  .task-item {
+    padding: var(--space-2) 0;
+  }
+  
+  .filter-tags {
+    gap: var(--space-1);
+  }
+}
+
+/* 响应式断点 - 中屏 */
+@media (min-width: 375px) and (max-width: 414px) {
+  .container {
+    padding: var(--space-4);
+  }
+  
+  .card {
+    padding: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+}
+
+/* 响应式断点 - 大屏 */
+@media (min-width: 414px) {
+  .container {
+    padding: var(--space-5);
+  }
+  
+  .card {
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  
+  .task-header {
+    flex-direction: row;
+  }
+  
+  .task-meta {
+    flex-direction: row;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) {
+  .card-header {
+    flex-direction: row;
+  }
+  
+  .task-header {
+    flex-direction: row;
+  }
+  
+  .task-meta {
+    flex-direction: row;
+  }
+  
+  .filter-tags {
+    flex-wrap: wrap;
+  }
+}

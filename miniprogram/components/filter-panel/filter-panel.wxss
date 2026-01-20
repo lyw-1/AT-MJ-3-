@@ -1,0 +1,199 @@
+/* 优化筛选面板样式 */
+.filter-container {
+  position: relative;
+  z-index: var(--z-dropdown);
+  background-color: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-light);
+  transition: all var(--transition-normal);
+}
+
+.filter-trigger {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-trigger:active {
+  background-color: var(--bg-secondary);
+}
+
+.filter-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-right: var(--space-2);
+}
+
+.filter-badge {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  min-width: 36rpx;
+  height: 36rpx;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-2);
+  padding: 0 var(--space-1);
+}
+
+.filter-arrow {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  transition: transform var(--transition-fast);
+}
+
+.filter-arrow.up {
+  transform: rotate(180deg);
+}
+
+.filter-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease-out);
+  box-shadow: var(--shadow-lg);
+}
+
+.filter-panel.show {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.filter-section {
+  padding: var(--space-4) 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+.filter-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.filter-option:active {
+  background-color: var(--bg-secondary);
+}
+
+.filter-option.selected {
+  background-color: var(--color-primary-light);
+}
+
+.filter-checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border: 2rpx solid var(--border-default);
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.checkbox-inner {
+  width: 20rpx;
+  height: 20rpx;
+  background-color: var(--color-white);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.filter-option.selected .checkbox-inner {
+  background-color: var(--color-primary);
+}
+
+.filter-option-text {
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-option.selected .filter-option-text {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  border-top: 1rpx solid var(--border-light);
+  margin-top: var(--space-3);
+  gap: var(--space-3);
+}
+
+.filter-action-btn {
+  flex: 1;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+  border: 1rpx solid transparent;
+}
+
+.filter-action-btn:active {
+  transform: scale(0.95);
+}
+
+.filter-reset {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.filter-reset:active {
+  background-color: var(--bg-tertiary);
+}
+
+.filter-confirm {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.filter-confirm:active {
+  background-color: var(--color-primary-dark);
+}
+
+/* 响应式 */
+@media (max-width: 375px) {
+  .filter-panel {
+    max-height: 60vh;
+  }
+  
+  .filter-section {
+    padding: var(--space-3) 0;
+  }
+}
+
+@media (orientation: landscape) {
+  .filter-panel {
+    max-height: 50vh;
+  }
+}

@@ -39,22 +39,18 @@
    - 询问TODO解决方式
 
 ## 关键规则
-
 ### 文档规范
 - 所有文档存于 `docs/任务名/`
 - 命名：ALIGNMENT_、CONSENSUS_、DESIGN_、TASK_、ACCEPTANCE_、FINAL_、TODO_
-
 ### 工具使用
 - Edit前先用Read获取最新内容
 - 搜索：代码库内用Search，外部用WebSearch
 - 复杂任务先用TodoWrite规划
 - 完成前必须运行GetDiagnostics或项目lint命令
-
 ### 问题解决
 - 同一问题连续三次失败→立即暂停
 - 全面梳理问题，转换思路，评审新方案
 - 禁止重复同样错误
-
 ### 禁止事项
 - 未验证就提交
 - 除非用户要求，否则不提交更改

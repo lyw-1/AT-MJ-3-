@@ -1,0 +1,35 @@
+# 工序模板基础信息
+basic_info:
+  name: "导料槽加工-切槽机"
+  code: "TEMPLATE_GUIDE_SLOT_CUTTER"
+  category: "GUIDE_SLOT"
+  description: "导料槽加工-切槽机工序模板"
+  status: "active"
+
+# 加工参数
+processing_params:
+  # 加工参数字段定义
+  slot_width: 0.0
+  slot_depth: 0.0
+  slot_length: 0.0
+  cutter_type: ""
+  cutter_diameter: 0.0
+  spindle_speed: 0
+  feed_rate: 0.0
+  tolerance: 0.01
+  cooling_method: ""
+
+# 质量检验标准
+quality_standards:
+  # 质量检验标准定义
+  dimension_check: ""
+  surface_roughness: ""
+  position_tolerance: ""
+  straightness_check: ""
+
+# 设备和人员要求
+equipment_requirements:
+  machine_type: "切槽机"
+  operator_role: "操作工"
+  estimated_duration: 90  # 标准工时（分钟）
+  quality_check_required: true
