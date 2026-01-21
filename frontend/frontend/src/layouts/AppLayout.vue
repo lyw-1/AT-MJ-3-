@@ -340,17 +340,20 @@ const handleMenuClick = (route: any) => {
 const updateBreadcrumbs = (route: any) => {
   const breadcrumbs = []
   
-  // 从路由匹配中提取完整路径
-  const matched = route.matched
+  // 从路由匹配中提取完整路径，添加空值检查
+  const matched = route.matched || []
   
-  matched.forEach(item => {
-    if (item.meta && item.meta.title && !item.path.includes('*')) {
-      breadcrumbs.push({
-        title: item.meta.title,
-        path: item.path
-      })
-    }
-  })
+  // 安全遍历matched数组，添加类型检查
+  if (Array.isArray(matched)) {
+    matched.forEach(item => {
+      if (item.meta && item.meta.title && !item.path.includes('*')) {
+        breadcrumbs.push({
+          title: item.meta.title,
+          path: item.path
+        })
+      }
+    })
+  }
   
   // 如果没有匹配到面包屑，添加默认首页
   if (breadcrumbs.length === 0) {
